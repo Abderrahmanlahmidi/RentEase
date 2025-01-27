@@ -1,23 +1,25 @@
-import { useTranslation } from 'react-i18next';
 import Logo from "../assets/img/home.svg";
-import { useState } from 'react';
+import {useState, useContext} from 'react';
 import Menu from '../components/Menu';
+import { informationContext } from "../App";
+
+
 
 function Navbar(){
 
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useContext(informationContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   }
- 
   const handleLanguageChange = (event) => {
-    i18n.changeLanguage(event.target.value);
+   i18n.changeLanguage(event.target.value);
   };
 
+  const routing = ["/", "/Properties", "/About", "/Contact"];
+
   return (
-    <nav className="bg-white flex sticky top-0 z-50 px-[120px] max-lg:px-[16px] items-center justify-between w-full">
+    <nav className="bg-white flex  fixed top-0  border-b-1 border-[#d9dbdc] z-50 px-[120px] max-lg:px-[16px] items-center justify-between w-full">
       <div className='flex items-center space-x-1' >
         <img className='w-[25px] h-auto' src={Logo} alt="Logo" />
         <a href="" className="flex items-center space-x-3 rtl:space-x-reverse py-[15px] ">
@@ -27,13 +29,15 @@ function Navbar(){
 
       <ul className="flex gap-6 max-md:hidden">
         {t('navbar_links', { returnObjects: true }).map((link, index) => (
-            <li key={index}><a className='text-[#191f3b] font-medium hover:text-blue-700' href="#">{link}</a></li>
+            <li key={index}><a className='text-[#191f3b] font-medium hover:text-blue-600' href={routing[index]}>{link}</a></li>
         ))}
       </ul>
 
-      <div className="flex items-center space-x-3" >
+      
+
+      <div className="flex items-center gap-3" >
           <a href="" className='text-sm  max-md:hidden text-blue-600 hover:underline' >{t('login')}</a>
-          <button type="button" className="text-white max-md:hidden bg-blue-700 cursor-pointer hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">{t('register')}</button>
+          <button type="button" className="text-white max-md:hidden bg-blue-600 cursor-pointer hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">{t('register')}</button>
         <select onChange={handleLanguageChange} defaultValue={i18n.language} className="bg-gray-50 border  border-gray-300 text-[#191f3b] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
           <option value='en' selected>English</option>
           <option value="fr">France</option>
@@ -45,7 +49,7 @@ function Navbar(){
         </button>
       </div>
 
-      {isMenuOpen && <Menu t={t} toggleMenu={toggleMenu} />}
+      {isMenuOpen && <Menu t={t} toggleMenu={toggleMenu} routing={routing} />}
 
     </nav> 
   );

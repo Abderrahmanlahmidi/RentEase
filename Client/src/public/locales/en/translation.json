@@ -1,6 +1,10 @@
 {
     "navbar_links":["Home","Properties","About","Contact"],
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "error_message": {
+        "title": "Something's missing.",
+        "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+        "button": "Back to Homepage"
+    }
 }
-  

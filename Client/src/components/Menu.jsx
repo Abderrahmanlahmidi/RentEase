@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Menu = ({toggleMenu, t}) => {
+const Menu = ({toggleMenu, t, routing}) => {
     return(
      <AnimatePresence>
        <motion.ul
@@ -33,7 +33,7 @@ const Menu = ({toggleMenu, t}) => {
             </button>
             {t('navbar_links', {returnObjects: true }).map((link, index) => (
               <li key={index} >
-                <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100">{link}</a>
+                <a href={routing[index]} className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100">{link}</a>
               </li>
             ))}
             

@@ -1,7 +1,10 @@
 {
     "navbar_links": ["Accueil", "Propriétés", "À propos", "Contact"],
     "login": "Connexion",
-    "register": "Inscription"
+    "register": "Inscription",
+    "error_message": {
+        "title": "Quelque chose manque.",
+        "description": "Désolé, nous ne pouvons pas trouver cette page. Vous trouverez beaucoup à explorer sur la page d'accueil.",
+        "button": "Retour à l'accueil"
+    }
 }
-
-  
