@@ -6,5 +6,17 @@
         "title": "Something's missing.",
         "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
         "button": "Back to Homepage"
-    }
+    },
+    "create_account": "Create an account",
+    "first_name": "First Name",
+    "first_name_placeholder": "Your first name",
+    "last_name": "Last Name",
+    "last_name_placeholder": "Your last name",
+    "age": "Age",
+    "age_placeholder": "Your age",
+    "email": "Your email",
+    "email_placeholder": "name@company.com",
+    "password": "Password",
+    "already_have_account": "Already have an account?",
+    "login_here": "Login here"
 }

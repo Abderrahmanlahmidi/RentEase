@@ -4,7 +4,6 @@ import Menu from '../components/Menu';
 import { informationContext } from "../App";
 
 
-
 function Navbar(){
 
   const {t, i18n} = useContext(informationContext);
@@ -33,11 +32,15 @@ function Navbar(){
         ))}
       </ul>
 
-      
-
       <div className="flex items-center gap-3" >
-          <a href="" className='text-sm  max-md:hidden text-blue-600 hover:underline' >{t('login')}</a>
-          <button type="button" className="text-white max-md:hidden bg-blue-600 cursor-pointer hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">{t('register')}</button>
+
+        <a href="/Login" className='text-sm  max-md:hidden text-blue-600 hover:underline' >{t('login')}</a>
+        <a
+          href="/Register"
+          className="inline-flex text-white max-md:hidden bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          {t("register")}
+        </a>
         <select onChange={handleLanguageChange} defaultValue={i18n.language} className="bg-gray-50 border  border-gray-300 text-[#191f3b] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
           <option value='en' selected>English</option>
           <option value="fr">France</option>
