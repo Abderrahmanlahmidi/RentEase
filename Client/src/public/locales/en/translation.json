@@ -3,9 +3,9 @@
     "login": "Login",
     "register": "Register",
     "error_message": {
-        "title": "Something's missing.",
-        "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
-        "button": "Back to Homepage"
+      "title": "Something's missing.",
+      "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+      "button": "Back to Homepage"
     },
     "create_account": "Create an account",
     "first_name": "First Name",
@@ -21,12 +21,52 @@
     "login_here": "Login here",
     "dont_have_account": "Don’t have an account?",
     "hero": {
-        "title": "Find Your Dream Home",
-        "description": "Discover the perfect place to call home. Browse properties and rent with ease."
+      "title": "Find Your Dream Home",
+      "description": "Discover the perfect place to call home. Browse properties and rent with ease."
     },
     "buttons": {
       "explore_now": "Explore Now",
-      "contact_us": "Contact Us"
+      "contact_us": "Contact Us",
+      "search": "Search"
+    },
+    "form": {
+      "city": {
+        "label": "city",
+        "options": {
+          "US": "United States",
+          "CA": "Canada",
+          "FR": "France",
+          "DE": "Germany"
+        }
+      },
+      "propertyType": {
+        "label": "type of property",
+        "options": {
+          "apartment": "Apartment",
+          "house": "House",
+          "condo": "Condo",
+          "villa": "Villa"
+        }
+      },
+      "priceRange": {
+        "label": "price range",
+        "options": {
+          "1000-2000": "$1000 - $2000",
+          "2000-3000": "$2000 - $3000",
+          "3000-4000": "$3000 - $4000",
+          "4000-5000": "$4000 - $5000"
+        }
+      },
+      "rooms": {
+        "label": "rooms",
+        "options": {
+          "1": "1 Room",
+          "2": "2 Rooms",
+          "3": "3 Rooms",
+          "4": "4 Rooms",
+          "5+": "5+ Rooms"
+        }
+      }
     }
-    
-}
+  }
+  

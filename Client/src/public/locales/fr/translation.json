@@ -3,9 +3,9 @@
     "login": "Connexion",
     "register": "Inscription",
     "error_message": {
-        "title": "Il manque quelque chose.",
-        "description": "Désolé, nous ne trouvons pas cette page. Vous trouverez beaucoup de choses à explorer sur la page d'accueil.",
-        "button": "Retour à l'accueil"
+      "title": "Il manque quelque chose.",
+      "description": "Désolé, nous ne trouvons pas cette page. Vous trouverez beaucoup de choses à explorer sur la page d'accueil.",
+      "button": "Retour à l'accueil"
     },
     "create_account": "Créer un compte",
     "first_name": "Prénom",
@@ -21,14 +21,52 @@
     "login_here": "Connectez-vous ici",
     "dont_have_account": "Vous n'avez pas de compte ?",
     "hero": {
-        "title": "Trouvez la maison de vos rêves",
-        "description": "Découvrez l'endroit parfait pour vous installer. Parcourez les propriétés et louez en toute simplicité."
+      "title": "Trouvez la maison de vos rêves",
+      "description": "Découvrez l'endroit parfait pour vous installer. Parcourez les propriétés et louez en toute simplicité."
     },
     "buttons": {
       "explore_now": "Explorez maintenant",
-      "contact_us": "Contactez-nous"
+      "contact_us": "Contactez-nous",
+      "search": "Rechercher"
+    },
+    "form": {
+      "city": {
+        "label": "ville",
+        "options": {
+          "US": "États-Unis",
+          "CA": "Canada",
+          "FR": "France",
+          "DE": "Allemagne"
+        }
+      },
+      "propertyType": {
+        "label": "type propriété",
+        "options": {
+          "apartment": "Appartement",
+          "house": "Maison",
+          "condo": "Condo",
+          "villa": "Villa"
+        }
+      },
+      "priceRange": {
+        "label": "gamme de prix",
+        "options": {
+          "1000-2000": "$1000 - $2000",
+          "2000-3000": "$2000 - $3000",
+          "3000-4000": "$3000 - $4000",
+          "4000-5000": "$4000 - $5000"
+        }
+      },
+      "rooms": {
+        "label": "nombre de chambres",
+        "options": {
+          "1": "1 Chambre",
+          "2": "2 Chambres",
+          "3": "3 Chambres",
+          "4": "4 Chambres",
+          "5+": "5+ Chambres"
+        }
+      }
     }
-    
-      
-
-}
+  }
+  
