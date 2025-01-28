@@ -2,6 +2,7 @@ import Logo from "../assets/img/home.svg";
 import {useState, useContext} from 'react';
 import Menu from '../components/Menu';
 import { informationContext } from "../App";
+import { NavLink } from "react-router";
 
 
 function Navbar(){
@@ -21,26 +22,26 @@ function Navbar(){
     <nav className="bg-white flex  fixed top-0  border-b-1 border-[#d9dbdc] z-50 px-[120px] max-lg:px-[16px] items-center justify-between w-full">
       <div className='flex items-center space-x-1' >
         <img className='w-[25px] h-auto' src={Logo} alt="Logo" />
-        <a href="" className="flex items-center space-x-3 rtl:space-x-reverse py-[15px] ">
+        <NavLink to='/' className="flex items-center space-x-3 rtl:space-x-reverse py-[15px] ">
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#191f3b] ">RentEase</span>
-        </a>
+        </NavLink>
       </div>
 
       <ul className="flex gap-6 max-md:hidden">
         {t('navbar_links', { returnObjects: true }).map((link, index) => (
-            <li key={index}><a className='text-[#191f3b] font-medium hover:text-blue-600' href={routing[index]}>{link}</a></li>
+            <li key={index}><NavLink className='text-[#191f3b] font-medium hover:text-blue-600' to={routing[index]}>{link}</NavLink></li>
         ))}
       </ul>
 
       <div className="flex items-center gap-3" >
 
-        <a href="/Login" className='text-sm  max-md:hidden text-blue-600 hover:underline' >{t('login')}</a>
-        <a
-          href="/Register"
+        <NavLink to="/Login" className='text-sm  max-md:hidden text-blue-600 hover:underline' >{t('login')}</NavLink>
+        <NavLink
+          to="/Register"
           className="inline-flex text-white max-md:hidden bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           {t("register")}
-        </a>
+        </NavLink>
         <select onChange={handleLanguageChange} defaultValue={i18n.language} className="bg-gray-50 border  border-gray-300 text-[#191f3b] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
           <option value='en' selected>English</option>
           <option value="fr">France</option>

@@ -3,8 +3,8 @@
     "login": "Connexion",
     "register": "Inscription",
     "error_message": {
-        "title": "Quelque chose manque.",
-        "description": "Désolé, nous ne pouvons pas trouver cette page. Vous trouverez beaucoup à explorer sur la page d'accueil.",
+        "title": "Il manque quelque chose.",
+        "description": "Désolé, nous ne trouvons pas cette page. Vous trouverez beaucoup de choses à explorer sur la page d'accueil.",
         "button": "Retour à l'accueil"
     },
     "create_account": "Créer un compte",
@@ -18,7 +18,17 @@
     "email_placeholder": "nom@entreprise.com",
     "password": "Mot de passe",
     "already_have_account": "Vous avez déjà un compte ?",
-    "login_here": "Connectez-vous ici"
+    "login_here": "Connectez-vous ici",
+    "dont_have_account": "Vous n'avez pas de compte ?",
+    "hero": {
+        "title": "Trouvez la maison de vos rêves",
+        "description": "Découvrez l'endroit parfait pour vous installer. Parcourez les propriétés et louez en toute simplicité."
+    },
+    "buttons": {
+      "explore_now": "Explorez maintenant",
+      "contact_us": "Contactez-nous"
+    }
+    
       
-      
+
 }

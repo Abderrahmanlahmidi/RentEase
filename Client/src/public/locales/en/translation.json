@@ -1,5 +1,5 @@
 {
-    "navbar_links":["Home","Properties","About","Contact"],
+    "navbar_links": ["Home", "Properties", "About", "Contact"],
     "login": "Login",
     "register": "Register",
     "error_message": {
@@ -18,5 +18,15 @@
     "email_placeholder": "name@company.com",
     "password": "Password",
     "already_have_account": "Already have an account?",
-    "login_here": "Login here"
+    "login_here": "Login here",
+    "dont_have_account": "Don’t have an account?",
+    "hero": {
+        "title": "Find Your Dream Home",
+        "description": "Discover the perfect place to call home. Browse properties and rent with ease."
+    },
+    "buttons": {
+      "explore_now": "Explore Now",
+      "contact_us": "Contact Us"
+    }
+    
 }

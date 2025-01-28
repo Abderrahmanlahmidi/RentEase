@@ -23,8 +23,8 @@ const App = () => {
 
   return (
     <informationContext.Provider value={contextInformation}>
-      <div className="flex flex-col">
-        <Navbar />
+      
+        {/* <Navbar /> */}
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -36,7 +36,7 @@ const App = () => {
             <Route path="/*" element={<Error />} />
           </Routes>
         </Router>
-      </div>
+      
     </informationContext.Provider>
   );
 };

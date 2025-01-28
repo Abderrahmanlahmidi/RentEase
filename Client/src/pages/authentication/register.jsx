@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { informationContext } from "../../App";
+import { NavLink } from "react-router";
 
 const Register = () => {
     
   const { t } = useContext(informationContext);
 
   return (
-    <div className="flex justify-center items-center w-full py-[50px] max-md:px-[16px] max-md:py-[30px]">
+    <div className="flex justify-center items-center w-full py-[30px] max-md:px-[16px]">
       <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
@@ -93,9 +94,9 @@ const Register = () => {
             {/* Login Redirect */}
             <p className="text-sm font-light text-gray-500">
               {t("already_have_account")}{" "}
-              <a href="#" className="font-medium text-primary-600 hover:underline">
+              <NavLink to="/Login" className="font-medium text-primary-600 hover:underline">
                 {t("login_here")}
-              </a>
+              </NavLink>
             </p>
           </form>
         </div>
