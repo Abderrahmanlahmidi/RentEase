@@ -1,10 +1,14 @@
-import { useContext } from "react";
+import { useContext , useState} from "react";
 import { informationContext } from "../../App";
 import { NavLink } from "react-router";
+import { validationError } from "../../utils/utils";
 
 const Register = () => {
     
   const { t } = useContext(informationContext);
+
+  const [error, setError] = useState(true);
+
 
   return (
     <div className="flex justify-center items-center w-full py-[30px] max-md:px-[16px]">
@@ -13,20 +17,22 @@ const Register = () => {
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
             {t("create_account")}
           </h1>
-          <form className="space-y-4 md:space-y-6" action="#">
+          <form className="space-y-4 md:space-y-6" action="">
             {/* First Name */}
             <div>
-              <label htmlFor="firstname" className="block mb-2 text-sm font-medium text-gray-900">
+              <label htmlFor="firstname" className={`${error == false ? validationError.labelSuccess : validationError.labelError} block mb-2 text-sm font-medium`}>
                 {t("first_name")}
               </label>
               <input
-                type="text"
-                name="firstname"
-                id="firstname"
-                placeholder={t("first_name_placeholder")}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
+                 type="text"
+                 name="firstname"
+                 id="firstname"
+                 placeholder={t("first_name_placeholder")}
+                 className={`${error == false  ? validationError.inputSuccess : validationError.inputError} text-sm rounded-lg block w-full p-2.5`}
               />
+              {error == true ? (<p className={validationError.messageError}>Oh, snapp! Some error message.</p>) : null}
+
+
             </div>
             {/* Last Name */}
             <div>

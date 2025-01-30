@@ -1,4 +1,3 @@
-import Navbar from "./sections/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Properties from "./pages/Properties";
@@ -23,7 +22,6 @@ const App = () => {
 
   return (
     <informationContext.Provider value={contextInformation}>
-      
         {/* <Navbar /> */}
         <Router>
           <Routes>
@@ -36,7 +34,6 @@ const App = () => {
             <Route path="/*" element={<Error />} />
           </Routes>
         </Router>
-      
     </informationContext.Provider>
   );
 };

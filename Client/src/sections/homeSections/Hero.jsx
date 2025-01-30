@@ -3,12 +3,13 @@ import { informationContext } from "../../App";
 import { NavLink } from "react-router";
 
 export default function Hero() {
+  
   const { t } = useContext(informationContext);
   return (
     <div
-      className="mt-[62px] w-full h-[80vh] background bg-cover bg-center text-white flex items-center justify-center"
+      className="mt-[62px] w-full py-[150px] max-md:py-[30px] background bg-cover bg-center text-white flex items-center justify-center"
     >
-      <div className="text-center max-w-4xl px-6 rounded-lg py-8">
+      <div className="text-center max-md:px-[16px] rounded-lg py-8">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           {t('hero.title')}
         </h1>
