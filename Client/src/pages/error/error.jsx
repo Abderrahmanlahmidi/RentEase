@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { informationContext } from "../../App";
 
-
-
 const Error = () => {
    
   const {t} = useContext(informationContext);

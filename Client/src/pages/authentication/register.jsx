@@ -5,7 +5,6 @@ import {useForm} from "react-hook-form";
 import { validationError } from "../../utils/utils";
 
 
-
 const Register = () => {
     
   const { t } = useContext(informationContext);
@@ -13,7 +12,7 @@ const Register = () => {
   const [successMessage , setSuccessMessage] = useState("");
 
   const onSubmit = (data) => {
-      setSuccessMessage("Form Submitted successfully ✅");
+      setSuccessMessage("You have been successfully registered.");
       console.log(data);
   }
 
@@ -165,20 +164,13 @@ const Register = () => {
                     {errors.password.type === "pattern" && " Password must include at least one uppercase letter and one number!"}
                   </p>
                 )}
-              </div>
-
-          
-             
-           
-            
+              </div> 
              <button
                type="submit"
                className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
              >
                {t("create_account")}
              </button>
-           
-
              <p className="text-sm font-light text-gray-500">
                {t("already_have_account")}{" "}
                <NavLink to="/Login" className="font-medium text-primary-600 hover:underline">
