@@ -67,6 +67,33 @@
           "5+": "5+ Chambres"
         }
       }
-    }
+    },
+  "specialOffers": {
+    "title": "Offres Spéciales"
+  },
+  "process": {
+    "title": "Le Processus d'Achat ou de Location",
+    "steps": [
+      {
+        "id": 1,
+        "title": "Rechercher",
+        "description": "Trouvez les meilleures offres en parcourant nos annonces disponibles.",
+        "button": "Rechercher"
+      },
+      {
+        "id": 2,
+        "title": "Explorer",
+        "description": "Découvrez les détails, comparez les options et choisissez ce qui vous convient le mieux.",
+        "button": "Explorer"
+      },
+      {
+        "id": 3,
+        "title": "Contactez-nous",
+        "description": "Besoin d'aide ? Contactez notre équipe pour plus d'informations.",
+        "button": "Contactez-nous"
+      }
+    ]
   }
+
+}
   

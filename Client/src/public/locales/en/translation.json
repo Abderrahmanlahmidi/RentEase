@@ -1,72 +1,103 @@
 {
-    "navbar_links": ["Home", "Properties", "About", "Contact"],
-    "login": "Login",
-    "register": "Register",
-    "error_message": {
-      "title": "Something's missing.",
-      "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
-      "button": "Back to Homepage"
+  "age": "Age",
+  "age_placeholder": "Your age",
+  "already_have_account": "Already have an account?",
+  "buttons": {
+    "explore_now": "Explore Now",
+    "contact_us": "Contact Us",
+    "search": "Search"
+  },
+  "create_account": "Create an account",
+  "dont_have_account": "Don’t have an account?",
+  "email": "Your email",
+  "email_placeholder": "name@company.com",
+  "error_message": {
+    "title": "Something's missing.",
+    "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+    "button": "Back to Homepage"
+  },
+  "first_name": "First Name",
+  "first_name_placeholder": "Your first name",
+  "form": {
+    "city": {
+      "label": "city",
+      "options": {
+        "US": "United States",
+        "CA": "Canada",
+        "FR": "France",
+        "DE": "Germany"
+      }
     },
-    "create_account": "Create an account",
-    "first_name": "First Name",
-    "first_name_placeholder": "Your first name",
-    "last_name": "Last Name",
-    "last_name_placeholder": "Your last name",
-    "age": "Age",
-    "age_placeholder": "Your age",
-    "email": "Your email",
-    "email_placeholder": "name@company.com",
-    "password": "Password",
-    "already_have_account": "Already have an account?",
-    "login_here": "Login here",
-    "dont_have_account": "Don’t have an account?",
-    "hero": {
-      "title": "Find Your Dream Home",
-      "description": "Discover the perfect place to call home. Browse properties and rent with ease."
+    "propertyType": {
+      "label": "type of property",
+      "options": {
+        "apartment": "Apartment",
+        "house": "House",
+        "condo": "Condo",
+        "villa": "Villa"
+      }
     },
-    "buttons": {
-      "explore_now": "Explore Now",
-      "contact_us": "Contact Us",
-      "search": "Search"
+    "priceRange": {
+      "label": "price range",
+      "options": {
+        "1000-2000": "$1000 - $2000",
+        "2000-3000": "$2000 - $3000",
+        "3000-4000": "$3000 - $4000",
+        "4000-5000": "$4000 - $5000"
+      }
     },
-    "form": {
-      "city": {
-        "label": "city",
-        "options": {
-          "US": "United States",
-          "CA": "Canada",
-          "FR": "France",
-          "DE": "Germany"
-        }
-      },
-      "propertyType": {
-        "label": "type of property",
-        "options": {
-          "apartment": "Apartment",
-          "house": "House",
-          "condo": "Condo",
-          "villa": "Villa"
-        }
-      },
-      "priceRange": {
-        "label": "price range",
-        "options": {
-          "1000-2000": "$1000 - $2000",
-          "2000-3000": "$2000 - $3000",
-          "3000-4000": "$3000 - $4000",
-          "4000-5000": "$4000 - $5000"
-        }
-      },
-      "rooms": {
-        "label": "rooms",
-        "options": {
-          "1": "1 Room",
-          "2": "2 Rooms",
-          "3": "3 Rooms",
-          "4": "4 Rooms",
-          "5+": "5+ Rooms"
-        }
+    "rooms": {
+      "label": "rooms",
+      "options": {
+        "1": "1 Room",
+        "2": "2 Rooms",
+        "3": "3 Rooms",
+        "4": "4 Rooms",
+        "5+": "5+ Rooms"
       }
     }
+  },
+  "hero": {
+    "title": "Find Your Dream Home",
+    "description": "Discover the perfect place to call home. Browse properties and rent with ease."
+  },
+  "last_name": "Last Name",
+  "last_name_placeholder": "Your last name",
+  "login": "Login",
+  "login_here": "Login here",
+  "navbar_links": [
+    "Home",
+    "Properties",
+    "About",
+    "Contact"
+  ],
+  "password": "Password",
+  "register": "Register",
+  "specialOffers": {
+    "title": "Special Offers"
+  },
+  "process": {
+    "title": "The Buying or Renting Process",
+    "steps": [
+      {
+        "id": 1,
+        "title": "Search",
+        "description": "Find the best deals by browsing our available listings.",
+        "button": "Search now"
+      },
+      {
+        "id": 2,
+        "title": "Explore",
+        "description": "Discover details, compare options, and choose what suits you best.",
+        "button": "Explore now"
+      },
+      {
+        "id": 3,
+        "title": "Contact Us",
+        "description": "Need help? Contact our team for more information.",
+        "button": "Contact now"
+      }
+    ]
   }
+}
   

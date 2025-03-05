@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { informationContext } from "../../App";
-import { NavLink } from "react-router";
 
 export default function Hero() {
   
-  const { t } = useContext(informationContext);
+  const {t} = useContext(informationContext);
   return (
     <div
       className="mt-[62px] w-full py-[150px] max-md:py-[30px] background bg-cover bg-center text-white flex items-center justify-center"
