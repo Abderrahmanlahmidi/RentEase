@@ -18,7 +18,6 @@
       <path value="$PROJECT_DIR$/Server/vendor/psr/event-dispatcher" />
       <path value="$PROJECT_DIR$/Server/vendor/filp/whoops" />
       <path value="$PROJECT_DIR$/Server/vendor/psy/psysh" />
-      <path value="$PROJECT_DIR$/Server/vendor/asm89/stack-cors" />
       <path value="$PROJECT_DIR$/Server/vendor/voku/portable-ascii" />
       <path value="$PROJECT_DIR$/Server/vendor/psr/http-message" />
       <path value="$PROJECT_DIR$/Server/vendor/psr/http-factory" />

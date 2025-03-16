@@ -7,6 +7,18 @@ export const validationError = {
         inputSuccess:"bg-green-50 border border-green-500 text-green-900 placeholder-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500",
 }
 
+export const validationLogin = {
+  labelNormal: "text-gray-900",
+  labelError: "text-red-700",
+  labelSuccess: "text-green-700",
+  inputNormal:
+    "bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600",
+  inputError:
+    "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500",
+  inputSuccess:
+    "bg-green-50 border border-green-500 text-green-900 placeholder-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500",
+};
+
 export const specialOffers = [
         {
           id: 1,
@@ -74,56 +86,26 @@ export const specialOffers = [
        
       ];
 
-// export const icons = [
-//     <svg
-//         key="1"
-//         className="w-12 h-12 text-blue-600 mb-3 mx-auto"
-//         aria-hidden="true"
-//         xmlns="http://www.w3.org/2000/svg"
-//         fill="none"
-//         viewBox="0 0 24 24"
-//         stroke="currentColor"
-//         strokeWidth="2"
-//     >
-//         <path
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//             d="M21 21l-4.35-4.35M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0z"
-//         />
-//     </svg>,
-//     <svg
-//         key="2"
-//         className="w-12 h-12 text-blue-600 mb-3 mx-auto"
-//         aria-hidden="true"
-//         xmlns="http://www.w3.org/2000/svg"
-//         fill="none"
-//         viewBox="0 0 24 24"
-//         stroke="currentColor"
-//         strokeWidth="2"
-//     >
-//         <path
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//             d="M3 10h18M3 14h18M3 18h18M3 6h18"
-//         />
-//     </svg>,
-//     <svg
-//         key="3"
-//         className="w-12 h-12 text-blue-600 mb-3 mx-auto"
-//         aria-hidden="true"
-//         xmlns="http://www.w3.org/2000/svg"
-//         fill="none"
-//         viewBox="0 0 24 24"
-//         stroke="currentColor"
-//         strokeWidth="2"
-//     >
-//         <path
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//             d="M16 12H8m8 0l-4 4m4-4l-4-4M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z"
-//         />
-//     </svg>
-// ];
-//
-//
-
+export const validationRules = {
+  firstName: {
+    required: true,
+    pattern: /^[A-Z][a-z]{1,49}$/,
+    minLength: 5,
+    maxLength: 15,
+  },
+  lastName: {
+    required: true,
+    pattern: /^[A-Z][a-z]{1,49}$/,
+    minLength: 5,
+    maxLength: 15,
+  },
+  age: {
+    required: true,
+    min: 18,
+    max: 100,
+  },
+  email: {
+    required: true,
+    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+  },
+};

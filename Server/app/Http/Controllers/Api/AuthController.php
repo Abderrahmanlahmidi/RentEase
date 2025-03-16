@@ -23,7 +23,8 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::where("email", $request->email)->first();
+        $user = User::with('role')->where('email', $request->email)->first();
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 "message" => "the email or password is incorrect"
@@ -36,16 +37,20 @@ class AuthController extends Controller
             "message" => "login success",
             "token_type" => "Bearer",
             "token" => $token,
+            'user' => $user,
+//            "password" => $user->password,
         ]);
     }
 
     public function register(Request $request): JsonResponse {
         $validator = Validator::make($request->all(), [
-            "name" => "required|string",
-            "email" => "required|string|email|max:255|unique:users",
-            "password" => "required|string|min:6",
-            "age" => "required|integer",
-            "role_id" => "required|integer"
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'age' => 'required|integer|min:18',
+            'email' => 'required|email|unique:users,email',
+            'profile_image' => 'required',
+            'password' => 'required',
+            'role_id' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -55,8 +60,10 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->name,
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
             'email' => $request->email,
+            'profile_image' => $request->profile_image,
             'password' => Hash::make($request->password),
             'age' => $request->age,
             'role_id' => $request->role_id
@@ -95,7 +102,7 @@ class AuthController extends Controller
             $user->tokens()->delete();
             return response()->json([
                 "message" => "logout success",
-            ], 200);
+            ], 201);
         }else{
             return response()->json([
                 "message" => "user not found",
@@ -103,5 +110,66 @@ class AuthController extends Controller
         }
     }
 
+    public function index(){
+        $users = User::with("role")->get();
+        return response()->json([
+            "users" => $users
+        ]);
+    }
+
+   public function show(int $id): JsonResponse {
+        $user = User::find($id);
+        if ($user) {
+            return response()->json([
+                "user" => $user,
+                "password" => $user->password,
+            ], 201);
+        }else{
+            return response()->json([
+                "message" => "user not found",
+            ], 500);
+        }
+   }
+
+    public function update(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            "id" => "required|integer|exists:users,id",
+            "firstName" => "required|string",
+            "lastName" => "required|string",
+            "age" => "required|integer|min:18",
+            "email" => "required|email|unique:users,email," . $request->id, // ignore current user
+            "profile_image" => "required",
+            "password" => "required|string|min:6",
+            "role_id" => "required|integer",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $user = User::find($request->id);
+
+        $user->firstName = $request->firstName;
+        $user->lastName = $request->lastName;
+        $user->age = $request->age;
+        $user->email = $request->email;
+        $user->profile_image = $request->profile_image;
+        $user->role_id = $request->role_id;
+
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        return response()->json([
+            "message" => "User updated successfully",
+            "user" => $user
+        ], 201);
+    }
+
+
 
 }
+

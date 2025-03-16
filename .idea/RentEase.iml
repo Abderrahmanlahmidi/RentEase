@@ -11,7 +11,6 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/Server/vendor/asm89/stack-cors" />
       <excludeFolder url="file://$MODULE_DIR$/Server/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/Server/vendor/carbonphp/carbon-doctrine-types" />
       <excludeFolder url="file://$MODULE_DIR$/Server/vendor/composer" />
