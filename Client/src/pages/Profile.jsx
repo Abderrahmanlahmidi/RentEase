@@ -13,7 +13,7 @@ const Profile = () => {
     const [showConfirmPassword, setConfirmShowPassword] = useState(false);
     const [userData, setUserData] = useState({});
 
-    const { user } = useContext(UserContext);
+    const { user , setUser} = useContext(UserContext);
     const formRef = useRef(null);
 
     const scrollToForm = () => {
@@ -35,8 +35,12 @@ const Profile = () => {
                 withCredentials: true,
             });
 
-            console.log(data);
-            
+            const response = await axios.put(`http://127.0.0.1:8000/api/user/update/${data.id}`, data, {
+                withCredentials: true,
+            });
+
+            console.log("User updated successfully:", response.data.user);
+            setUser(response.data.user);
             setSuccessMessage("Profile successfully updated!");
         } catch (error) {
             if (error.response) {
@@ -69,8 +73,6 @@ const Profile = () => {
                 age: userData.user?.age || "",
                 profile_image: userData.user?.profile_image || "",
                 email: userData.user?.email || "",
-                password: userData.password || "",
-                confirmPassword: userData.password || "",
             });
         }
     }, [userData, reset]);
@@ -194,7 +196,6 @@ const Profile = () => {
                                 minLength: 5,
                                 maxLength: 15,
                             })}
-
                         />
                         {errors.lastName && (
                             <p className="mt-2 text-sm text-red-600 dark:text-red-500">
@@ -235,7 +236,6 @@ const Profile = () => {
                         )}
                     </div>
 
-                    Profile Image
                     <div className="flex flex-col md:col-span-2">
                         <label
                             htmlFor="profileImage"
@@ -297,8 +297,8 @@ const Profile = () => {
                                 placeholder="••••••••"
                                 className={`${errors.password ? validationError.inputError : validationError.inputNormal} border text-sm rounded-lg block w-full p-2.5 pr-10`}
                                 {...register("password", {
-                                    required: true,
                                     minLength: 8,
+                                    maxLength: 18,
                                     pattern: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
                                 })}
 
@@ -308,6 +308,7 @@ const Profile = () => {
                                     <span className="font-medium">Oops!</span>
                                     {errors.password.type === "required" && " Password is required!"}
                                     {errors.password.type === "minLength" && " Password must be at least 8 characters long!"}
+                                    {errors.type === "maxLength" && " Max characters must be at least 8 characters long!"}
                                     {errors.password.type === "pattern" && " Password must include at least one uppercase letter and one number!"}
                                 </p>
                             )}
@@ -334,7 +335,6 @@ const Profile = () => {
                                 placeholder="••••••••"
                                 className={`${errors.confirmPassword ? validationError.inputError : validationError.inputNormal} border text-sm rounded-lg block w-full p-2.5`}
                                 {...register("confirmPassword", {
-                                    required: true,
                                     validate: (value) => value === watch("password"),
                                 })}
                             />

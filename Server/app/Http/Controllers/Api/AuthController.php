@@ -130,46 +130,45 @@ class AuthController extends Controller
             ], 500);
         }
    }
-
-    public function update(Request $request): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.',
+            ], 404);
+        }
+
         $validator = Validator::make($request->all(), [
-            "id" => "required|integer|exists:users,id",
             "firstName" => "required|string",
             "lastName" => "required|string",
             "age" => "required|integer|min:18",
-            "email" => "required|email|unique:users,email," . $request->id, // ignore current user
-            "profile_image" => "required",
-            "password" => "required|string|min:6",
-            "role_id" => "required|integer",
+            "email" => "required|email|unique:users,email," . $id,
+            "profile_image" => "required|string",
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                "message" => $validator->errors(),
+                'errors' => $validator->errors(),
             ], 422);
         }
-
-        $user = User::find($request->id);
 
         $user->firstName = $request->firstName;
         $user->lastName = $request->lastName;
         $user->age = $request->age;
         $user->email = $request->email;
         $user->profile_image = $request->profile_image;
-        $user->role_id = $request->role_id;
-
-        $user->password = Hash::make($request->password);
 
         $user->save();
 
+        $userData = User::with('role')->where('email', $request->email)->first();
+
         return response()->json([
-            "message" => "User updated successfully",
-            "user" => $user
+            'message' => 'User updated successfully.',
+            'user' => $userData,
         ], 201);
     }
-
-
 
 }
 

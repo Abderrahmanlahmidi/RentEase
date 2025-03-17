@@ -8,7 +8,7 @@ Route::post("login", [AuthController::class, "login"])->name("login");
 Route::post("register", [AuthController::class, "register"])->name("register");
 Route::get('users', [AuthController::class, 'index']);
 Route::get('user/{id}', [AuthController::class, 'show']);
-Route::put('user/{id}', [AuthController::class, 'update']);
+Route::put('user/update/{id}', [AuthController::class, 'update']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("logout", [AuthController::class, "logout"])->name("logout");
