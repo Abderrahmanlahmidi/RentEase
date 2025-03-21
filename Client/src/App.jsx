@@ -29,8 +29,11 @@ const App = () => {
     i18n: i18n,
   };
 
+
   const user = JSON.parse(localStorage.getItem("user"));
+
   const role = user?.role.name || "";
+
 
 
   return (

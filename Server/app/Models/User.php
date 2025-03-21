@@ -50,21 +50,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function blogs(){
-        return $this->hasMany(Blog::class);
-    }
-
-    public function annonces(){
-        return $this->hasMany(Annonce::class, 'proprietaire_id');
-    }
-
-    public function messagesEnvoyes(){
-        return $this->hasMany(Message::class, 'expediteur_id');
-    }
-
-    public function messagesRecus(){
-        return $this->hasMany(Message::class, 'destinataire_id');
-    }
 
 
 }

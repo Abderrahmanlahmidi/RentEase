@@ -9,6 +9,8 @@ Route::post("register", [AuthController::class, "register"])->name("register");
 Route::get('users', [AuthController::class, 'index']);
 Route::get('user/{id}', [AuthController::class, 'show']);
 Route::put('user/update/{id}', [AuthController::class, 'update']);
+Route::put('user/password', [AuthController::class, 'changePassword']);
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("logout", [AuthController::class, "logout"])->name("logout");

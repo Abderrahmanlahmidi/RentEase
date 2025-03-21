@@ -4,12 +4,16 @@ import axios from "axios";
 export default function UsersDashboard() {
 
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredData, setFilteredData] = useState({});
+
+
 
   const handleUpdateClick = () => {
     setShowModal(true);
   };
 
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +27,20 @@ export default function UsersDashboard() {
     fetchData();
   }, []);
 
+  const searchInputChangeHandler = (searchValue) => {
+    setSearchInput(searchValue);
+
+    if (searchValue !== "") {
+      const filteredData = data.filter((item) =>
+          Object.values(item).join('').toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredData(filteredData);
+    } else {
+      setFilteredData(data);
+    }
+  };
+
+  const displayedData = searchInput === "" ? data : filteredData;
 
   return (
     <div className="relative overflow-x-auto w-full sm:rounded-lg">
@@ -32,6 +50,7 @@ export default function UsersDashboard() {
           <input
             type="text"
             placeholder="Search..."
+            onChange={(e) => searchInputChangeHandler(e.target.value)}
             className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
           />
         </div>
@@ -50,7 +69,7 @@ export default function UsersDashboard() {
         </thead>
 
         <tbody>
-        {data.map((item, index) => (
+        {displayedData.map((item, index) => (
             <tr
                 key={index}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
@@ -86,6 +105,7 @@ export default function UsersDashboard() {
               </td>
             </tr>
         ))}
+
         </tbody>
       </table>
     </div>

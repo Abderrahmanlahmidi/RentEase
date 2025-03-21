@@ -38,7 +38,6 @@ class AuthController extends Controller
             "token_type" => "Bearer",
             "token" => $token,
             'user' => $user,
-//            "password" => $user->password,
         ]);
     }
 
@@ -169,6 +168,31 @@ class AuthController extends Controller
             'user' => $userData,
         ], 201);
     }
+
+    public function changePassword(Request $request): JsonResponse{
+
+        $user = auth()->user();
+
+       $validator = Validator::make($request->all(), [
+           "password" => "required",
+       ]);
+
+       if($validator->fails()){
+           return response()->json([
+               "message" => $validator->errors(),
+           ], 404);
+       }
+
+       $user -> password = Hash::make($request->password);
+
+       $user->save();
+
+        return response()->json([
+            "message" => "password updated successfully",
+        ], 202);
+
+    }
+
 
 }
 
