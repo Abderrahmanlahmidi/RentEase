@@ -19,7 +19,7 @@ const Register = () => {
 
   const onSubmit = async (data) => {
 
-
+    console.log(data);
 
     if (data.password !== data.confirmPassword) {
       console.log("password not correct");

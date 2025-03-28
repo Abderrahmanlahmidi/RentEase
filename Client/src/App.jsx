@@ -16,6 +16,8 @@ import Unauthorized from "./pages/error/unauthorized.jsx";
 import ProtectedDashboard from "./components/ProtectedDashboard.jsx";
 import ProtectedProfile from "./components/ProtectedProfile.jsx";
 import Profile from "./pages/Profile.jsx";
+import RolesDashboard from "./pages/dashboard/dashboardChildrens/roleDashboard.jsx";
+import CategoriesDashboard from "./pages/dashboard/dashboardChildrens/categoriesDashboard.jsx";
 
 
 export const informationContext = createContext();
@@ -53,6 +55,8 @@ const App = () => {
                 <Route path="/dashboard" element={<Dashboard />}>
                   <Route index element={<HomeDashboard />} />
                   <Route path="users" element={<UsersDashboard />} />
+                  <Route path="roles" element={<RolesDashboard />} />
+                  <Route path="categories" element={<CategoriesDashboard />} />
                 </Route>
               </Route>
 

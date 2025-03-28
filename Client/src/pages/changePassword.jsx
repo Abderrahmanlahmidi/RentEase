@@ -88,7 +88,6 @@ const ChangePassword = () => {
                         {...register("confirmPassword", {
                             required:true,
                             validate: (value) => value === watch("password"),
-
                         })}
                     />
                     {errors.confirmPassword && (

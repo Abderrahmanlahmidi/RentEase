@@ -24,10 +24,6 @@ const Profile = () => {
     const onSubmit = async (data) => {
         data.id = userData?.user?.id;
 
-        if (data.password !== data.confirmPassword) {
-            setSuccessMessage("Passwords do not match.");
-            return;
-        }
         try {
             await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
                 withCredentials: true,
@@ -157,10 +153,9 @@ const Profile = () => {
                         <button type="submit" className="btn-primary">Save Changes</button>
                     </div>
                 </form>
-            ): (
+            ):(
                 <ChangePassword/>
             )}
-
 
         </div>
     );
