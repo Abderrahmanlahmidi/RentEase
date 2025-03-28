@@ -193,6 +193,41 @@ class AuthController extends Controller
 
     }
 
+    public function updateUserRole(Request $request, $id): JsonResponse{
+        $request->validate([
+            "role_id" => "required",
+        ]);
+
+        $user = User::find($id);
+        $user-> role_id = $request->role_id;
+        $user->save();
+
+        if(!$user){
+            return response()->json([
+                "message" => "user not found",
+            ], 404);
+        }
+
+        return response()->json([
+            "message" => "user role updated successfully",
+        ], 201);
+    }
+
+    public function deleteUser(Request $request, $id): JsonResponse{
+       $user =  User::destroy($id);
+
+       if(!$user){
+           return response()->json([
+               "message" => "user not found",
+           ], 404);
+       }
+
+       return response()->json([
+           "message" => "user deleted successfully",
+       ], 201);
+
+    }
+
 
 }
 

@@ -46,8 +46,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
+    }
+
+    public function annonces()
+    {
+        return $this->hasMany(Annonce::class, 'proprietaire_id');
+    }
+
+    public function messagesSent()
+    {
+        return $this->hasMany(Message::class, 'expediteur_id');
+    }
+
+    public function messagesReceived()
+    {
+        return $this->hasMany(Message::class, 'destinataire_id');
     }
 
 

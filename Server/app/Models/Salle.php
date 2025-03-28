@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Salle extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['type'];
+
+    public function annonces()
+    {
+        return $this->belongsToMany(Annonce::class, 'annonce_salle');
+    }
+
 }

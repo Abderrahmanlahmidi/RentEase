@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('titre');
             $table->text('contenu');
             $table->date('datePublication');
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('auteur_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

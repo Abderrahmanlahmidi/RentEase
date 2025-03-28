@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['expediteur_id', 'destinataire_id', 'contenu', 'status'];
+
+    public function expediteur()
+    {
+        return $this->belongsTo(User::class, 'expediteur_id');
+    }
+
+    public function destinataire()
+    {
+        return $this->belongsTo(User::class, 'destinataire_id');
+    }
+
 }

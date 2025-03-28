@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('annonces', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
-            $table->text('description')->nullable();
-            $table->float('prix');
-            $table->string('localisation');
-            $table->boolean('estDisponible')->default(true);
+            $table->text('description');
             $table->float('superficie');
             $table->string('coordonnees');
-            $table->foreignId('proprietaire_id')->nullable()->constrained('users');
+            $table->foreignId('proprietaire_id')->constrained('users');
+            $table->foreignId('client_id')->nullable()->constrained('users');
+            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('quartier_id')->constrained('quartiers');
             $table->timestamps();
         });
     }
