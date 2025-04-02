@@ -4,20 +4,19 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 
 export default function CategoriesDashboard() {
+
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
     const [toastMessage, setToastMessage] = useState("");
     const [showToast, setShowToast] = useState(false);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit , setValue} = useForm();
 
-    // This will only be called once when the component mounts
     useEffect(() => {
         displayCategories();
     }, []);
 
-    // Function to fetch categories
     const displayCategories = async () => {
         try {
             const response = await axios.get("http://127.0.0.1:8000/api/categories");
@@ -27,7 +26,7 @@ export default function CategoriesDashboard() {
         }
     };
 
-    // Delete category function
+
     const deleteCategories = async (id) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/category/${id}`);
@@ -41,7 +40,6 @@ export default function CategoriesDashboard() {
         }
     };
 
-    // Create new category function
     const createNewCategory = async (data) => {
         try {
             await axios.post(
@@ -52,12 +50,37 @@ export default function CategoriesDashboard() {
                     withCredentials: true,
                 }
             );
-            displayCategories();  // Re-fetch categories after adding a new one
+            displayCategories();
             setIsCreateModalOpen(false);
         } catch (error) {
             console.log(error);
         }
     };
+
+
+    const updateModalCategories = (category) => {
+        setIsUpdateModalOpen(true);
+        setSelectedCategory(category.id);
+        setValue('nom', category.nom);
+        setValue('description', category.description);
+    }
+
+
+    const updateCategory = async (data) => {
+
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/api/category/update/${selectedCategory}`, data, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response);
+            setIsUpdateModalOpen(false);
+            displayCategories()
+            setSelectedCategory(null);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <div className="relative overflow-x-auto w-full sm:rounded-lg">
@@ -97,8 +120,7 @@ export default function CategoriesDashboard() {
                             <td className="px-6 py-4 text-center space-x-2">
                                 <button
                                     onClick={() => {
-                                        setSelectedCategory(category);
-                                        setIsUpdateModalOpen(true);
+                                      updateModalCategories(category)
                                     }}
                                     className="bg-blue-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-blue-600 text-xs"
                                 >
@@ -125,7 +147,7 @@ export default function CategoriesDashboard() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-                    onClick={() => setIsCreateModalOpen(false)}
+                    onClick={() => setIsUpdateModalOpen(false)}
                 >
                     <motion.div
                         initial={{ y: -50, opacity: 0 }}
@@ -175,6 +197,71 @@ export default function CategoriesDashboard() {
                                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                 >
                                     Add
+                                </button>
+                            </div>
+                        </form>
+                    </motion.div>
+                </motion.div>
+            )}
+
+
+            {/* Update Category Modal */}
+            {isUpdateModalOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                >
+                    <motion.div
+                        initial={{ y: -50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -50, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                            Update Category
+                        </h3>
+                        <form onSubmit={handleSubmit(updateCategory)}>
+                            <div className="mb-4">
+                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Name
+                                </label>
+                                <input
+                                    {...register("nom", { required: true })}
+                                    type="text"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Enter category name"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Description
+                                </label>
+                                <textarea
+                                    {...register("description", { required: true })}
+                                    rows="4"
+                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Leave a description..."
+                                ></textarea>
+                            </div>
+
+                            <div className="flex justify-end space-x-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsUpdateModalOpen(false)}
+                                    className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                   type="submit"
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                >
+                                    Update
                                 </button>
                             </div>
                         </form>
