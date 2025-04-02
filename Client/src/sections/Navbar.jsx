@@ -6,6 +6,7 @@ import { NavLink } from "react-router";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router";
 import UserDropdown from "../components/navbarComponents/userDropdown.jsx";
+import UserNotification from "../components/navbarComponents/userNotification.jsx";
 
 
 
@@ -50,6 +51,7 @@ function Navbar(){
       <div className="flex items-center gap-3">
   {user ? (
       <div className="flex items-center gap-3">
+          <UserNotification/>
        <UserDropdown logoutHandler={logoutHandler} />
       </div>
   ) : (

@@ -8,7 +8,7 @@ export default function UsersDashboard() {
   const [filteredData, setFilteredData] = useState({});
   const [userDeleteMessage, setUserDeleteMessage] = useState("");
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-
+  const [selectRole, setSelectRole] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,6 +63,18 @@ export default function UsersDashboard() {
     }
   };
 
+  useEffect(() => {
+   const fetchRoles = async () => {
+     try {
+       const response = await axios.get("http://127.0.0.1:8000/api/roles");
+      setSelectRole(response.data.data);
+      console.log(selectRole)
+     } catch (error) {
+       console.error(error);
+     }
+   };
+   fetchRoles();
+  }, []);
 
   const displayedData = searchInput === "" ? data : filteredData;
 
@@ -131,14 +143,15 @@ export default function UsersDashboard() {
                   <td className="px-6 py-4">{item.email}</td>
                   <td className="px-6 py-4">{item.age}</td>
                   <td className="px-6 py-4">
-                    <select
-                        className="block w-full p-2 border border-gray-300 rounded text-sm bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        value={item.role_id}
-                        onChange={(e) => handleRoleChange(Number(e.target.value), item.id)}
-                    >
-                      <option value="2">Admin</option>
-                      <option value="1">Client</option>
-                    </select>
+                        <select
+                            value={item.role_id}
+                            className="block w-full p-2 border border-gray-300 rounded text-sm bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            onChange={(e) => handleRoleChange(Number(e.target.value), item.id)}
+                        >
+                         {selectRole.map((item) => (
+                               <option key={item.id} value={item.id}>{item.name}</option>
+                          ))}
+                        </select>
                   </td>
                   <td className="px-6 py-4 text-center space-x-2">
                     <button

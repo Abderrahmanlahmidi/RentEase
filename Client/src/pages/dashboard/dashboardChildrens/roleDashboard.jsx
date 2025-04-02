@@ -44,9 +44,6 @@ export default function RolesDashboard() {
 
     const createRole = async (data) => {
         try {
-            await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
-                withCredentials: true,
-            });
             await axios.post("http://127.0.0.1:8000/api/role", data, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
@@ -60,9 +57,6 @@ export default function RolesDashboard() {
 
     const updateRole = async (data) => {
         try {
-            await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
-                withCredentials: true,
-            });
             await axios.put(`http://127.0.0.1:8000/api/role/${selectedRole.id}`, data, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
