@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Annonce;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -169,9 +171,9 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function changePassword(Request $request): JsonResponse{
+    public function changePassword(Request $request, $id): JsonResponse{
 
-        $user = auth()->user();
+        $user = User::find($id);
 
        $validator = Validator::make($request->all(), [
            "password" => "required",
@@ -188,7 +190,7 @@ class AuthController extends Controller
        $user->save();
 
         return response()->json([
-            "message" => "password updated successfully",
+            "message" => "Password changed successfully!",
         ], 202);
 
     }
@@ -213,7 +215,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function deleteUser(Request $request, $id): JsonResponse{
+    public function deleteUser($id): JsonResponse{
        $user =  User::destroy($id);
 
        if(!$user){
@@ -227,6 +229,8 @@ class AuthController extends Controller
        ], 201);
 
     }
+
+
 
 
 }

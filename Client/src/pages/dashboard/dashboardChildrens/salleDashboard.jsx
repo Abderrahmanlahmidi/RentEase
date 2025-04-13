@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import {ToastContainer} from "react-toastify";
+import {showToast} from "../../../utils/toastUtils.jsx";
 
 export default function SallesDashboard() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -14,9 +16,8 @@ export default function SallesDashboard() {
         try {
             const response = await axios.get("http://127.0.0.1:8000/api/salles");
             setSalles(response.data.salles);
-            console.log(salles)
-        } catch (error) {
-            console.error(error);
+        } catch {
+            showToast("error", "Failed to fetch salles.");
         }
     };
 
@@ -53,8 +54,10 @@ export default function SallesDashboard() {
             });
             await fetchSalles();
             closeModals();
-        } catch (error) {
-            console.error(error);
+            showToast("success", "Salle created!");
+        } catch  {
+
+            showToast("error", "Error creating Salle");
         }
     };
 
@@ -67,8 +70,9 @@ export default function SallesDashboard() {
             });
             await fetchSalles();
             closeModals();
-        } catch (error) {
-            console.error(error);
+            showToast("success", "Salle updated!");
+        } catch  {
+            showToast("error", "Error updating Salle");
         }
     };
 
@@ -76,13 +80,15 @@ export default function SallesDashboard() {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/salle/${id}`);
             await fetchSalles();
-        } catch (error) {
-            console.error(error);
+            showToast("success", "Salle deleted!");
+        } catch  {
+            showToast("error", "Error deleting Salle");
         }
     };
 
     return (
         <div className="relative overflow-x-auto w-full sm:rounded-lg">
+            <ToastContainer/>
             <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                     Salle Management
@@ -98,15 +104,24 @@ export default function SallesDashboard() {
             <div className="relative overflow-auto max-h-[600px] w-full sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
+                    <motion.tr
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         <th className="px-6 py-3">Name</th>
                         <th className="px-6 py-3">Description</th>
                         <th className="px-6 py-3 text-center">Actions</th>
-                    </tr>
+                    </motion.tr>
                     </thead>
                     <tbody>
                     {salles.map((salle, index) => (
-                        <tr
+                        <motion.tr
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
                             key={index}
                             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                         >
@@ -128,7 +143,7 @@ export default function SallesDashboard() {
                                     Delete
                                 </button>
                             </td>
-                        </tr>
+                        </motion.tr>
                     ))}
                     </tbody>
                 </table>
@@ -141,7 +156,7 @@ export default function SallesDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
                     onClick={closeModals}
                 >
                     <motion.div
@@ -207,7 +222,7 @@ export default function SallesDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
                     onClick={closeModals}
                 >
                     <motion.div

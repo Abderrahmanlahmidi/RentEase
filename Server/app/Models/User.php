@@ -56,6 +56,10 @@ class User extends Authenticatable
         return $this->hasMany(Annonce::class, 'proprietaire_id');
     }
 
+    public function Subscribes(){
+        return $this->hasMany(Subscribe::class);
+    }
+
     public function messagesSent()
     {
         return $this->hasMany(Message::class, 'expediteur_id');
@@ -65,6 +69,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'destinataire_id');
     }
+
+
 
 
 

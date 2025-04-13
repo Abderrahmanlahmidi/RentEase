@@ -2,7 +2,6 @@ import {Outlet} from "react-router";
 import Sidebar from "../../components/dashboardComponents/sidebar.jsx";
 
 
-
 function Dashboard(){
 
     return (

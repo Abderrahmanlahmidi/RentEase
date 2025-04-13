@@ -9,7 +9,7 @@ class Blog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titre', 'contenu', 'date_publication', 'auteur_id'];
+    protected $fillable = ['titre', 'contenu', 'datePublication', 'auteur_id'];
 
     public function auteur()
     {
