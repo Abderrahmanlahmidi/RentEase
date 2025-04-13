@@ -78,24 +78,28 @@
   },
   "process": {
     "title": "The Buying or Renting Process",
+    "subtitle": "Step-by-step guide to finding your next home",
     "steps": [
       {
         "id": 1,
         "title": "Search",
         "description": "Find the best deals by browsing our available listings.",
-        "button": "Search now"
+        "button": "Search now",
+        "path": "/properties"
       },
       {
         "id": 2,
         "title": "Explore",
         "description": "Discover details, compare options, and choose what suits you best.",
-        "button": "Explore now"
+        "button": "Explore now",
+        "path": "/properties"
       },
       {
         "id": 3,
         "title": "Contact Us",
         "description": "Need help? Contact our team for more information.",
-        "button": "Contact now"
+        "button": "Contact now",
+        "path": "/contact"
       }
     ]
   }

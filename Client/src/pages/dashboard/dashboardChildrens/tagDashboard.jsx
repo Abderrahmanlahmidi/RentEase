@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import {ToastContainer} from "react-toastify";
+import {showToast} from "../../../utils/toastUtils.jsx";
 
 export default function TagsDashboard() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -14,8 +16,8 @@ export default function TagsDashboard() {
         try {
             const response = await axios.get("http://127.0.0.1:8000/api/tags");
             setTags(response.data.tags);
-        } catch (error) {
-            console.error(error);
+        } catch  {
+            showToast("error", "Error fetching tags.");
         }
     };
 
@@ -48,9 +50,9 @@ export default function TagsDashboard() {
             });
             await fetchTags();
             closeModals();
-
-        } catch (error) {
-            console.error(error);
+            showToast("success", "Success create Tag");
+        } catch  {
+            showToast("error", "Error create Tag");
         }
     };
 
@@ -61,8 +63,10 @@ export default function TagsDashboard() {
             });
             await fetchTags();
             closeModals();
-        } catch (error) {
-            console.error(error);
+            showToast("success", "Success update Tag");
+        } catch  {
+
+            showToast("error", "Error updating Tag");
         }
     };
 
@@ -70,13 +74,16 @@ export default function TagsDashboard() {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/tag/${id}`);
             await fetchTags();
-        } catch (error) {
-            console.error(error);
+            showToast("success", "Success delete Tag");
+        } catch  {
+
+            showToast("error", "Error deleting Tag");
         }
     };
 
     return (
         <div className="relative overflow-x-auto w-full sm:rounded-lg">
+            <ToastContainer />
             <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Tag Management</h2>
                 <button
@@ -90,22 +97,32 @@ export default function TagsDashboard() {
             <div className="relative overflow-auto max-h-[600px] w-full sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
+                    <motion.tr
+                          initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                    >
                         <th className="px-6 py-3">Nom</th>
                         <th className="px-6 py-3">Description</th>
                         <th className="px-6 py-3 text-center">Actions</th>
-                    </tr>
+                    </motion.tr>
                     </thead>
                     <tbody>
                     {tags.map((tag, index) => (
-                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                        <motion.tr
+                              initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                             <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{tag.nom}</td>
                             <td className="px-6 py-4">{tag.description}</td>
                             <td className="px-6 py-4 text-center space-x-2">
                                 <button onClick={() => openUpdateModal(tag)} className="bg-blue-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-blue-600 text-xs">Update</button>
                                 <button onClick={() => deleteTag(tag.id)} className="bg-red-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-red-600 text-xs">Delete</button>
                             </td>
-                        </tr>
+                        </motion.tr>
                     ))}
                     </tbody>
                 </table>
@@ -118,7 +135,7 @@ export default function TagsDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
                     onClick={closeModals}
                 >
                     <motion.div
@@ -184,7 +201,7 @@ export default function TagsDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
                     onClick={closeModals}
                 >
                     <motion.div

@@ -60,6 +60,41 @@ class CategorieController extends Controller
         ]);
     }
 
+    public function updateCategory(Request $request, $id)
+    {
+        $categorie = Category::find($id);
+
+        if (!$categorie) {
+            return response()->json([
+                "success" => false,
+                "message" => "Category not found."
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string|max:255',
+            'description' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors()
+            ], 422);
+        }
+
+        $categorie->nom = $request->nom;
+        $categorie->description = $request->description;
+        $categorie->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Category updated successfully."
+        ], 201);
+    }
+
+
+
 }
 
 

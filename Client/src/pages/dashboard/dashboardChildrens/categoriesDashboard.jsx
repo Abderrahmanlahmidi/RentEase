@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import {showToast} from "../../../utils/toastUtils.jsx";
+import {ToastContainer} from "react-toastify";
 
 export default function CategoriesDashboard() {
-
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
-    const [toastMessage, setToastMessage] = useState("");
-    const [showToast, setShowToast] = useState(false);
-    const { register, handleSubmit , setValue} = useForm();
+
+    const { register, handleSubmit, setValue, reset } = useForm();
+
+    useEffect(() => {
+        displayCategories();
+    }, []);
 
     useEffect(() => {
         displayCategories();
@@ -21,22 +25,18 @@ export default function CategoriesDashboard() {
         try {
             const response = await axios.get("http://127.0.0.1:8000/api/categories");
             setCategories(response.data.categories);
-        } catch (err) {
-            console.log(err);
+        } catch {
+            showToast("error", "Failed to load categories");
         }
     };
-
 
     const deleteCategories = async (id) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/category/${id}`);
             setCategories(categories.filter((prev) => prev.id !== id));
-            setToastMessage("Category deleted");
-            setShowToast(true);
-            setTimeout(() => setShowToast(false), 3000);
-        } catch (err) {
-            console.log(err);
-            setToastMessage("Something went wrong");
+            showToast("success", "Category deleted successfully");
+        } catch {
+            showToast("error", "Failed to delete category");
         }
     };
 
@@ -52,38 +52,43 @@ export default function CategoriesDashboard() {
             );
             displayCategories();
             setIsCreateModalOpen(false);
-        } catch (error) {
-            console.log(error);
+            reset();
+            showToast("success", "Category created successfully");
+        } catch  {
+            showToast("error", "Failed to create category");
         }
     };
-
 
     const updateModalCategories = (category) => {
         setIsUpdateModalOpen(true);
         setSelectedCategory(category.id);
         setValue('nom', category.nom);
         setValue('description', category.description);
-    }
-
+    };
 
     const updateCategory = async (data) => {
-
         try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/category/update/${selectedCategory}`, data, {
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true,
-            });
-            console.log(response);
+            await axios.put(
+                `http://127.0.0.1:8000/api/category/update/${selectedCategory}`,
+                data,
+                {
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                }
+            );
             setIsUpdateModalOpen(false);
-            displayCategories()
+            displayCategories();
             setSelectedCategory(null);
-        } catch (err) {
-            console.log(err);
+            showToast("success", "Category updated successfully");
+        } catch{
+            showToast("error", "Failed to update category");
         }
-    }
+    };
+
 
     return (
         <div className="relative overflow-x-auto w-full sm:rounded-lg">
+            <ToastContainer/>
             {/* Table Header */}
             <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -109,8 +114,12 @@ export default function CategoriesDashboard() {
                     </thead>
                     <tbody>
                     {categories.map((category) => (
-                        <tr
+                        <motion.tr
                             key={category.id}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
                             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                         >
                             <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -119,9 +128,7 @@ export default function CategoriesDashboard() {
                             <td className="px-6 py-4">{category.description}</td>
                             <td className="px-6 py-4 text-center space-x-2">
                                 <button
-                                    onClick={() => {
-                                      updateModalCategories(category)
-                                    }}
+                                    onClick={() => updateModalCategories(category)}
                                     className="bg-blue-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-blue-600 text-xs"
                                 >
                                     Update
@@ -133,7 +140,7 @@ export default function CategoriesDashboard() {
                                     Delete
                                 </button>
                             </td>
-                        </tr>
+                        </motion.tr>
                     ))}
                     </tbody>
                 </table>
@@ -146,8 +153,8 @@ export default function CategoriesDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-                    onClick={() => setIsUpdateModalOpen(false)}
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
+                    onClick={() => setIsCreateModalOpen(false)}
                 >
                     <motion.div
                         initial={{ y: -50, opacity: 0 }}
@@ -204,7 +211,6 @@ export default function CategoriesDashboard() {
                 </motion.div>
             )}
 
-
             {/* Update Category Modal */}
             {isUpdateModalOpen && (
                 <motion.div
@@ -212,7 +218,8 @@ export default function CategoriesDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
+                    onClick={() => setIsUpdateModalOpen(false)}
                 >
                     <motion.div
                         initial={{ y: -50, opacity: 0 }}
@@ -258,7 +265,7 @@ export default function CategoriesDashboard() {
                                     Cancel
                                 </button>
                                 <button
-                                   type="submit"
+                                    type="submit"
                                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                 >
                                     Update
@@ -269,33 +276,6 @@ export default function CategoriesDashboard() {
                 </motion.div>
             )}
 
-            {/* Toast Notifications */}
-            {showToast && (
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 30 }}
-                    transition={{ duration: 0.3 }}
-                    className="fixed bottom-6 right-6 z-50"
-                >
-                    <div
-                        className="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-                        role="alert"
-                    >
-                        <svg
-                            className="shrink-0 inline w-4 h-4 me-3"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                        </svg>
-                        <span className="sr-only">Info</span>
-                        <div>{toastMessage}</div>
-                    </div>
-                </motion.div>
-            )}
         </div>
     );
 }
