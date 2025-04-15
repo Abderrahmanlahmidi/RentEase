@@ -9,7 +9,7 @@ class Salle extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type'];
+    protected $fillable = ['type', 'description'];
 
     public function annonces()
     {

@@ -28,3 +28,7 @@ body{
 .form-label {
   @apply block mb-2 text-sm font-medium text-gray-800;
 }
+
+.opacity{
+  background-color: rgba(0, 0, 0, 0.6);
+}

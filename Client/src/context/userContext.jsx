@@ -1,10 +1,26 @@
 import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
+
+  const [announcements, setAnnouncements] = useState([]);
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const displayAnnouces = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/annonces");
+        setAnnouncements(response.data.annonces);
+      }catch(error){
+        console.log("Error get data" + error);
+      }
+    }
+    displayAnnouces()
+  }, [])
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -23,7 +39,7 @@ export const UserProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, announcements, setAnnouncements}}>
       {children}
     </UserContext.Provider>
   );

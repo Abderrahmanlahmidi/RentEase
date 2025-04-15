@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import {showToast} from "../../../utils/toastUtils.jsx";
+import {ToastContainer} from "react-toastify";
 
 export default function RolesDashboard() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -16,6 +18,7 @@ export default function RolesDashboard() {
             setRoles(response.data.data);
         } catch (error) {
             console.error(error);
+            showToast("error", "Failed to fetch roles.");
         }
     };
 
@@ -44,47 +47,45 @@ export default function RolesDashboard() {
 
     const createRole = async (data) => {
         try {
-            await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
-                withCredentials: true,
-            });
             await axios.post("http://127.0.0.1:8000/api/role", data, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
+            showToast("success", "Role created successfully!");
             await fetchRoles();
             closeModals();
-        } catch (error) {
-            console.error(error);
+        } catch{
+            showToast("error", "Error creating role.");
         }
     };
 
     const updateRole = async (data) => {
         try {
-            await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
-                withCredentials: true,
-            });
             await axios.put(`http://127.0.0.1:8000/api/role/${selectedRole.id}`, data, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
+            showToast("success", "Role updated successfully!");
             await fetchRoles();
             closeModals();
-        } catch (error) {
-            console.error(error);
+        } catch{
+            showToast("error", "Error updating role.");
         }
     };
 
     const deleteRole = async (id) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/role/${id}`);
+            showToast("success", "Role deleted successfully!");
             await fetchRoles();
-        } catch (error) {
-            console.error(error);
+        } catch{
+            showToast("error", "Error deleting role.");
         }
     };
 
     return (
         <div className="relative overflow-x-auto w-full sm:rounded-lg">
+            <ToastContainer />
             <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                     Role Management
@@ -108,7 +109,12 @@ export default function RolesDashboard() {
                     </thead>
                     <tbody>
                     {roles.map((role, index) => (
-                        <tr
+                        <motion.tr
+
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
                             key={index}
                             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                         >
@@ -130,7 +136,7 @@ export default function RolesDashboard() {
                                     Delete
                                 </button>
                             </td>
-                        </tr>
+                        </motion.tr>
                     ))}
                     </tbody>
                 </table>
@@ -143,7 +149,7 @@ export default function RolesDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
                     onClick={closeModals}
                 >
                     <motion.div
@@ -209,7 +215,7 @@ export default function RolesDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
                     onClick={closeModals}
                 >
                     <motion.div

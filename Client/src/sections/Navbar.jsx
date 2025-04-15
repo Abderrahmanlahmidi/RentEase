@@ -6,6 +6,7 @@ import { NavLink } from "react-router";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router";
 import UserDropdown from "../components/navbarComponents/userDropdown.jsx";
+import UserNotification from "../components/navbarComponents/userNotification.jsx";
 
 
 
@@ -25,7 +26,6 @@ function Navbar(){
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    localStorage.removeItem('user');
     setUser(null)
     navigate('/');
   }
@@ -50,6 +50,7 @@ function Navbar(){
       <div className="flex items-center gap-3">
   {user ? (
       <div className="flex items-center gap-3">
+          <UserNotification/>
        <UserDropdown logoutHandler={logoutHandler} />
       </div>
   ) : (
@@ -57,6 +58,7 @@ function Navbar(){
           <NavLink to="/Login" className='text-sm  max-md:hidden text-blue-600 hover:underline'>
               {t('login')}
           </NavLink>
+
           <NavLink
               to="/Register"
               className="inline-flex text-white max-md:hidden bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
