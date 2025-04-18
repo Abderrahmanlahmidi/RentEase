@@ -5,107 +5,101 @@ import { useForm } from "react-hook-form";
 import { showToast } from "../../../utils/toastUtils.jsx";
 import { ToastContainer } from "react-toastify";
 
-export default function BlogsDashboard() {
+export default function ReviewsDashboard() {
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [selectedBlog, setSelectedBlog] = useState(null);
+    const [selectedReview, setSelectedReview] = useState(null);
     const { handleSubmit, register, reset, setValue } = useForm();
-    const [blogs, setBlogs] = useState([]);
-    const [filteredData, setFileteredData] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");
 
 
-    const fetchBlogs = async () => {
+    const fetchReviews = async () => {
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/blogs");
-            setBlogs(response.data.blogs);
+            const response = await axios.get("http://127.0.0.1:8000/api/reviews");
+            setReviews(response.data.reviews);
         } catch {
-            showToast("error", "Failed to fetch blogs.");
+            showToast("error", "Failed to fetch reviews.");
         }
     };
 
     useEffect(() => {
-        fetchBlogs();
+        fetchReviews();
     }, []);
 
     const closeModals = () => {
         setIsCreateModalOpen(false);
         setIsUpdateModalOpen(false);
-        setSelectedBlog(null);
+        setSelectedReview(null);
         reset();
     };
 
-    const createBlog = async (data) => {
+    const createReview = async (data) => {
         try {
-            await axios.post("http://127.0.0.1:8000/api/blog", data, {
+            await axios.post("http://127.0.0.1:8000/api/review", data, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            showToast("success", "Blog created successfully!");
-            await fetchBlogs();
+            showToast("success", "Review created successfully!");
+            await fetchReviews();
             closeModals();
         } catch {
-            showToast("error", "Error creating blog.");
+            showToast("error", "Error creating review.");
         }
     };
 
-    const updateBlog = async (data) => {
+    const updateReview = async (data) => {
         try {
-            await axios.put(`http://127.0.0.1:8000/api/blog/${selectedBlog.id}`, data, {
+            await axios.put(`http://127.0.0.1:8000/api/review/${selectedReview.id}`, data, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            showToast("success", "Blog updated successfully!");
-            await fetchBlogs();
+            showToast("success", "Review updated successfully!");
+            await fetchReviews();
             closeModals();
         } catch {
-            showToast("error", "Error updating blog.");
+            showToast("error", "Error updating review.");
         }
     };
 
-    const deleteBlog = async (id) => {
+    const deleteReview = async (id) => {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/blog/${id}`);
-            showToast("success", "Blog deleted successfully!");
-            await fetchBlogs();
+            await axios.delete(`http://127.0.0.1:8000/api/review/${id}`);
+            showToast("success", "Review deleted successfully!");
+            await fetchReviews();
         } catch {
-            showToast("error", "Error deleting blog.");
+            showToast("error", "Error deleting review.");
         }
     };
 
-    const searchBlog = (inputValue) => {
+    const searchReview = (inputValue) => {
         setSearchValue(inputValue);
         if (inputValue !== "") {
-            const filtered = blogs.filter(blog => {
-                return Object.values(blog).join('').toLowerCase().includes(inputValue.toLowerCase());
+            const filtered = reviews.filter(review => {
+                return Object.values(review).join('').toLowerCase().includes(inputValue.toLowerCase());
             });
-            setFileteredData(filtered);
+            setFilteredData(filtered);
         } else {
-            setFileteredData(blogs);
+            setFilteredData(reviews);
         }
     };
 
-    const result = searchValue === "" ? blogs : filteredData;
+    const result = searchValue === "" ? reviews : filteredData;
 
     return (
         <div className="relative overflow-x-auto w-full sm:rounded-lg">
             <ToastContainer />
             <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    Blog Management
+                    Review Management
                 </h2>
-                {/*<button*/}
-                {/*    onClick={openCreateModal}*/}
-                {/*    className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"*/}
-                {/*>*/}
-                {/*    Add Blog*/}
-                {/*</button>*/}
                 <div>
                     <input
                         type="text"
-                        placeholder="Search blog..."
-                        onChange={(e) => searchBlog(e.target.value)}
+                        placeholder="Search review..."
+                        onChange={(e) => searchReview(e.target.value)}
                         className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                 </div>
@@ -123,7 +117,7 @@ export default function BlogsDashboard() {
                     </tr>
                     </thead>
                     <tbody>
-                    {result.map((blog, index) => (
+                    {result.map((review, index) => (
                         <motion.tr
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -133,26 +127,20 @@ export default function BlogsDashboard() {
                             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                         >
                             <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate max-w-xs">
-                                {blog.titre.length > 40 ? `${blog.titre.substring(0, 40)}...` : blog.titre}
+                                {review.titre.length > 40 ? `${review.titre.substring(0, 40)}...` : review.titre}
                             </td>
-                            <td className="px-6 py-4  whitespace-nowrap dark:text-white truncate max-w-xs">
-                                {blog.contenu.length > 80 ? `${blog.contenu.substring(0, 80)}...` : blog.contenu}
+                            <td className="px-6 py-4 whitespace-nowrap dark:text-white truncate max-w-xs">
+                                {review.contenu.length > 80 ? `${review.contenu.substring(0, 80)}...` : review.contenu}
                             </td>
-                            <td className="px-6 py-4  whitespace-nowrap dark:text-white">
-                                {blog.auteur.firstName}  {blog.auteur.lastName}
+                            <td className="px-6 py-4 whitespace-nowrap dark:text-white">
+                                {review.auteur.firstName} {review.auteur.lastName}
                             </td>
-                            <td className="px-6 py-4  whitespace-nowrap dark:text-white">
-                                {blog.datePublication}
+                            <td className="px-6 py-4 whitespace-nowrap dark:text-white">
+                                {review.datePublication}
                             </td>
                             <td className="px-6 py-4 text-center space-x-2">
-                                {/*<button*/}
-                                {/*    onClick={() => openUpdateModal(blog)}*/}
-                                {/*    className="bg-blue-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-blue-600 text-xs"*/}
-                                {/*>*/}
-                                {/*    Update*/}
-                                {/*</button>*/}
                                 <button
-                                    onClick={() => deleteBlog(blog.id)}
+                                    onClick={() => deleteReview(review.id)}
                                     className="bg-red-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-red-600 text-xs"
                                 >
                                     Delete
@@ -164,7 +152,7 @@ export default function BlogsDashboard() {
                 </table>
             </div>
 
-            {/* Create Blog Modal */}
+            {/* Create Review Modal */}
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -183,9 +171,9 @@ export default function BlogsDashboard() {
                         onClick={(e) => e.stopPropagation()}
                     >
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                            Add Blog
+                            Add Review
                         </h3>
-                        <form onSubmit={handleSubmit(createBlog)}>
+                        <form onSubmit={handleSubmit(createReview)}>
                             <div className="mb-4">
                                 <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Title
@@ -194,7 +182,7 @@ export default function BlogsDashboard() {
                                     {...register("title", { required: true })}
                                     type="text"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Enter blog title"
+                                    placeholder="Enter review title"
                                 />
                             </div>
 
@@ -230,7 +218,7 @@ export default function BlogsDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Blog Modal */}
+            {/* Update Review Modal */}
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -249,9 +237,9 @@ export default function BlogsDashboard() {
                         onClick={(e) => e.stopPropagation()}
                     >
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                            Update Blog
+                            Update Review
                         </h3>
-                        <form onSubmit={handleSubmit(updateBlog)}>
+                        <form onSubmit={handleSubmit(updateReview)}>
                             <div className="mb-4">
                                 <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Title
@@ -260,7 +248,7 @@ export default function BlogsDashboard() {
                                     {...register("title", { required: true })}
                                     type="text"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Enter blog title"
+                                    placeholder="Enter review title"
                                 />
                             </div>
 
