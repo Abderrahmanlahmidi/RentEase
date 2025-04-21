@@ -67,7 +67,7 @@ class SalleController extends Controller
   }
 
   public function updateSalle(Request $request, $id){
-      $salle = $this -> salleRepo -> find($id);
+      $this -> salleRepo -> find($id);
 
       $validator = Validator::make($request->all(), [
           'type' => "required",

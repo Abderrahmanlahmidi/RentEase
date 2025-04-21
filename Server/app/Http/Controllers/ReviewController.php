@@ -2,29 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\Contracts\ReviewRepositoryInterface;
 
-class BlogController extends Controller
+class ReviewController extends Controller
 {
-    public function displayBlogs(){
-        $blogs = Blog::with('auteur')->get();
+    protected $reviewRepo;
 
-        if(!$blogs){
+    public function __construct(ReviewRepositoryInterface $reviewRepo){
+        $this->reviewRepo = $reviewRepo;
+    }
+    public function displayReviews(){
+        $reviews = $this->reviewRepo->all();
+
+        if(!$reviews){
             return response()->json([
                 "success" => false,
-                "message" => "No blogs found."
+                "message" => "No reviews found."
             ]);
         }
 
         return response()->json([
             "success" => true,
-            "blogs" => $blogs
+            "reviews" => $reviews
         ]);
     }
 
-    public function createBlog(Request $request){
+    public function createReview(Request $request){
+
         $validator = Validator::make($request->all(), [
             'titre' => 'required',
             'contenu' => 'required',
@@ -36,25 +43,25 @@ class BlogController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-       $blog = Blog::create([
+       $review = $this->reviewRepo->create([
             'titre' => $request->titre,
             'contenu' => $request->contenu,
             'datePublication' => $request->datePublication,
             'auteur_id' => $request->auteur_id
         ]);
 
-        $review = Blog::with('auteur')->find($blog->id);
+        $review = $this->reviewRepo->find($review->id);
 
         return response()->json([
             "success" => true,
-            "message" => "Blog created.",
+            "message" => "Review created.",
             "review" => $review
         ], 201);
     }
 
-    public function updateBlog(Request $request, $id){
+    public function updateReview(Request $request, $id){
 
-        $blog = Blog::find($id);
+        $review = $this->reviewRepo->find($id);
 
         $validator = Validator::make($request->all(), [
             'titre' => 'required',
@@ -63,10 +70,10 @@ class BlogController extends Controller
             'auteur_id' => 'required',
         ]);
 
-        if(!$blog){
+        if(!$review){
             return response()->json([
                 "success" => false,
-                "message" => "Blog not found."
+                "message" => "Review not found."
             ]);
         }
 
@@ -74,32 +81,35 @@ class BlogController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-       $blog->titre = $request->titre;
-       $blog->contenu = $request->contenu;
-       $blog->datePublication = $request->datePublication;
-       $blog->auteur_id = $request->auteur_id;
-        $blog->save();
+       $this->reviewRepo->update([
+           'titre' => $request->titre,
+           'contenu' => $request->contenu,
+           'datePublication' => $request->datePublication,
+           'auteur_id' => $request->auteur_id
+       ], $id);
+
+        $this->reviewRepo->find($id);
 
         return response()->json([
             "success" => true,
-            'message' => "Blog updated."
+            'message' => "Review updated."
         ], 201);
 
     }
 
-    public function deleteBlog($id){
-       $blog =  Blog::destroy($id);
+    public function deleteReview($id){
+       $review = $this -> reviewRepo->delete($id);
 
-       if(!$blog){
+       if(!$review){
            return response()->json([
                "success" => false,
-               "message" => "Blog not found."
+               "message" => "Review not found."
            ]);
        }
 
         return response()->json([
             "success" => true,
-            "message" => "Blog deleted."
+            "message" => "Review deleted."
         ]);
     }
 

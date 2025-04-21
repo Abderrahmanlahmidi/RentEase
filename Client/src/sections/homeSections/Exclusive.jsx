@@ -7,11 +7,11 @@ export default function Exclusive() {
     const [showPopup, setShowPopup] = useState(false);
 
 
-    useEffect(() => {
-        setTimeout(() => {
-            setShowPopup(true);
-        }, 6000)
-    }, []);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setShowPopup(true);
+    //     }, 6000)
+    // }, []);
 
     const navigate = useNavigate();
 

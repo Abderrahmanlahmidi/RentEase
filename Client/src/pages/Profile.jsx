@@ -1,19 +1,17 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { validationError } from "../utils/utils";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/userContext.jsx";
 import ChangePassword from "./changePassword.jsx";
 
 const Profile = () => {
-
-    const { register, reset, formState: { errors }, handleSubmit, watch } = useForm();
+    const { register, reset, formState: { errors }, handleSubmit } = useForm();
     const [successMessage, setSuccessMessage] = useState("");
     const [userData, setUserData] = useState({});
     const { user, setUser } = useContext(UserContext);
     const formRef = useRef(null);
-    const [Showing, setShowing] = useState(false);
+    const [showingForm, setShowingForm] = useState(false);
 
     const scrollToForm = () => {
         if (formRef.current) {
@@ -31,17 +29,11 @@ const Profile = () => {
             const response = await axios.put(`http://127.0.0.1:8000/api/user/update/${data.id}`, data, {
                 withCredentials: true,
             });
-            console.log("User updated successfully:", response.data.user);
             setUser(response.data.user);
             setSuccessMessage("Profile successfully updated!");
         } catch (error) {
-            if (error.response) {
-                console.log("Error:", error.response.data);
-                setSuccessMessage("Failed to update profile.");
-            } else {
-                console.log("Request failed:", error.message);
-                setSuccessMessage("Failed to update profile.");
-            }
+            console.error("Error:", error?.response?.data || error.message);
+            setSuccessMessage("Failed to update profile.");
         }
     };
 
@@ -64,99 +56,205 @@ const Profile = () => {
                 age: userData.user?.age || "",
                 profile_image: userData.user?.profile_image || "",
                 email: userData.user?.email || "",
-                password: userData.user?.password || "",
             });
         }
     }, [userData, reset]);
 
-    const handleShowing = () => {
-        setShowing(!Showing);
-    }
+    const toggleForm = () => {
+        setShowingForm(!showingForm);
+        scrollToForm();
+        handleSubmitId(user?.id);
+    };
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Profile</h2>
+            <h2 className="text-3xl font-light text-gray-900 mb-6">Profile</h2>
+            
             <div className="mb-6">
-                <NavLink to="/" className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                <NavLink 
+                    to="/" 
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
                     Go Home
                 </NavLink>
             </div>
+
             {successMessage && (
-                <div className="p-4 mb-4 text-sm rounded-lg text-green-800 bg-green-50" role="alert">
+                <div className={`p-4 mb-6 text-sm ${successMessage.includes("success") ? "bg-gray-100 text-gray-800" : "bg-gray-100 text-gray-800"} border border-gray-200`}>
                     {successMessage}
                 </div>
             )}
-            <div className="bg-white shadow rounded-lg p-6 mb-6 border border-gray-200">
+
+            <div className="bg-white border border-gray-200 p-6 mb-6">
                 <div className="flex items-center gap-6">
-                    <div className="w-24 h-24">
-                        <img src={user?.profile_image} alt="Profile" className="w-full h-full object-cover rounded-full border-4 border-indigo-200" />
+                    <div className="w-20 h-20">
+                        <img 
+                            src={user?.profile_image} 
+                            alt="Profile" 
+                            className="w-full h-full object-cover rounded-full border-2 border-gray-200" 
+                        />
                     </div>
                     <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-800">{user?.firstName}</h3>
-                        <h3 className="text-xl font-semibold text-gray-800">{user?.lastName}</h3>
-                        <p className="text-gray-600 text-sm">Role: <span className="font-medium">{user?.role.name}</span></p>
+                        <h3 className="text-xl font-medium text-gray-900">{user?.firstName} {user?.lastName}</h3>
+                        <p className="text-gray-600 text-sm">Role: <span className="font-medium">{user?.role?.name}</span></p>
                         <p className="text-gray-600 text-sm">Age: {user?.age}</p>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <button type="button" value={user?.id} className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2" onClick={() => {
-                            scrollToForm();
-                            handleSubmitId(user?.id);
-                            handleShowing();
-                        }}>
-                            {Showing ? "Change Password" : "Edit Profile"}
+                    <div>
+                        <button 
+                            type="button" 
+                            onClick={toggleForm}
+                            className="px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors"
+                        >
+                            {showingForm ? "Change Password" : "Edit Profile"}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {Showing === true ? (
-                <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="bg-white shadow rounded-lg p-6 space-y-6 border border-gray-200">
+            {showingForm ? (
+                <form 
+                    ref={formRef} 
+                    onSubmit={handleSubmit(onSubmit)} 
+                    className="bg-white border border-gray-200 p-6 space-y-6"
+                >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* First Name */}
                         <div className="flex flex-col">
-                            <label htmlFor="firstName" className={`${errors.firstName ? validationError.labelError : validationError.labelNormal} block mb-2 text-sm font-medium`}>
+                            <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-700">
                                 First Name
                             </label>
-                            <input type="text" id="firstName" placeholder="John" className={`${errors.firstName ? validationError.inputError : validationError.inputNormal} border text-sm rounded-lg block w-full p-2.5`} {...register("firstName", { required: true, pattern: /^[A-Z][a-z]{1,49}$/, minLength: 5, maxLength: 15 })} />
-                            {errors.firstName && <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span>{errors.firstName.type === "required" && " First name is required!"}{errors.firstName.type === "pattern" && " First name is not valid!"}</p>}
+                            <input 
+                                type="text" 
+                                id="firstName" 
+                                placeholder="John" 
+                                className={`border border-gray-300 text-sm block w-full p-2.5 focus:border-black focus:ring-0 ${
+                                    errors.firstName ? "border-red-500" : ""
+                                }`} 
+                                {...register("firstName", { 
+                                    required: true, 
+                                    pattern: /^[A-Z][a-z]{1,49}$/, 
+                                    minLength: 2, 
+                                    maxLength: 15 
+                                })} 
+                            />
+                            {errors.firstName && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.firstName.type === "required" && "First name is required"}
+                                    {errors.firstName.type === "pattern" && "First name must start with capital letter"}
+                                    {errors.firstName.type === "minLength" && "Minimum 2 characters"}
+                                    {errors.firstName.type === "maxLength" && "Maximum 15 characters"}
+                                </p>
+                            )}
                         </div>
+                        
                         {/* Last Name */}
                         <div className="flex flex-col">
-                            <label htmlFor="lastName" className={`${errors.lastName ? validationError.labelError : validationError.labelNormal} block mb-2 text-sm font-medium`}>
+                            <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-700">
                                 Last Name
                             </label>
-                            <input type="text" id="lastName" placeholder="Doe" className={`${errors.lastName ? validationError.inputError : validationError.inputNormal} border text-sm rounded-lg block w-full p-2.5`} {...register("lastName", { required: true, pattern: /^[A-Z][a-z]{1,49}$/, minLength: 5, maxLength: 15 })} />
-                            {errors.lastName && <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span>{errors.lastName.type === "required" && " Last name is required!"}{errors.lastName.type === "pattern" && " Last name is not valid!"}</p>}
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                placeholder="Doe" 
+                                className={`border border-gray-300 text-sm block w-full p-2.5 focus:border-black focus:ring-0 ${
+                                    errors.lastName ? "border-red-500" : ""
+                                }`} 
+                                {...register("lastName", { 
+                                    required: true, 
+                                    pattern: /^[A-Z][a-z]{1,49}$/, 
+                                    minLength: 2, 
+                                    maxLength: 15 
+                                })} 
+                            />
+                            {errors.lastName && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.lastName.type === "required" && "Last name is required"}
+                                    {errors.lastName.type === "pattern" && "Last name must start with capital letter"}
+                                    {errors.lastName.type === "minLength" && "Minimum 2 characters"}
+                                    {errors.lastName.type === "maxLength" && "Maximum 15 characters"}
+                                </p>
+                            )}
                         </div>
+                        
                         {/* Age */}
-                        <div className="flex flex-col md:col-span-2">
-                            <label htmlFor="age" className={`${errors.age ? validationError.labelError : validationError.labelNormal} block mb-2 text-sm font-medium`}>
+                        <div className="flex flex-col">
+                            <label htmlFor="age" className="block mb-2 text-sm font-medium text-gray-700">
                                 Age
                             </label>
-                            <input type="number" id="age" placeholder="30" className={`${errors.age ? validationError.inputError : validationError.inputNormal} border text-sm rounded-lg block w-full p-2.5`} {...register("age", { required: true, min: 18, max: 100 })} />
-                            {errors.age && <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span>{errors.age.type === "required" && " Age is required!"}{errors.age.type === "min" && " You must be at least 18 years old!"}{errors.age.type === "max" && " Age cannot exceed 100!"}</p>}
+                            <input 
+                                type="number" 
+                                id="age" 
+                                placeholder="30" 
+                                className={`border border-gray-300 text-sm block w-full p-2.5 focus:border-black focus:ring-0 ${
+                                    errors.age ? "border-red-500" : ""
+                                }`} 
+                                {...register("age", { 
+                                    required: true, 
+                                    min: 18, 
+                                    max: 100 
+                                })} 
+                            />
+                            {errors.age && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.age.type === "required" && "Age is required"}
+                                    {errors.age.type === "min" && "Minimum age is 18"}
+                                    {errors.age.type === "max" && "Maximum age is 100"}
+                                </p>
+                            )}
                         </div>
-                        <div className="flex flex-col md:col-span-2">
-                            <label htmlFor="profileImage" className="block mb-2 text-sm font-medium text-gray-700">Profile Image</label>
-                            <input type="text" id="profileImage" placeholder="Enter image URL" className="form-input" {...register("profile_image")}/>
+                        
+                        {/* Profile Image */}
+                        <div className="flex flex-col">
+                            <label htmlFor="profileImage" className="block mb-2 text-sm font-medium text-gray-700">
+                                Profile Image URL
+                            </label>
+                            <input 
+                                type="text" 
+                                id="profileImage" 
+                                placeholder="Enter image URL" 
+                                className="border border-gray-300 text-sm block w-full p-2.5 focus:border-black focus:ring-0" 
+                                {...register("profile_image")}
+                            />
                         </div>
+                        
                         {/* Email */}
                         <div className="flex flex-col md:col-span-2">
-                            <label htmlFor="email" className={`${errors.email ? validationError.labelError : validationError.labelNormal} block mb-2 text-sm font-medium`}>
+                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
                                 Email
                             </label>
-                            <input type="email" id="email" placeholder="john@example.com" className={`${errors.email ? validationError.inputError : validationError.inputNormal} border text-sm rounded-lg block w-full p-2.5`} {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$/ })} />
-                            {errors.email && <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span>{errors.email.type === "required" && " Email is required!"}{errors.email.type === "pattern" && " Enter a valid email address!"}</p>}
+                            <input 
+                                type="email" 
+                                id="email" 
+                                placeholder="john@example.com" 
+                                className={`border border-gray-300 text-sm block w-full p-2.5 focus:border-black focus:ring-0 ${
+                                    errors.email ? "border-red-500" : ""
+                                }`} 
+                                {...register("email", { 
+                                    required: true, 
+                                    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ 
+                                })} 
+                            />
+                            {errors.email && (
+                                <p className="mt-1 text-sm text-red-600">
+                                    {errors.email.type === "required" && "Email is required"}
+                                    {errors.email.type === "pattern" && "Enter a valid email address"}
+                                </p>
+                            )}
                         </div>
                     </div>
+                    
                     <div className="flex justify-end pt-6">
-                        <button type="submit" className="btn-primary">Save Changes</button>
+                        <button 
+                            type="submit" 
+                            className="px-6 py-2 bg-black text-white hover:bg-gray-800 transition-colors"
+                        >
+                            Save Changes
+                        </button>
                     </div>
                 </form>
-            ):(
-                <ChangePassword/>
+            ) : (
+                <ChangePassword />
             )}
-
         </div>
     );
 };

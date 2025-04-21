@@ -7,8 +7,7 @@ import {
     FaHome,
     FaArrowRight
 } from "react-icons/fa";
-import {NavLink} from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 
 const stepIcons = [FaSearch, FaHandshake, FaHome];
 
@@ -27,19 +26,18 @@ export default function Process() {
     };
 
     return (
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100">
+        <section className="py-14 px-4 sm:px-6 lg:px-8 bg-gray-50">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-4xl font-light tracking-tight text-gray-900 mb-2">
                         {t('process.title')}
                     </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-lg text-gray-600">
                         {t('process.subtitle')}
                     </p>
                 </motion.div>
@@ -57,25 +55,25 @@ export default function Process() {
                             <motion.div
                                 key={i}
                                 variants={item}
-                                className="group bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+                                className="group bg-white border border-gray-200 p-8 rounded-none hover:shadow-sm transition-all duration-300 h-full flex flex-col"
                             >
                                 <div className="flex flex-col h-full">
-                                    <div className="mb-6 p-3 w-14 h-14 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+                                    <div className="mb-6 p-3 w-14 h-14 rounded-none bg-gray-100 text-gray-800 group-hover:bg-gray-200 transition-colors">
                                         <Icon className="w-8 h-8" />
                                     </div>
 
-                                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                                    <h3 className="text-xl font-medium text-gray-900 mb-3">
                                         {item.title}
                                     </h3>
-                                    <p className="text-gray-600 mb-6 flex-grow">
+                                    <p className="text-gray-600 text-sm mb-6 flex-grow">
                                         {item.description}
                                     </p>
                                     <NavLink
-                                       to={item.path}
-                                        className="inline-flex items-center text-blue-600 font-medium group-hover:text-blue-700 transition-colors"
+                                        to={item.path}
+                                        className="inline-flex items-center text-gray-800 font-medium group-hover:text-black transition-colors border-b border-transparent group-hover:border-black pb-1 self-start"
                                     >
                                         {item.button}
-                                        <FaArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
+                                        <FaArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                                     </NavLink>
                                 </div>
                             </motion.div>

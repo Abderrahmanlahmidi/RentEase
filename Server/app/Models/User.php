@@ -70,6 +70,10 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'destinataire_id');
     }
 
+    public function visit(){
+        return $this->hasMany(Visit::class);
+    }
+
 
 
 
