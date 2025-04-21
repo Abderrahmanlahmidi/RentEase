@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\VisitRepositoryInterface;
+use App\Repositories\Eloquent\VisitRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Contracts\TagRepositoryInterface;
 use App\Repositories\Eloquent\TagRepository;
 use App\Repositories\Eloquent\SalleRepository;
 use App\Repositories\Contracts\SalleRepositoryInterface;
+use App\Repositories\Eloquent\ReviewRepository;
+use  App\Repositories\Contracts\ReviewRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
         $this->app->bind(SalleRepositoryInterface::class, SalleRepository::class);
+        $this->app->bind(ReviewRepositoryInterface::class, ReviewRepository::class);
+        $this->app->bind(VisitRepositoryInterface::class, VisitRepository::class);
     }
 
     /**

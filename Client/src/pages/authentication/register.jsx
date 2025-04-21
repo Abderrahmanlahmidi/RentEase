@@ -1,275 +1,275 @@
 import { useContext, useState } from "react";
 import { informationContext } from "../../App";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { validationError } from "../../utils/utils";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import {useNavigate} from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Register = () => {
-
   const { t } = useContext(informationContext);
   const { register, formState: { errors }, handleSubmit, watch } = useForm();
   const [successMessage, setSuccessMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
-  const [showConfirmPassword, setConfirmShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-
   const onSubmit = async (data) => {
-
-    console.log(data);
-
-    if (data.password !== data.confirmPassword) {
-      console.log("password not correct");
-      return;
-    }
-
+    setIsLoading(true);
     try {
       await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", { withCredentials: true });
-
-      const response = await axios.post("http://127.0.0.1:8000/api/register", { ...data,  role_id: 1,  profile_image:"image.png"  }, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/register", 
+        { ...data, role_id: 1, profile_image: "image.png" }, 
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       setSuccessMessage("You have been successfully registered.");
-      navigate("/login");
-
+      setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
-      if (error.response) {
-        console.log("Error:", error.response.data);
-      } else {
-        console.log("Request failed:", error.message);
-      }
+      console.error("Registration error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-
   return (
-    <div className="flex justify-center items-center w-full py-[30px] max-md:px-[16px]">
-      <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
-        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-            {t("create_account")}
-          </h1>
+    <div className="flex justify-center items-center min-h-screen bg-white p-4">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md border border-gray-200 rounded-none p-8"
+      >
+        <h1 className="text-2xl font-light text-gray-900 mb-6">
+          {t("create_account")}
+        </h1>
 
-          {successMessage && (
-            <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-              <span className="font-medium">Success!</span> {successMessage}
-            </div>
-          )}
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-4 mb-6 text-sm text-gray-900 bg-gray-100 border border-gray-300"
+          >
+            {successMessage}
+          </motion.div>
+        )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
-            {/* First Name */}
-            <div>
-              <label
-                htmlFor="firstname"
-                className={`${successMessage === "" ? (errors.firstName ? validationError.labelError : validationError.labelNormal) : validationError.labelSuccess} block mb-2 text-sm font-medium`}
-              >
-                {t("first_name")}
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                id="firstName"
-                placeholder={t("first_name_placeholder")}
-                className={`${successMessage === "" ? (errors.firstName ? validationError.inputError : validationError.inputNormal) : validationError.inputSuccess} border text-sm rounded-lg block w-full p-2.5`}
-                {...register("firstName", {
-                  required: true,
-                  pattern: /^[A-Z][a-z]{1,49}$/,
-                  minLength: 5,
-                  maxLength: 15,
-                })}
-              />
-              {errors.firstName && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Oops!</span>
-                  {errors.firstName.type === "required" && " First name is required!"}
-                  {errors.firstName.type === "pattern" && " First name is not valid!"}
-                </p>
-              )}
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* First Name */}
+          <div>
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+              {t("first_name")}
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              placeholder={t("first_name_placeholder")}
+              className={`block w-full px-4 py-2 border ${
+                errors.firstName ? "border-red-500" : "border-gray-300"
+              } rounded-none focus:ring-1 focus:ring-black focus:border-black`}
+              {...register("firstName", {
+                required: true,
+                pattern: /^[A-Z][a-z]{1,49}$/,
+                minLength: 5,
+                maxLength: 15,
+              })}
+            />
+            {errors.firstName && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.firstName.type === "required" && "First name is required"}
+                {errors.firstName.type === "pattern" && "First name is not valid"}
+                {errors.firstName.type === "minLength" && "Minimum 5 characters"}
+                {errors.firstName.type === "maxLength" && "Maximum 15 characters"}
+              </p>
+            )}
+          </div>
 
-            {/* Last Name */}
-            <div>
-              <label
-                htmlFor="lastname"
-                className={`${successMessage === "" ? (errors.lastName ? validationError.labelError : validationError.labelNormal) : validationError.labelSuccess} block mb-2 text-sm font-medium`}
-              >
-                {t("last_name")}
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder={t("last_name_placeholder")}
-                className={`${successMessage === "" ? (errors.lastName ? validationError.inputError : validationError.inputNormal) : validationError.inputSuccess} border text-sm rounded-lg block w-full p-2.5`}
-                {...register("lastName", {
-                  required: true,
-                  pattern: /^[A-Z][a-z]{1,49}$/,
-                  minLength: 5,
-                  maxLength: 15,
-                })}
-              />
-              {errors.lastName && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Oops!</span>
-                  {errors.lastName.type === "required" && " Last name is required!"}
-                  {errors.lastName.type === "pattern" && " Last name is not valid!"}
-                </p>
-              )}
-            </div>
+          {/* Last Name */}
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+              {t("last_name")}
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              placeholder={t("last_name_placeholder")}
+              className={`block w-full px-4 py-2 border ${
+                errors.lastName ? "border-red-500" : "border-gray-300"
+              } rounded-none focus:ring-1 focus:ring-black focus:border-black`}
+              {...register("lastName", {
+                required: true,
+                pattern: /^[A-Z][a-z]{1,49}$/,
+                minLength: 5,
+                maxLength: 15,
+              })}
+            />
+            {errors.lastName && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.lastName.type === "required" && "Last name is required"}
+                {errors.lastName.type === "pattern" && "Last name is not valid"}
+                {errors.lastName.type === "minLength" && "Minimum 5 characters"}
+                {errors.lastName.type === "maxLength" && "Maximum 15 characters"}
+              </p>
+            )}
+          </div>
 
-            {/* Age */}
-            <div>
-              <label
-                htmlFor="age"
-                className={`${successMessage === "" ? (errors.age ? validationError.labelError : validationError.labelNormal) : validationError.labelSuccess} block mb-2 text-sm font-medium`}
-              >
-                {t("age")}
-              </label>
-              <input
-                type="number"
-                name="age"
-                id="age"
-                placeholder={t("age_placeholder")}
-                className={`${successMessage === "" ? (errors.age ? validationError.inputError : validationError.inputNormal) : validationError.inputSuccess} border text-sm rounded-lg block w-full p-2.5`}
-                {...register("age", {
-                  required: true,
-                  min: 18,
-                  max: 100,
-                })}
-              />
-              {errors.age && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Oops!</span>
-                  {errors.age.type === "required" && " Age is required!"}
-                  {errors.age.type === "min" && " You must be at least 18 years old!"}
-                  {errors.age.type === "max" && " Age cannot exceed 100!"}
-                </p>
-              )}
-            </div>
+          {/* Age */}
+          <div>
+            <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-2">
+              {t("age")}
+            </label>
+            <input
+              type="number"
+              id="age"
+              placeholder={t("age_placeholder")}
+              className={`block w-full px-4 py-2 border ${
+                errors.age ? "border-red-500" : "border-gray-300"
+              } rounded-none focus:ring-1 focus:ring-black focus:border-black`}
+              {...register("age", {
+                required: true,
+                min: 18,
+                max: 100,
+              })}
+            />
+            {errors.age && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.age.type === "required" && "Age is required"}
+                {errors.age.type === "min" && "Minimum age is 18"}
+                {errors.age.type === "max" && "Maximum age is 100"}
+              </p>
+            )}
+          </div>
 
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className={`${successMessage === "" ? (errors.email ? validationError.labelError : validationError.labelNormal) : validationError.labelSuccess} block mb-2 text-sm font-medium`}
-              >
-                {t("email")}
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder={t("email_placeholder")}
-                className={`${successMessage === "" ? (errors.email ? validationError.inputError : validationError.inputNormal) : validationError.inputSuccess} border text-sm rounded-lg block w-full p-2.5`}
-                {...register("email", {
-                  required: true,
-                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                })}
-              />
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Oops!</span>
-                  {errors.email.type === "required" && " Email is required!"}
-                  {errors.email.type === "pattern" && " Enter a valid email address!"}
-                </p>
-              )}
-            </div>
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              {t("email")}
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder={t("email_placeholder")}
+              className={`block w-full px-4 py-2 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-none focus:ring-1 focus:ring-black focus:border-black`}
+              {...register("email", {
+                required: true,
+                pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              })}
+            />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.email.type === "required" && "Email is required"}
+                {errors.email.type === "pattern" && "Enter a valid email"}
+              </p>
+            )}
+          </div>
 
-            {/* Password */}
-            <div className="relative">
-              <label
-                htmlFor="password"
-                className={`${successMessage === "" ? (errors.password ? validationError.labelError : validationError.labelNormal) : validationError.labelSuccess} block mb-2 text-sm font-medium`}
-              >
-                {t("password")}
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                className={`${successMessage === "" ? (errors.password ? validationError.inputError : validationError.inputNormal) : validationError.inputSuccess} border text-sm rounded-lg block w-full p-2.5 pr-10`}
-                {...register("password", {
-                  required: true,
-                  minLength: 8,
-                  maxLength: 20,
-                  pattern: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
-                })}
-              />
-              {errors.password && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Oops!</span>
-                  {errors.password.type === "required" && " Password is required!"}
-                  {errors.password.type === "minLength" && " Password must be at least 8 characters long!"}
-                  {errors.password.type === "maxLength" && " Password cannot exceed 20 characters!"}
-                  {errors.password.type === "pattern" && " Password must include at least one uppercase letter and one number!"}
-                </p>
-              )}
-              <button
-                type="button"
-                className="absolute inset-y-0 top-7 right-3 flex items-center text-gray-400"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
-              </button>
-            </div>
-
-            {/* Confirm Password */}
-            <div className="relative">
-              <label
-                htmlFor="confirmPassword"
-                className={`${successMessage === "" ? (errors.confirmPassword ? validationError.labelError : validationError.labelNormal) : validationError.labelSuccess} block mb-2 text-sm font-medium`}
-              >
-                {t("confirmed password")}
-              </label>
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                id="confirmPassword"
-                placeholder="••••••••"
-                className={`${successMessage === "" ? (errors.confirmPassword ? validationError.inputError : validationError.inputNormal) : validationError.inputSuccess} border text-sm rounded-lg block w-full p-2.5`}
-                {...register("confirmPassword", {
-                  required: "Confirm Password is required",
-                  validate: (value) => value === watch("password"),
-                })}
-              />
-              {errors.confirmPassword && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Oops!</span> The password is not correct
-                </p>
-              )}
-              <button
-                type="button"
-                className="absolute top-7 inset-y-0 right-3 flex items-center text-gray-400"
-                onClick={() => setConfirmShowPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
-              </button>
-            </div>
-
-            {/* Submit Button */}
+          {/* Password */}
+          <div className="relative">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              {t("password")}
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              placeholder="••••••••"
+              className={`block w-full px-4 py-2 border ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              } rounded-none focus:ring-1 focus:ring-black focus:border-black pr-10`}
+              {...register("password", {
+                required: true,
+                minLength: 8,
+                maxLength: 20,
+                pattern: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
+              })}
+            />
             <button
-              type="submit"
-              className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              type="button"
+              className="absolute right-3 top-[38px] text-gray-500 hover:text-black"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              {t("create_account")}
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.password.type === "required" && "Password is required"}
+                {errors.password.type === "minLength" && "Minimum 8 characters"}
+                {errors.password.type === "maxLength" && "Maximum 20 characters"}
+                {errors.password.type === "pattern" && "Include uppercase and number"}
+              </p>
+            )}
+          </div>
 
-            {/* Login Link */}
-            <p className="text-sm font-light text-gray-500">
-              {t("already_have_account")}{""}
-              <NavLink to="/Login" className="font-medium text-primary-600 hover:underline">
-                {t("login_here")}
-              </NavLink>
-            </p>
-          </form>
-        </div>
-      </div>
+          {/* Confirm Password */}
+          <div className="relative">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              {t("confirmed password")}
+            </label>
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              placeholder="••••••••"
+              className={`block w-full px-4 py-2 border ${
+                errors.confirmPassword ? "border-red-500" : "border-gray-300"
+              } rounded-none focus:ring-1 focus:ring-black focus:border-black pr-10`}
+              {...register("confirmPassword", {
+                required: "Confirm Password is required",
+                validate: (value) => value === watch("password"),
+              })}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-[38px] text-gray-500 hover:text-black"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.confirmPassword.message || "Passwords don't match"}
+              </p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full bg-black text-white py-3 rounded-none hover:bg-gray-800 transition-colors flex items-center justify-center"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </>
+            ) : (
+              t("create_account")
+            )}
+          </motion.button>
+
+          {/* Login Link */}
+          <p className="text-sm text-gray-600 text-center">
+            {t("already_have_account")}{" "}
+            <NavLink 
+              to="/login" 
+              className="font-medium text-black hover:underline"
+            >
+              {t("login_here")}
+            </NavLink>
+          </p>
+        </form>
+      </motion.div>
     </div>
   );
 };

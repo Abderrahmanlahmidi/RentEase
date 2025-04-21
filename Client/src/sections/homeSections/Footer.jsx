@@ -1,35 +1,56 @@
 import Logo from "../../assets/img/home.svg";
-import {NavLink} from "react-router";
+import { NavLink } from "react-router-dom";
 
 export default function Footer() {
     return (
-        <footer className="bg-white rounded-lg shadow-sm dark:bg-gray-900 border-t border-gray-200">
-            <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
-                <div className="sm:flex sm:items-center sm:justify-between">
-                    <div className='flex items-center space-x-1' >
-                        <img className='w-[25px] h-auto' src={Logo} alt="Logo" />
-                        <NavLink to='/' className="flex items-center space-x-3 rtl:space-x-reverse">
-                            <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#191f3b] ">RentEase</span>
+        <footer className="bg-white border-t border-gray-200">
+            <div className="w-full max-w-7xl mx-auto p-8">
+                <div className="md:flex md:items-center md:justify-between">
+                    <div className='flex items-center space-x-2 mb-4 md:mb-0'>
+                        <img className='w-6 h-6' src={Logo} alt="Logo" />
+                        <NavLink to='/' className="flex items-center">
+                            <span className="text-2xl font-light tracking-tight text-gray-900">RentEase</span>
                         </NavLink>
                     </div>
-                    <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                    <ul className="flex flex-wrap items-center text-sm font-medium text-gray-600 space-x-6">
                         <li>
-                            <NavLink to="/"  className="hover:underline me-4 md:me-6">Home</NavLink>
+                            <NavLink 
+                                to="/" 
+                                className="hover:text-black transition-colors"
+                            >
+                                Home
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/properties"  className="hover:underline me-4 md:me-6">Properties</NavLink>
+                            <NavLink 
+                                to="/properties" 
+                                className="hover:text-black transition-colors"
+                            >
+                                Properties
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/about" className="hover:underline me-4 md:me-6">About</NavLink>
+                            <NavLink 
+                                to="/about" 
+                                className="hover:text-black transition-colors"
+                            >
+                                About
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/contact" className="hover:underline">Contact</NavLink>
+                            <NavLink 
+                                to="/contact" 
+                                className="hover:text-black transition-colors"
+                            >
+                                Contact
+                            </NavLink>
                         </li>
                     </ul>
                 </div>
-                <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"/>
-                <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a
-                    className="hover:underline">RentEase™</a>. All Rights Reserved.</span>
+                <hr className="my-6 border-gray-200"/>
+                <span className="block text-sm text-gray-500 text-center">
+                    © {new Date().getFullYear()} <span className="font-medium">RentEase</span>. All Rights Reserved.
+                </span>
             </div>
         </footer>
     )

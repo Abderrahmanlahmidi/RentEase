@@ -4,134 +4,145 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { showToast } from "../../../utils/toastUtils.jsx";
 import { ToastContainer } from "react-toastify";
-import { FaPlus, FaTimes, FaArrowRight } from "react-icons/fa";
+import { FaPlus, FaTimes, FaArrowRight, FaSearch } from "react-icons/fa";
 
-export default function CategoriesDashboard() {
+export default function ReviewsDashboard() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [categories, setCategories] = useState([]);
+    const [selectedReview, setSelectedReview] = useState(null);
+    const { handleSubmit, register, reset, setValue } = useForm();
+    const [reviews, setReviews] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
 
-    const { register, handleSubmit, setValue, reset } = useForm();
+    const fetchReviews = async () => {
+        try {
+            const response = await axios.get("http://127.0.0.1:8000/api/reviews");
+            setReviews(response.data.reviews);
+        } catch {
+            showToast("error", "Failed to fetch reviews.");
+        }
+    };
 
     useEffect(() => {
-        displayCategories();
+        fetchReviews();
     }, []);
 
-    const displayCategories = async () => {
+    const closeModals = () => {
+        setIsCreateModalOpen(false);
+        setIsUpdateModalOpen(false);
+        setSelectedReview(null);
+        reset();
+    };
+
+    const createReview = async (data) => {
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/categories");
-            setCategories(response.data.categories);
+            await axios.post("http://127.0.0.1:8000/api/review", data, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            showToast("success", "Review created successfully!");
+            await fetchReviews();
+            closeModals();
         } catch {
-            showToast("error", "Failed to load categories");
+            showToast("error", "Error creating review.");
         }
     };
 
-    const deleteCategories = async (id) => {
+    const updateReview = async (data) => {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/category/${id}`);
-            setCategories(categories.filter((prev) => prev.id !== id));
-            showToast("success", "Category deleted successfully");
+            await axios.put(`http://127.0.0.1:8000/api/review/${selectedReview.id}`, data, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            showToast("success", "Review updated successfully!");
+            await fetchReviews();
+            closeModals();
         } catch {
-            showToast("error", "Failed to delete category");
+            showToast("error", "Error updating review.");
         }
     };
 
-    const createNewCategory = async (data) => {
+    const deleteReview = async (id) => {
         try {
-            await axios.post(
-                "http://127.0.0.1:8000/api/category",
-                data,
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
-            );
-            displayCategories();
-            setIsCreateModalOpen(false);
-            reset();
-            showToast("success", "Category created successfully");
-        } catch  {
-            showToast("error", "Failed to create category");
-        }
-    };
-
-    const updateModalCategories = (category) => {
-        setIsUpdateModalOpen(true);
-        setSelectedCategory(category.id);
-        setValue('nom', category.nom);
-        setValue('description', category.description);
-    };
-
-    const updateCategory = async (data) => {
-        try {
-            await axios.put(
-                `http://127.0.0.1:8000/api/category/update/${selectedCategory}`,
-                data,
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
-            );
-            setIsUpdateModalOpen(false);
-            displayCategories();
-            setSelectedCategory(null);
-            showToast("success", "Category updated successfully");
+            await axios.delete(`http://127.0.0.1:8000/api/review/${id}`);
+            showToast("success", "Review deleted successfully!");
+            await fetchReviews();
         } catch {
-            showToast("error", "Failed to update category");
+            showToast("error", "Error deleting review.");
         }
     };
+
+    const searchReview = (inputValue) => {
+        setSearchValue(inputValue);
+        if (inputValue !== "") {
+            const filtered = reviews.filter(review => {
+                return Object.values(review).join('').toLowerCase().includes(inputValue.toLowerCase());
+            });
+            setFilteredData(filtered);
+        } else {
+            setFilteredData(reviews);
+        }
+    };
+
+    const result = searchValue === "" ? reviews : filteredData;
 
     return (
         <div className="w-full">
             <ToastContainer />
-            {/* Table Header */}
             <div className="flex items-center justify-between p-6 bg-white border-b border-gray-200">
                 <h2 className="text-xl font-light text-gray-900">
-                    Category Management
+                    Review Management
                 </h2>
-                <button
-                    onClick={() => setIsCreateModalOpen(true)}
-                    className="flex items-center px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-800"
-                >
-                    <FaPlus className="mr-2" />
-                    Add Category
-                </button>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaSearch className="text-gray-400" />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search reviews..."
+                        onChange={(e) => searchReview(e.target.value)}
+                        className="pl-10 px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-black"
+                    />
+                </div>
             </div>
 
-            {/* Categories Table */}
             <div className="relative overflow-auto max-h-[600px] w-full">
                 <table className="w-full text-sm text-left">
                     <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th className="px-6 py-3 font-medium">Name</th>
-                            <th className="px-6 py-3 font-medium">Description</th>
+                            <th className="px-6 py-3 font-medium">Title</th>
+                            <th className="px-6 py-3 font-medium">Content</th>
+                            <th className="px-6 py-3 font-medium">Author</th>
+                            <th className="px-6 py-3 font-medium">Date</th>
                             <th className="px-6 py-3 font-medium text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {categories.map((category) => (
+                        {result.map((review, index) => (
                             <motion.tr
-                                key={category.id}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.3 }}
+                                key={index}
                                 className="bg-white border-b border-gray-200"
                             >
-                                <td className="px-6 py-4 font-medium text-gray-900">
-                                    {category.nom}
+                                <td className="px-6 py-4 font-medium text-gray-900 truncate max-w-xs">
+                                    {review.titre.length > 40 ? `${review.titre.substring(0, 40)}...` : review.titre}
                                 </td>
-                                <td className="px-6 py-4 text-gray-700">{category.description}</td>
+                                <td className="px-6 py-4 text-gray-700 truncate max-w-xs">
+                                    {review.contenu.length > 80 ? `${review.contenu.substring(0, 80)}...` : review.contenu}
+                                </td>
+                                <td className="px-6 py-4 text-gray-700">
+                                    {review.auteur.firstName} {review.auteur.lastName}
+                                </td>
+                                <td className="px-6 py-4 text-gray-700">
+                                    {review.datePublication}
+                                </td>
                                 <td className="px-6 py-4 text-center space-x-2">
                                     <button
-                                        onClick={() => updateModalCategories(category)}
-                                        className="px-3 py-1 border border-gray-300 hover:border-gray-400 text-gray-700"
-                                    >
-                                        Update
-                                    </button>
-                                    <button
-                                        onClick={() => deleteCategories(category.id)}
+                                        onClick={() => deleteReview(review.id)}
                                         className="px-3 py-1 border border-gray-300 hover:border-gray-400 text-gray-700"
                                     >
                                         Delete
@@ -143,15 +154,15 @@ export default function CategoriesDashboard() {
                 </table>
             </div>
 
-            {/* Create Category Modal */}
+            {/* Create Review Modal */}
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
-                    onClick={() => setIsCreateModalOpen(false)}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
+                    onClick={closeModals}
                 >
                     <motion.div
                         initial={{ y: -50, opacity: 0 }}
@@ -163,43 +174,44 @@ export default function CategoriesDashboard() {
                     >
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-light text-gray-900">
-                                Add Category
+                                Add Review
                             </h3>
                             <button
-                                onClick={() => setIsCreateModalOpen(false)}
+                                onClick={closeModals}
                                 className="text-gray-500 hover:text-gray-700"
                             >
                                 <FaTimes />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit(createNewCategory)} className="space-y-4">
+                        <form onSubmit={handleSubmit(createReview)} className="space-y-4">
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-700">
-                                    Name
+                                    Title
                                 </label>
                                 <input
-                                    {...register("nom", { required: true })}
+                                    {...register("titre", { required: true })}
                                     type="text"
                                     className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
-                                    placeholder="Enter category name"
+                                    placeholder="Enter review title"
                                 />
                             </div>
+
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-700">
-                                    Description
+                                    Content
                                 </label>
                                 <textarea
-                                    {...register("description", { required: true })}
+                                    {...register("contenu", { required: true })}
                                     rows="4"
                                     className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
-                                    placeholder="Leave a description..."
+                                    placeholder="Leave content..."
                                 ></textarea>
                             </div>
 
                             <div className="flex justify-end space-x-3 pt-4">
                                 <button
                                     type="button"
-                                    onClick={() => setIsCreateModalOpen(false)}
+                                    onClick={closeModals}
                                     className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-gray-400"
                                 >
                                     Cancel
@@ -208,7 +220,7 @@ export default function CategoriesDashboard() {
                                     type="submit"
                                     className="px-6 py-2 bg-black text-white hover:bg-gray-800 flex items-center"
                                 >
-                                    Add Category
+                                    Add Review
                                     <FaArrowRight className="ml-2" />
                                 </button>
                             </div>
@@ -217,15 +229,15 @@ export default function CategoriesDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Category Modal */}
+            {/* Update Review Modal */}
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
-                    onClick={() => setIsUpdateModalOpen(false)}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
+                    onClick={closeModals}
                 >
                     <motion.div
                         initial={{ y: -50, opacity: 0 }}
@@ -237,43 +249,44 @@ export default function CategoriesDashboard() {
                     >
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-light text-gray-900">
-                                Update Category
+                                Update Review
                             </h3>
                             <button
-                                onClick={() => setIsUpdateModalOpen(false)}
+                                onClick={closeModals}
                                 className="text-gray-500 hover:text-gray-700"
                             >
                                 <FaTimes />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit(updateCategory)} className="space-y-4">
+                        <form onSubmit={handleSubmit(updateReview)} className="space-y-4">
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-700">
-                                    Name
+                                    Title
                                 </label>
                                 <input
-                                    {...register("nom", { required: true })}
+                                    {...register("titre", { required: true })}
                                     type="text"
                                     className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
-                                    placeholder="Enter category name"
+                                    placeholder="Enter review title"
                                 />
                             </div>
+
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-700">
-                                    Description
+                                    Content
                                 </label>
                                 <textarea
-                                    {...register("description", { required: true })}
+                                    {...register("contenu", { required: true })}
                                     rows="4"
                                     className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
-                                    placeholder="Leave a description..."
+                                    placeholder="Leave content..."
                                 ></textarea>
                             </div>
 
                             <div className="flex justify-end space-x-3 pt-4">
                                 <button
                                     type="button"
-                                    onClick={() => setIsUpdateModalOpen(false)}
+                                    onClick={closeModals}
                                     className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-gray-400"
                                 >
                                     Cancel
@@ -282,7 +295,7 @@ export default function CategoriesDashboard() {
                                     type="submit"
                                     className="px-6 py-2 bg-black text-white hover:bg-gray-800 flex items-center"
                                 >
-                                    Update Category
+                                    Update Review
                                     <FaArrowRight className="ml-2" />
                                 </button>
                             </div>

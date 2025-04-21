@@ -4,52 +4,55 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/userContext.jsx";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import axios from "axios";
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function HomeDashboard() {
-    const { announcements } = useContext(UserContext);
-    const totalProperties = announcements?.length || 0;
-    const [clientCount, setClientCount] = useState(0);
+    const { announcements = [] } = useContext(UserContext);
+    const totalProperties = announcements.length;
+    const [clients, setClients] = useState([]);
 
-    const revenue = announcements?.reduce((acc, announcement) => {
+    const revenue = announcements.reduce((acc, announcement) => {
         return acc + Number(announcement.prix || 0);
-    }, 0) || 0;
+    }, 0);
 
     useEffect(() => {
-        if (!announcements || announcements.length === 0) return;
-
-        const uniqueClients = new Set();
-        announcements.forEach((announcement) => {
-            if (announcement.proprietaire?.role_id !== 2) {
-                uniqueClients.add(announcement.proprietaire?.id);
+        const fetchData = async () => {
+            try {
+                const { data: response } = await axios.get("http://127.0.0.1:8000/api/users");
+                setClients(response.users.filter(item => item.role.name === "Client"));
+            } catch (err) {
+                console.log(err.message);
             }
-        });
-        setClientCount(uniqueClients.size);
-    }, [announcements]);
+        };
+        fetchData();
+    }, []);
 
-    const avgRevenue = totalProperties > 0 ? (revenue / totalProperties).toFixed(2) : 0;
+    const avgRevenue = totalProperties > 0 ? (revenue / totalProperties).toFixed(2) : "0.00";
+
+    function formatDateTime(datetime) {
+        const date = new Date(datetime);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const time = `${hours}:${minutes}`;
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const fullDate = `${year}-${month}-${day}`;
+        return `${time} - ${fullDate}`;
+    }
 
     // Chart data configuration
     const metricsData = {
-        labels: ['Total Properties', 'Clients', 'Avg Revenue', 'Total Revenue'],
+        labels: ['Properties', 'Clients', 'Avg Revenue', 'Total Revenue'],
         datasets: [
             {
-                label: 'Dashboard Metrics',
-                data: [totalProperties, clientCount, avgRevenue, revenue],
-                backgroundColor: [
-                    'rgba(59, 130, 246, 0.7)',
-                    'rgba(139, 92, 246, 0.7)',
-                    'rgba(16, 185, 129, 0.7)',
-                    'rgba(245, 158, 11, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(59, 130, 246, 1)',
-                    'rgba(139, 92, 246, 1)',
-                    'rgba(16, 185, 129, 1)',
-                    'rgba(245, 158, 11, 1)'
-                ],
+                label: 'Metrics',
+                data: [totalProperties, clients.length, avgRevenue, revenue],
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                borderColor: 'rgba(0, 0, 0, 1)',
                 borderWidth: 1,
             }
         ]
@@ -84,6 +87,14 @@ export default function HomeDashboard() {
         scales: {
             y: {
                 beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)'
+                }
+            },
+            x: {
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)'
+                }
             }
         }
     };
@@ -108,70 +119,70 @@ export default function HomeDashboard() {
             initial="hidden"
             animate="show"
             variants={container}
-            className="w-full bg-gradient-to-br from-gray-50 to-gray-100 p-4"
+            className="w-full bg-white p-6"
         >
             {/* Header */}
             <motion.div variants={item} className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-800">Dashboard Overview</h1>
+                <h1 className="text-3xl font-light text-gray-900">Dashboard Overview</h1>
                 <p className="text-gray-600">Welcome back! Here's what's happening today.</p>
             </motion.div>
 
-            {/* Stats Cards - KEPT AS REQUESTED */}
+            {/* Stats Cards */}
             <motion.div
                 variants={container}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
             >
                 <motion.div variants={item}>
-                    <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div className="bg-white border border-gray-200 p-6 hover:shadow-sm transition-all">
                         <div className="flex items-center">
-                            <div className="p-3 rounded-full bg-blue-50 text-blue-600">
-                                <FiHome className="w-6 h-6" />
+                            <div className="p-3 rounded-none bg-gray-100 text-gray-900">
+                                <FiHome className="w-5 h-5" />
                             </div>
                             <div className="ml-4">
-                                <p className="text-sm font-medium text-gray-500">Total Properties</p>
-                                <p className="text-2xl font-semibold text-gray-800">{totalProperties}</p>
+                                <p className="text-sm font-medium text-gray-600">Total Properties</p>
+                                <p className="text-2xl font-light text-gray-900">{totalProperties}</p>
                             </div>
                         </div>
                     </div>
                 </motion.div>
 
                 <motion.div variants={item}>
-                    <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div className="bg-white border border-gray-200 p-6 hover:shadow-sm transition-all">
                         <div className="flex items-center">
-                            <div className="p-3 rounded-full bg-purple-50 text-purple-600">
-                                <FiUsers className="w-6 h-6" />
+                            <div className="p-3 rounded-none bg-gray-100 text-gray-900">
+                                <FiUsers className="w-5 h-5" />
                             </div>
                             <div className="ml-4">
-                                <p className="text-sm font-medium text-gray-500">Clients</p>
-                                <p className="text-2xl font-semibold text-gray-800">{clientCount}</p>
+                                <p className="text-sm font-medium text-gray-600">Clients</p>
+                                <p className="text-2xl font-light text-gray-900">{clients.length}</p>
                             </div>
                         </div>
                     </div>
                 </motion.div>
 
                 <motion.div variants={item}>
-                    <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div className="bg-white border border-gray-200 p-6 hover:shadow-sm transition-all">
                         <div className="flex items-center">
-                            <div className="p-3 rounded-full bg-green-50 text-green-600">
-                                <FiTrendingUp className="w-6 h-6" />
+                            <div className="p-3 rounded-none bg-gray-100 text-gray-900">
+                                <FiTrendingUp className="w-5 h-5" />
                             </div>
                             <div className="ml-4">
-                                <p className="text-sm font-medium text-gray-500">Average Revenue</p>
-                                <p className="text-2xl font-semibold text-gray-800">${avgRevenue}</p>
+                                <p className="text-sm font-medium text-gray-600">Avg Revenue</p>
+                                <p className="text-2xl font-light text-gray-900">${avgRevenue}</p>
                             </div>
                         </div>
                     </div>
                 </motion.div>
 
                 <motion.div variants={item}>
-                    <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div className="bg-white border border-gray-200 p-6 hover:shadow-sm transition-all">
                         <div className="flex items-center">
-                            <div className="p-3 rounded-full bg-amber-50 text-amber-600">
-                                <FiDollarSign className="w-6 h-6" />
+                            <div className="p-3 rounded-none bg-gray-100 text-gray-900">
+                                <FiDollarSign className="w-5 h-5" />
                             </div>
                             <div className="ml-4">
-                                <p className="text-sm font-medium text-gray-500">Revenue</p>
-                                <p className="text-2xl font-semibold text-gray-800">${revenue.toLocaleString()}</p>
+                                <p className="text-sm font-medium text-gray-600">Revenue</p>
+                                <p className="text-2xl font-light text-gray-900">${revenue.toLocaleString()}</p>
                             </div>
                         </div>
                     </div>
@@ -181,31 +192,31 @@ export default function HomeDashboard() {
             {/* Main Content with Charts */}
             <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Metrics Bar Chart */}
-                <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">Visual Metrics Overview</h2>
-                    <div className="h-86 flex justify-center">
+                <div className="lg:col-span-2 bg-white border border-gray-200 p-6">
+                    <h2 className="text-xl font-light text-gray-900 mb-4">Metrics Overview</h2>
+                    <div className="h-86">
                         <Bar data={metricsData} options={options} />
                     </div>
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-white rounded-xl shadow-md p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+                <div className="bg-white border border-gray-200 p-6">
+                    <h2 className="text-xl font-light text-gray-900 mb-4">Recent Properties</h2>
                     <div className="space-y-4">
-                        {[1, 2, 3, 4, 5].map((i) => (
+                        {announcements.slice(-5).map((item, index) => (
                             <motion.div
-                                key={i}
+                                key={index}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ delay: 0.1 * i }}
-                                className="flex items-start pb-4 border-b border-gray-100 last:border-0"
+                                transition={{ delay: 0.1 * index }}
+                                className="flex items-start pb-4 border-b border-gray-200 last:border-0"
                             >
-                                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                    <span className="text-gray-600">{i}</span>
+                                <div className="flex-shrink-0 h-10 w-10 rounded-none bg-gray-100 flex items-center justify-center border border-gray-200">
+                                    <span className="text-gray-900">{index + 1}</span>
                                 </div>
                                 <div className="ml-3">
-                                    <p className="text-sm font-medium text-gray-800">New property listed #{i}</p>
-                                    <p className="text-sm text-gray-500">2 hours ago</p>
+                                    <p className="text-sm font-medium text-gray-900">{item.titre}</p>
+                                    <p className="text-sm text-gray-600">{formatDateTime(item.created_at)}</p>
                                 </div>
                             </motion.div>
                         ))}
