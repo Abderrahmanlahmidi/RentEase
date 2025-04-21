@@ -1,94 +1,146 @@
 import Logo from "../assets/img/home.svg";
-import {useState, useContext} from 'react';
+import { useState, useContext } from 'react';
 import Menu from '../components/Menu';
 import { informationContext } from "../App";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import UserDropdown from "../components/navbarComponents/userDropdown.jsx";
 import UserNotification from "../components/navbarComponents/userNotification.jsx";
+import { motion } from 'framer-motion';
 
+function Navbar() {
+    const { t, i18n } = useContext(informationContext);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-function Navbar(){
+    const handleLanguageChange = (event) => {
+        i18n.changeLanguage(event.target.value);
+    };
 
-  const {t, i18n} = useContext(informationContext);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  }
-  const handleLanguageChange = (event) => {
-    i18n.changeLanguage(event.target.value);
-  };
-  
-  const {user, setUser} = useContext(UserContext);
+    const logoutHandler = () => {
+        setUser(null);
+        navigate('/');
+    };
 
-  const navigate = useNavigate();
+    const routing = ["/", "/Properties", "/About", "/Contact"];
 
-  const logoutHandler = () => {
-    setUser(null)
-    navigate('/');
-  }
+    return (
+        <nav className="bg-white fixed top-0 w-full border-b border-gray-200 z-50 px-4 sm:px-8 lg:px-16 xl:px-32 py-3">
+            <div className="flex items-center justify-between">
+                {/* Logo/Brand */}
+                <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    className="flex items-center space-x-2"
+                >
+                    <img className="w-6 h-6" src={Logo} alt="RentEase Logo" />
+                    <NavLink
+                        to="/"
+                        className="text-2xl font-light text-gray-900 hover:text-black transition-colors"
+                    >
+                        RentEase
+                    </NavLink>
+                </motion.div>
 
-  const routing = ["/", "/Properties", "/About", "/Contact"];
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center space-x-8">
+                    <ul className="flex space-x-6">
+                        {t('navbar_links', { returnObjects: true }).map((link, index) => (
+                            <li key={index}>
+                                <NavLink
+                                    to={routing[index]}
+                                    className={({ isActive }) =>
+                                        `py-2 px-1 ${isActive ? 'text-black font-medium border-b border-black' : 'text-gray-600'} hover:text-black transition-colors`
+                                    }
+                                >
+                                    {link}
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
 
-  return (
-    <nav className="bg-white flex  fixed top-0  border-b-1 border-[#d9dbdc] z-50 px-[120px] max-lg:px-[16px] items-center justify-between w-full">
-      <div className='flex items-center space-x-1' >
-        <img className='w-[25px] h-auto' src={Logo} alt="Logo" />
-        <NavLink to='/' className="flex items-center space-x-3 rtl:space-x-reverse py-[15px] ">
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#191f3b] ">RentEase</span>
-        </NavLink>
-      </div>
+                    {/* User/Auth Section */}
+                    <div className="flex items-center space-x-4">
+                        {user ? (
+                            <>
+                                <UserNotification />
+                                <UserDropdown logoutHandler={logoutHandler} />
+                            </>
+                        ) : (
+                            <>
+                                <NavLink
+                                    to="/Login"
+                                    className="text-sm text-gray-600 hover:text-black transition-colors"
+                                >
+                                    {t('login')}
+                                </NavLink>
+                                <motion.div
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
+                                >
+                                    <NavLink
+                                        to="/Register"
+                                        className="text-sm px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors border border-black"
+                                    >
+                                        {t("register")}
+                                    </NavLink>
+                                </motion.div>
+                            </>
+                        )}
 
-      <ul className="flex gap-6 max-md:hidden">
-        {t('navbar_links', { returnObjects: true }).map((link, index) => (
-            <li key={index}><NavLink className='text-[#191f3b] font-medium hover:text-blue-600' to={routing[index]}>{link}</NavLink></li>
-        ))}
-      </ul>
+                        {/* Language Selector */}
+                        <select
+                            onChange={handleLanguageChange}
+                            defaultValue={i18n.language}
+                            className="bg-white border border-gray-300 text-gray-600 text-sm px-3 py-1.5 focus:ring-1 focus:ring-black focus:border-black outline-none"
+                        >
+                            <option value='en'>EN</option>
+                            <option value="fr">FR</option>
+                        </select>
+                    </div>
+                </div>
 
-      <div className="flex items-center gap-3">
-  {user ? (
-      <div className="flex items-center gap-3">
-          <UserNotification/>
-       <UserDropdown logoutHandler={logoutHandler} />
-      </div>
-  ) : (
-      <>
-          <NavLink to="/Login" className='text-sm  max-md:hidden text-blue-600 hover:underline'>
-              {t('login')}
-          </NavLink>
+                {/* Mobile Menu Button */}
+                <div className="md:hidden flex items-center space-x-4">
+                    <UserNotification />
+                    <UserDropdown logoutHandler={logoutHandler} />
+                    <select
+                        onChange={handleLanguageChange}
+                        defaultValue={i18n.language}
+                        className="bg-white border border-gray-300 text-gray-600 text-sm px-2 py-1 focus:outline-none"
+                    >
+                        <option value='en'>EN</option>
+                        <option value="fr">FR</option>
+                    </select>
+                    <motion.button
+                        onClick={toggleMenu}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-2 text-gray-600 hover:text-black focus:outline-none"
+                        aria-label="Toggle menu"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> 
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </motion.button>
+                </div>
+            </div>
 
-          <NavLink
-              to="/Register"
-              className="inline-flex text-white max-md:hidden bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-              {t("register")}
-          </NavLink>
-      </>
-  )}
-
-          <select onChange={handleLanguageChange} defaultValue={i18n.language}
-                  className="bg-gray-50 border border-gray-300 text-[#191f3b] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-              <option value='en'>English</option>
-              <option value="fr">France</option>
-          </select>
-
-          <button onClick={toggleMenu} data-collapse-toggle="navbar-hamburger" type="button"
-                  className="max-md:inline-flex hidden items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                  aria-controls="navbar-hamburger" aria-expanded="false">
-              <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 17 14">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-       </svg>
-     </button>
-   </div>
-
-
-      {isMenuOpen && <Menu t={t} toggleMenu={toggleMenu} routing={routing} />}
-
-    </nav> 
-  );
+            {/* Mobile Menu */}
+            {isMenuOpen && (
+                <Menu
+                    t={t}
+                    toggleMenu={toggleMenu}
+                    routing={routing}
+                    user={user}
+                    logoutHandler={logoutHandler}
+                />
+            )}
+        </nav>
+    );
 }
 
 export default Navbar;

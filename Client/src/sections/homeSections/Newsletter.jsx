@@ -2,12 +2,10 @@ import { motion } from "framer-motion";
 import { FiMail, FiArrowRight, FiCheck } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { useState, useContext } from "react";
-import emailjs from "emailjs-com";
 import {UserContext} from "../../context/userContext.jsx";
 import axios from "axios";
 
 export default function Newsletter() {
-
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
     const [isSuccess, setIsSuccess] = useState(false);
     const {user} = useContext(UserContext);
@@ -31,17 +29,16 @@ export default function Newsletter() {
         }catch(err) {
             console.log(err);
         }
-
     };
 
     return (
-        <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gray-50 py-14 px-4 sm:px-6 lg:px-8">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden"
+                className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-none overflow-hidden"
             >
                 <div className="p-8 sm:p-10 lg:p-12">
                     <div className="text-center mb-10">
@@ -49,9 +46,9 @@ export default function Newsletter() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
+                            className="text-4xl font-light text-gray-900 mb-2"
                         >
-                            Stay in the Loop
+                            Stay Updated
                         </motion.h2>
                         <motion.p
                             initial={{ opacity: 0 }}
@@ -59,7 +56,7 @@ export default function Newsletter() {
                             transition={{ delay: 0.3 }}
                             className="text-lg text-gray-600 max-w-2xl mx-auto"
                         >
-                            Join <span className="font-semibold text-blue-600">10,000+</span> subscribers who get our weekly updates
+                            Join our newsletter for the latest updates
                         </motion.p>
                     </div>
 
@@ -67,36 +64,32 @@ export default function Newsletter() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="text-center p-6 bg-green-50 rounded-lg border border-green-100"
+                            className="text-center p-8 bg-white border border-gray-200"
                         >
                             <div className="flex flex-col items-center">
-                                {/* Checkmark icon with animation */}
                                 <motion.div
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
                                     transition={{ type: "spring", stiffness: 500 }}
-                                    className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4"
+                                    className="w-14 h-14 bg-gray-100 rounded-none flex items-center justify-center mb-4"
                                 >
-                                    <FiCheck className="w-8 h-8 text-green-600" />
+                                    <FiCheck className="w-6 h-6 text-gray-800" />
                                 </motion.div>
 
-                                {/* Main success message */}
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                    You're subscribed!
+                                <h3 className="text-xl font-medium text-gray-900 mb-3">
+                                    Subscription Confirmed
                                 </h3>
 
-                                {/* Confirmation details */}
                                 <div className="space-y-2">
-                                    <p className="text-gray-600">
-                                        Thanks for joining our newsletter.
+                                    <p className="text-gray-600 text-sm">
+                                        Thank you for subscribing to our newsletter.
                                     </p>
-                                    <p className="text-sm text-green-700 font-medium flex items-center justify-center">
+                                    <p className="text-sm text-gray-700 font-medium flex items-center justify-center">
                                         <FiMail className="mr-2" />
-                                        Please check your email
+                                        Check your inbox
                                     </p>
                                 </div>
 
-                                {/* Additional help text */}
                                 <p className="mt-4 text-xs text-gray-500">
                                     Can't find our email? Check your spam folder.
                                 </p>
@@ -128,7 +121,7 @@ export default function Newsletter() {
                                                 type="email"
                                                 id="email"
                                                 placeholder="Enter your email"
-                                                className={`block w-full pl-10 pr-4 py-3 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:rounded-r-none transition-colors`}
+                                                className={`block w-full pl-10 pr-4 py-3 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-none focus:ring-0 focus:border-black transition-colors`}
                                             />
                                         </div>
                                         {errors.email && (
@@ -147,12 +140,11 @@ export default function Newsletter() {
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         type="submit"
-
-                                        className={`w-full sm:w-auto flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white shadow-sm transition-colors bg-blue-400 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700`}
+                                        className="group w-full sm:w-auto flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-none shadow-sm transition-colors bg-black text-white hover:bg-gray-800"
                                     >
-                                            <span className="flex items-center">
-                                                Subscribe <FiArrowRight className="ml-2 h-5 w-5" />
-                                            </span>
+                                        <span className="flex items-center">
+                                            Subscribe <FiArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        </span>
                                     </motion.button>
                                 </div>
                             </div>

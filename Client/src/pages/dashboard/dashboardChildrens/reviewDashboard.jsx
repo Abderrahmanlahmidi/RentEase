@@ -4,9 +4,9 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { showToast } from "../../../utils/toastUtils.jsx";
 import { ToastContainer } from "react-toastify";
+import { FaPlus, FaTimes, FaArrowRight, FaSearch } from "react-icons/fa";
 
 export default function ReviewsDashboard() {
-
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedReview, setSelectedReview] = useState(null);
@@ -14,7 +14,6 @@ export default function ReviewsDashboard() {
     const [reviews, setReviews] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");
-
 
     const fetchReviews = async () => {
         try {
@@ -89,65 +88,68 @@ export default function ReviewsDashboard() {
     const result = searchValue === "" ? reviews : filteredData;
 
     return (
-        <div className="relative overflow-x-auto w-full sm:rounded-lg">
+        <div className="w-full">
             <ToastContainer />
-            <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+            <div className="flex items-center justify-between p-6 bg-white border-b border-gray-200">
+                <h2 className="text-xl font-light text-gray-900">
                     Review Management
                 </h2>
-                <div>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaSearch className="text-gray-400" />
+                    </div>
                     <input
                         type="text"
-                        placeholder="Search review..."
+                        placeholder="Search reviews..."
                         onChange={(e) => searchReview(e.target.value)}
-                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                        className="pl-10 px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-black"
                     />
                 </div>
             </div>
 
-            <div className="relative overflow-auto max-h-[600px] w-full sm:rounded-lg">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th className="px-6 py-3">Title</th>
-                        <th className="px-6 py-3">Content</th>
-                        <th className="px-6 py-3">Author</th>
-                        <th className="px-6 py-3">Date</th>
-                        <th className="px-6 py-3 text-center">Actions</th>
-                    </tr>
+            <div className="relative overflow-auto max-h-[600px] w-full">
+                <table className="w-full text-sm text-left">
+                    <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th className="px-6 py-3 font-medium">Title</th>
+                            <th className="px-6 py-3 font-medium">Content</th>
+                            <th className="px-6 py-3 font-medium">Author</th>
+                            <th className="px-6 py-3 font-medium">Date</th>
+                            <th className="px-6 py-3 font-medium text-center">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {result.map((review, index) => (
-                        <motion.tr
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            key={index}
-                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
-                        >
-                            <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate max-w-xs">
-                                {review.titre.length > 40 ? `${review.titre.substring(0, 40)}...` : review.titre}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap dark:text-white truncate max-w-xs">
-                                {review.contenu.length > 80 ? `${review.contenu.substring(0, 80)}...` : review.contenu}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap dark:text-white">
-                                {review.auteur.firstName} {review.auteur.lastName}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap dark:text-white">
-                                {review.datePublication}
-                            </td>
-                            <td className="px-6 py-4 text-center space-x-2">
-                                <button
-                                    onClick={() => deleteReview(review.id)}
-                                    className="bg-red-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-red-600 text-xs"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </motion.tr>
-                    ))}
+                        {result.map((review, index) => (
+                            <motion.tr
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                key={index}
+                                className="bg-white border-b border-gray-200"
+                            >
+                                <td className="px-6 py-4 font-medium text-gray-900 truncate max-w-xs">
+                                    {review.titre.length > 40 ? `${review.titre.substring(0, 40)}...` : review.titre}
+                                </td>
+                                <td className="px-6 py-4 text-gray-700 truncate max-w-xs">
+                                    {review.contenu.length > 80 ? `${review.contenu.substring(0, 80)}...` : review.contenu}
+                                </td>
+                                <td className="px-6 py-4 text-gray-700">
+                                    {review.auteur.firstName} {review.auteur.lastName}
+                                </td>
+                                <td className="px-6 py-4 text-gray-700">
+                                    {review.datePublication}
+                                </td>
+                                <td className="px-6 py-4 text-center space-x-2">
+                                    <button
+                                        onClick={() => deleteReview(review.id)}
+                                        className="px-3 py-1 border border-gray-300 hover:border-gray-400 text-gray-700"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </motion.tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -159,7 +161,7 @@ export default function ReviewsDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
                     onClick={closeModals}
                 >
                     <motion.div
@@ -167,50 +169,59 @@ export default function ReviewsDashboard() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -50, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96"
+                        className="bg-white p-8 rounded-none border border-gray-200 w-96"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                            Add Review
-                        </h3>
-                        <form onSubmit={handleSubmit(createReview)}>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-light text-gray-900">
+                                Add Review
+                            </h3>
+                            <button
+                                onClick={closeModals}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <form onSubmit={handleSubmit(createReview)} className="space-y-4">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Title
                                 </label>
                                 <input
-                                    {...register("title", { required: true })}
+                                    {...register("titre", { required: true })}
                                     type="text"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Enter review title"
                                 />
                             </div>
 
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Content
                                 </label>
                                 <textarea
-                                    {...register("content", { required: true })}
+                                    {...register("contenu", { required: true })}
                                     rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Leave content..."
                                 ></textarea>
                             </div>
 
-                            <div className="flex justify-end space-x-2">
+                            <div className="flex justify-end space-x-3 pt-4">
                                 <button
                                     type="button"
                                     onClick={closeModals}
-                                    className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-gray-400"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    className="px-6 py-2 bg-black text-white hover:bg-gray-800 flex items-center"
                                 >
-                                    Add
+                                    Add Review
+                                    <FaArrowRight className="ml-2" />
                                 </button>
                             </div>
                         </form>
@@ -225,7 +236,7 @@ export default function ReviewsDashboard() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center opacity"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
                     onClick={closeModals}
                 >
                     <motion.div
@@ -233,50 +244,59 @@ export default function ReviewsDashboard() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -50, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96"
+                        className="bg-white p-8 rounded-none border border-gray-200 w-96"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                            Update Review
-                        </h3>
-                        <form onSubmit={handleSubmit(updateReview)}>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-light text-gray-900">
+                                Update Review
+                            </h3>
+                            <button
+                                onClick={closeModals}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <form onSubmit={handleSubmit(updateReview)} className="space-y-4">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Title
                                 </label>
                                 <input
-                                    {...register("title", { required: true })}
+                                    {...register("titre", { required: true })}
                                     type="text"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Enter review title"
                                 />
                             </div>
 
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Content
                                 </label>
                                 <textarea
-                                    {...register("content", { required: true })}
+                                    {...register("contenu", { required: true })}
                                     rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Leave content..."
                                 ></textarea>
                             </div>
 
-                            <div className="flex justify-end space-x-2">
+                            <div className="flex justify-end space-x-3 pt-4">
                                 <button
                                     type="button"
                                     onClick={closeModals}
-                                    className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-gray-400"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    className="px-6 py-2 bg-black text-white hover:bg-gray-800 flex items-center"
                                 >
-                                    Update
+                                    Update Review
+                                    <FaArrowRight className="ml-2" />
                                 </button>
                             </div>
                         </form>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\VisitController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AnnonceController;
 use App\Http\Controllers\Api\AuthController;
@@ -9,9 +10,10 @@ use App\Http\Controllers\SalleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\TagController;
-use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\QuartierController;
 use App\Http\Controllers\ContactFromController;
+use App\Http\Controllers\NotificationController;
 
 //User
 Route::post("login", [AuthController::class, "login"])->name("login");
@@ -48,10 +50,10 @@ Route::delete('/tag/{id}', [TagController::class, 'deleteTag']);
 Route::put('/tag/update/{id}', [TagController::class, 'updateTag']);
 
 //Blogs
-Route::post('/blog', [BlogController::class, 'createBlog']);
-Route::get('/blogs', [BlogController::class, 'displayBlogs']);
-Route::delete('/blog/{id}', [BlogController::class, 'deleteBlog']);
-Route::put('/blog/update/{id}', [BlogController::class, 'updateBlog']);
+Route::post('/review', [ReviewController::class, 'createReview']);
+Route::get('/reviews', [ReviewController::class, 'displayReviews']);
+Route::delete('/review/{id}', [ReviewController::class, 'deleteReview']);
+Route::put('/review/update/{id}', [ReviewController::class, 'updateReview']);
 
 //quartiers
 Route::get('/quartiers', [QuartierController::class, 'displayQuartiers']);
@@ -64,6 +66,20 @@ Route::get('/findannonce/{id}', [AnnonceController::class, 'findAnnonceById']);
 
 //subscribe
 Route::post('/subscribe', [SubscribeController::class, 'createSubscribe']);
+
+//Notification
+Route::get('/notifications', [NotificationController::class, 'Notifications']);
+Route::post('/notification', [NotificationController::class, 'createNotification']);
+Route::delete('/notification/delete/{id}', [NotificationController::class, 'deleteNotification']);
+
+//Visits
+Route::get('/visits', [VisitController::class, 'index']);
+Route::post('/visit', [VisitController::class, 'store']);
+Route::get('/ownervists/{id}', [VisitController::class, 'getVisitsByOwner']);
+Route::put('/visit/status/{id}', [VisitController::class, 'updateStatus']);
+Route::delete('/visit/delete/{id}', [VisitController::class, 'destroy']);
+
+
 
 //send email
 Route::post("/sendmail", [ContactFromController::class, 'sendMail']);

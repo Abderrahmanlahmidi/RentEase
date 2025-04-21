@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import {showToast} from "../../../utils/toastUtils.jsx";
-import {ToastContainer} from "react-toastify";
+import { showToast } from "../../../utils/toastUtils.jsx";
+import { ToastContainer } from "react-toastify";
+import { FaPlus, FaTimes, FaArrowRight } from "react-icons/fa";
 
 export default function CategoriesDashboard() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -12,10 +13,6 @@ export default function CategoriesDashboard() {
     const [categories, setCategories] = useState([]);
 
     const { register, handleSubmit, setValue, reset } = useForm();
-
-    useEffect(() => {
-        displayCategories();
-    }, []);
 
     useEffect(() => {
         displayCategories();
@@ -80,68 +77,68 @@ export default function CategoriesDashboard() {
             displayCategories();
             setSelectedCategory(null);
             showToast("success", "Category updated successfully");
-        } catch{
+        } catch {
             showToast("error", "Failed to update category");
         }
     };
 
-
     return (
-        <div className="relative overflow-x-auto w-full sm:rounded-lg">
-            <ToastContainer/>
+        <div className="w-full">
+            <ToastContainer />
             {/* Table Header */}
-            <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+            <div className="flex items-center justify-between p-6 bg-white border-b border-gray-200">
+                <h2 className="text-xl font-light text-gray-900">
                     Category Management
                 </h2>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"
+                    className="flex items-center px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-800"
                 >
+                    <FaPlus className="mr-2" />
                     Add Category
                 </button>
             </div>
 
             {/* Categories Table */}
-            <div className="relative overflow-auto max-h-[600px] w-full sm:rounded-lg">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th className="px-6 py-3">Name</th>
-                        <th className="px-6 py-3">Description</th>
-                        <th className="px-6 py-3 text-center">Actions</th>
-                    </tr>
+            <div className="relative overflow-auto max-h-[600px] w-full">
+                <table className="w-full text-sm text-left">
+                    <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th className="px-6 py-3 font-medium">Name</th>
+                            <th className="px-6 py-3 font-medium">Description</th>
+                            <th className="px-6 py-3 font-medium text-center">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {categories.map((category) => (
-                        <motion.tr
-                            key={category.id}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
-                        >
-                            <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {category.nom}
-                            </td>
-                            <td className="px-6 py-4">{category.description}</td>
-                            <td className="px-6 py-4 text-center space-x-2">
-                                <button
-                                    onClick={() => updateModalCategories(category)}
-                                    className="bg-blue-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-blue-600 text-xs"
-                                >
-                                    Update
-                                </button>
-                                <button
-                                    onClick={() => deleteCategories(category.id)}
-                                    className="bg-red-500 text-white px-3 py-1 cursor-pointer rounded hover:bg-red-600 text-xs"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </motion.tr>
-                    ))}
+                        {categories.map((category) => (
+                            <motion.tr
+                                key={category.id}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="bg-white border-b border-gray-200"
+                            >
+                                <td className="px-6 py-4 font-medium text-gray-900">
+                                    {category.nom}
+                                </td>
+                                <td className="px-6 py-4 text-gray-700">{category.description}</td>
+                                <td className="px-6 py-4 text-center space-x-2">
+                                    <button
+                                        onClick={() => updateModalCategories(category)}
+                                        className="px-3 py-1 border border-gray-300 hover:border-gray-400 text-gray-700"
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() => deleteCategories(category.id)}
+                                        className="px-3 py-1 border border-gray-300 hover:border-gray-400 text-gray-700"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </motion.tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -161,49 +158,58 @@ export default function CategoriesDashboard() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -50, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96"
+                        className="bg-white p-8 rounded-none border border-gray-200 w-96"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                            Add Category
-                        </h3>
-                        <form onSubmit={handleSubmit(createNewCategory)}>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-light text-gray-900">
+                                Add Category
+                            </h3>
+                            <button
+                                onClick={() => setIsCreateModalOpen(false)}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <form onSubmit={handleSubmit(createNewCategory)} className="space-y-4">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Name
                                 </label>
                                 <input
                                     {...register("nom", { required: true })}
                                     type="text"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Enter category name"
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Description
                                 </label>
                                 <textarea
                                     {...register("description", { required: true })}
                                     rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Leave a description..."
                                 ></textarea>
                             </div>
 
-                            <div className="flex justify-end space-x-2">
+                            <div className="flex justify-end space-x-3 pt-4">
                                 <button
                                     type="button"
                                     onClick={() => setIsCreateModalOpen(false)}
-                                    className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-gray-400"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    className="px-6 py-2 bg-black text-white hover:bg-gray-800 flex items-center"
                                 >
-                                    Add
+                                    Add Category
+                                    <FaArrowRight className="ml-2" />
                                 </button>
                             </div>
                         </form>
@@ -226,56 +232,64 @@ export default function CategoriesDashboard() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -50, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96"
+                        className="bg-white p-8 rounded-none border border-gray-200 w-96"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                            Update Category
-                        </h3>
-                        <form onSubmit={handleSubmit(updateCategory)}>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-light text-gray-900">
+                                Update Category
+                            </h3>
+                            <button
+                                onClick={() => setIsUpdateModalOpen(false)}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <form onSubmit={handleSubmit(updateCategory)} className="space-y-4">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Name
                                 </label>
                                 <input
                                     {...register("nom", { required: true })}
                                     type="text"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Enter category name"
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div>
+                                <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Description
                                 </label>
                                 <textarea
                                     {...register("description", { required: true })}
                                     rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-black"
                                     placeholder="Leave a description..."
                                 ></textarea>
                             </div>
 
-                            <div className="flex justify-end space-x-2">
+                            <div className="flex justify-end space-x-3 pt-4">
                                 <button
                                     type="button"
                                     onClick={() => setIsUpdateModalOpen(false)}
-                                    className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-gray-400"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    className="px-6 py-2 bg-black text-white hover:bg-gray-800 flex items-center"
                                 >
-                                    Update
+                                    Update Category
+                                    <FaArrowRight className="ml-2" />
                                 </button>
                             </div>
                         </form>
                     </motion.div>
                 </motion.div>
             )}
-
         </div>
     );
 }

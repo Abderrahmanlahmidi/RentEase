@@ -61,4 +61,11 @@ class Annonce extends Model
         return $this->belongsToMany(Tag::class, 'annonce_tag');
     }
 
+    public function notifications(){
+        return $this->hasMany(Notification::class);
+    }
+
+    public function visit(){
+        return $this->hasMany(Visit::class);
+    }
 }

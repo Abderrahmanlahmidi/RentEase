@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
-import { FiExternalLink, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { useRef, useState } from "react";
-import {useNavigate} from "react-router-dom";
-
+import { FiExternalLink } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
 
 export default function Advertisement() {
-
     const navigate = useNavigate();
 
     const ads = [
@@ -61,141 +59,134 @@ export default function Advertisement() {
         }
     ];
 
-    const scrollRef = useRef(null);
-    const [showLeftArrow, setShowLeftArrow] = useState(false);
-    const [showRightArrow, setShowRightArrow] = useState(true);
-
-    const scroll = (direction) => {
-        const container = scrollRef.current;
-        const scrollAmount = direction === 'left' ? -400 : 400;
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-
-        // Update arrow visibility after scroll
-        setTimeout(() => {
-            setShowLeftArrow(container.scrollLeft > 0);
-            setShowRightArrow(
-                container.scrollLeft < container.scrollWidth - container.clientWidth
-            );
-        }, 300);
-    };
-
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <section className="py-14 px-4 sm:px-6 lg:px-8 bg-gray-50">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                     className="text-center mb-12"
                 >
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Featured Advertisements</h1>
-                    <p className="text-lg text-gray-600">Discover services and offers from our trusted partners</p>
+                    <h2 className="text-4xl font-light tracking-tight text-gray-900 mb-2">
+                        Featured Partners
+                    </h2>
+                    <p className="text-lg text-gray-600">
+                        Discover services and offers from our trusted partners
+                    </p>
                 </motion.div>
 
-                {/* Scrolling Advertisement Cards */}
-                <div className="relative">
-                    {/* Navigation Arrows */}
-                    {showLeftArrow && (
-                        <button
-                            onClick={() => scroll('left')}
-                            className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"
-                            aria-label="Scroll left"
-                        >
-                            <FiChevronLeft className="w-5 h-5 text-gray-700" />
-                        </button>
-                    )}
-                    {showRightArrow && (
-                        <button
-                            onClick={() => scroll('right')}
-                            className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"
-                            aria-label="Scroll right"
-                        >
-                            <FiChevronRight className="w-5 h-5 text-gray-700" />
-                        </button>
-                    )}
+                {ads.length > 0 ? (
+                    <div className="relative">
+                        {/* Gradient fade effect for scroll indication */}
+                        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l z-10 pointer-events-none" />
+                        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r z-10 pointer-events-none" />
 
-                    {/* Cards Container */}
-                    <div
-                        ref={scrollRef}
-                        className="flex overflow-x-auto pb-6 -mx-4 px-4"
-                        style={{
-                            scrollbarWidth: 'none', /* Firefox */
-                            msOverflowStyle: 'none', /* IE/Edge */
-                            '&::-webkit-scrollbar': { /* Chrome/Safari */
-                                display: 'none',
-                                width: 0,
-                                height: 0,
-                                background: 'transparent'
-                            }
-                        }}
-                        onScroll={(e) => {
-                            const container = e.target;
-                            setShowLeftArrow(container.scrollLeft > 0);
-                            setShowRightArrow(
-                                container.scrollLeft < container.scrollWidth - container.clientWidth
-                            );
-                        }}
-                    >
-                        <div className="flex space-x-6">
-                            {ads.map((ad, index) => (
-                                <motion.div
-                                    key={ad.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    whileHover={{ y: -5 }}
-                                    className="flex-shrink-0 w-80 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-                                >
-                                    <div className="relative h-48 overflow-hidden">
-                                        <img
-                                            src={ad.image}
-                                            alt={ad.title}
-                                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                                        />
-                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                            <span className="text-xs text-white/80">Sponsored by {ad.sponsor}</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{ad.title}</h3>
-                                        <p className="text-gray-600 mb-4">{ad.description}</p>
-                                        <a
-                                            href={ad.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-                                        >
-                                            Learn more <FiExternalLink className="ml-1" />
-                                        </a>
-                                        {ad.promoCode && (
-                                            <div className="mt-3 text-sm text-gray-500">
-                                                Use code: <span className="font-bold">{ad.promoCode}</span>
+                        <div className="overflow-hidden px-2 sm:px-4">
+                            <div className="flex gap-6 pb-8 pl-4 pr-4 overflow-x-auto scroll-smooth snap-x snap-mandatory">
+                                {ads.map((ad, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className="flex-shrink-0 w-[320px] snap-start"
+                                    >
+                                        <div className="bg-white border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-sm h-full flex flex-col">
+                                            <div className="relative h-56 overflow-hidden">
+                                                <img
+                                                    src={ad.image}
+                                                    alt={ad.title}
+                                                    className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+                                                />
+                                                <div className="absolute top-4 left-4 bg-black px-3 py-1 flex items-center">
+                                                    <FaStar className="text-white mr-1" />
+                                                    <span className="text-sm font-medium text-white">Partner Offer</span>
+                                                </div>
+                                                <div className="absolute bottom-4 left-4 bg-black/80 px-2 py-1">
+                                                    <span className="text-xs text-white">Sponsored by {ad.sponsor}</span>
+                                                </div>
                                             </div>
-                                        )}
-                                    </div>
-                                </motion.div>
-                            ))}
+                                            <div className="p-6 flex flex-col flex-grow">
+                                                <div className="mb-4">
+                                                    <h3 className="text-xl font-medium text-gray-900 mb-1 line-clamp-1">
+                                                        {ad.title}
+                                                    </h3>
+                                                    <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                                                        {ad.description}
+                                                    </p>
+                                                </div>
+
+                                                <div className="mt-auto pt-4 border-t border-gray-200">
+                                                    <div className="flex items-center justify-between">
+                                                        <a
+                                                            href={ad.link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="px-4 py-2 bg-black hover:bg-gray-800 text-white transition-colors flex items-center justify-center border border-black"
+                                                        >
+                                                            <span>Learn More</span>
+                                                            <FiExternalLink className="w-4 h-4 ml-2" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="text-center mt-12 bg-white border border-gray-200 p-10 max-w-2xl mx-auto">
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-none mb-6">
+                            <FaStar className="text-3xl text-gray-800" />
+                        </div>
+                        <h3 className="text-2xl font-light text-gray-800 mb-3">
+                            No Partner Offers Available
+                        </h3>
+                        <p className="text-gray-500 mb-6">
+                            We're currently updating our partner offers. Please check back later.
+                        </p>
+                    </div>
+                )}
 
-                {/* Additional Info */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="mt-16 bg-white rounded-xl shadow-sm p-6 text-center"
-                >
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Want to advertise with us?</h2>
-                    <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                        Reach thousands of potential customers by showcasing your products and services on our platform.
-                    </p>
-                    <button onClick={() => navigate("/contact")} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-                        Contact Our Ad Team
-                    </button>
-                </motion.div>
+                {/* CTA Section */}
+                <div className="mt-16 text-center">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                        className="bg-white border border-gray-200 p-8 max-w-2xl mx-auto"
+                    >
+                        <h2 className="text-2xl font-light text-gray-800 mb-3">
+                            Want to advertise with us?
+                        </h2>
+                        <p className="text-gray-600 mb-6">
+                            Reach thousands of potential customers by showcasing your products and services on our platform.
+                        </p>
+                        <button
+                            onClick={() => navigate("/contact")}
+                            className="px-6 py-3 bg-black hover:bg-gray-800 text-white transition-colors inline-flex items-center border border-black"
+                        >
+                            <span>Contact Our Ad Team</span>
+                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </motion.div>
+                </div>
             </div>
-        </div>
+
+            <style jsx>{`
+                /* Hide scrollbar but keep functionality */
+                .overflow-x-auto::-webkit-scrollbar {
+                    display: none;
+                }
+                .overflow-x-auto {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
+        </section>
     );
 }

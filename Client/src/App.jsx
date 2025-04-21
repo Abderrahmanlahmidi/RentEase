@@ -27,13 +27,17 @@ import RolesDashboard from "./pages/dashboard/dashboardChildrens/roleDashboard";
 import CategoriesDashboard from "./pages/dashboard/dashboardChildrens/categoriesDashboard";
 import SalleDashboard from "./pages/dashboard/dashboardChildrens/salleDashboard";
 import TagsDashboard from "./pages/dashboard/dashboardChildrens/tagDashboard";
-import BlogDashboard from "./pages/dashboard/dashboardChildrens/blogDashboard";
+import ReviewsDashboard from "./pages/dashboard/dashboardChildrens/reviewDashboard.jsx";
 
 // Announcement components
 import Annonces from "./sections/Annonces";
 import MyAnnonces from "./components/Annonces/myAnnonces";
 import CreateAnnonce from "./components/Annonces/createAnnonce";
 import AnnoncesDashboard from "./pages/dashboard/dashboardChildrens/annoncesDashboard..jsx";
+import AnnoncesVisits from "./components/Annonces/annoncesVisits.jsx";
+
+// Reviews components
+import UserReviews from "./components/userReviews.jsx";
 
 export const informationContext = createContext();
 
@@ -68,7 +72,7 @@ const App = () => {
                 <Route path="categories" element={<CategoriesDashboard />} />
                 <Route path="salles" element={<SalleDashboard />} />
                 <Route path="tags" element={<TagsDashboard />} />
-                <Route path="blogs" element={<BlogDashboard />} />
+                <Route path="reviews" element={<ReviewsDashboard />} />
                 <Route path="annonces" element={<AnnoncesDashboard />} />
               </Route>
             </Route>
@@ -80,6 +84,8 @@ const App = () => {
                 <Route index element={<MyAnnonces />} />
                 <Route path="/annonces/createAnnonce" element={<CreateAnnonce />} />
               </Route>
+              <Route path="/reviews" element={<UserReviews />} />
+              <Route path="/visits" element={<AnnoncesVisits />} />
             </Route>
 
             {/* Catch-all Route */}
