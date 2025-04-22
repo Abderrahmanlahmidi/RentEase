@@ -4,13 +4,13 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { showToast } from "../../../utils/toastUtils.jsx";
 import { ToastContainer } from "react-toastify";
-import { FaPlus, FaTimes, FaArrowRight, FaSearch } from "react-icons/fa";
+import {FaTimes, FaArrowRight, FaSearch } from "react-icons/fa";
 
 export default function ReviewsDashboard() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedReview, setSelectedReview] = useState(null);
-    const { handleSubmit, register, reset, setValue } = useForm();
+    const { handleSubmit, register, reset } = useForm();
     const [reviews, setReviews] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");

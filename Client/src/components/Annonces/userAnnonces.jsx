@@ -46,7 +46,7 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
 
     const deleteAnnonce = async (id) => {
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/api/annonce/${id}`);
+            await axios.delete(`http://127.0.0.1:8000/api/annonce/${id}`);
             showToast("success", "Annonce deleted successfully");
             onDelete(id);
         } catch {
@@ -140,6 +140,7 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
                     </button>
 
                     <button 
+                        onClick={() => navigate(`/annonces/update/${annonceData.id}`)}
                         className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border border-gray-300 hover:bg-gray-100 transition-colors flex-1 min-w-0"
                     >
                         <FaEdit className="w-3 h-3" />
