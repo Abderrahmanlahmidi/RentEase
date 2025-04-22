@@ -35,6 +35,7 @@ import MyAnnonces from "./components/Annonces/myAnnonces";
 import CreateAnnonce from "./components/Annonces/createAnnonce";
 import AnnoncesDashboard from "./pages/dashboard/dashboardChildrens/annoncesDashboard..jsx";
 import AnnoncesVisits from "./components/Annonces/annoncesVisits.jsx";
+import UpdateAnnonce from "./components/Annonces/updateAnnonce.jsx";
 
 // Reviews components
 import UserReviews from "./components/userReviews.jsx";
@@ -83,6 +84,7 @@ const App = () => {
               <Route path="/annonces" element={<Annonces />}>
                 <Route index element={<MyAnnonces />} />
                 <Route path="/annonces/createAnnonce" element={<CreateAnnonce />} />
+                <Route path="/annonces/update/:updateAnnonceId" element={<UpdateAnnonce/>} />
               </Route>
               <Route path="/reviews" element={<UserReviews />} />
               <Route path="/visits" element={<AnnoncesVisits />} />

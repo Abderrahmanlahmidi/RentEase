@@ -4,6 +4,7 @@ import axios from "axios";
 import {showToast} from "../../utils/toastUtils.jsx";
 import {ToastContainer} from "react-toastify";
 import {UserContext} from "../../context/userContext.jsx";
+import { useParams } from "react-router-dom";
 import {
     FaMoneyBillWave,
     FaExchangeAlt,
@@ -23,17 +24,16 @@ import {
 
 import {useNavigate} from "react-router-dom";
 
-export default function CreateAnnonce() {
+export default function UpdateAnnonce() {
     const [category, setCategory] = useState([]);
     const [tags, setTags] = useState([]);
     const [salles, setSalles]= useState([]);
     const [quartiers, setQuartiers] = useState([]);
     const [selectedCity, setSelectedCity] = useState();
+    const [selectedAnnonce, setSelectedAnnonce] = useState()
     const {user,announcements,setAnnouncements} = useContext(UserContext);
 
     const navigate = useNavigate();
-
-
 
     const addFileField = () => {
         append({ file: null });
@@ -43,6 +43,7 @@ export default function CreateAnnonce() {
         handleSubmit,
         control,
         watch,
+        setValue,
         formState: { errors }
     } = useForm({
         defaultValues:{
@@ -105,58 +106,79 @@ export default function CreateAnnonce() {
         displayQuartier()
     }, [])
 
-    const createAnnonce = async (data) => {
 
+    
 
-        const formData = new FormData();
+    const {updateAnnonceId} = useParams();
 
-        formData.append('titre', data.titre);
-        formData.append('description', data.description);
-        formData.append('transaction', data.transaction);
-        formData.append('prix', data.prix);
-        formData.append('superficie', data.superficie);
-        formData.append('telephone', data.telephone);
-        formData.append('email', data.email);
-        formData.append('latitude', data.latitude);
-        formData.append('longitude', data.longitude);
-        formData.append('category_id', data.category_id);
-        formData.append('city', data.city);
-        formData.append('quartier_id', data.quartier_id);
-        formData.append('proprietaire_id', user?.id);
+    useEffect(() => {
+        const getAnnonce = async () => {
+            const response = await axios.get(`http://127.0.0.1:8000/api/findannonce/${updateAnnonceId}`)
+            console.log(response.data.annonce);
+            setSelectedAnnonce(response.date.annonce)
 
-        data.salle_id.forEach((id) => {
-            formData.append('salle_id[]', id);
-        });
-
-        data.tag_id.forEach((id) => {
-            formData.append('tag_id[]', id);
-        });
-
-        data.image_files.forEach((item) => {
-            if (item.file && item.file.length > 0) {
-                formData.append('image_files[]', item.file[0]);
-            }
-        });
-
-        try {
-            const response = await axios.post("http://localhost:8000/api/annonce", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            showToast('success', "Annonce créée avec succès !");
-            console.log("the server response:", response.data.annonce);
-            setAnnouncements([...announcements, response.data.annonce]);
-            setTimeout(() => navigate("/properties"), 3000);
-        } catch (error) {
-            if (error.response) {
-                console.error("Erreur lors de l'envoi :", error.response.data);
-                showToast('error', "Erreur lors de l'envoi :");
-            } else {
-                console.error("Erreur inconnue :", error);
-                showToast('error', "Erreur lors de l'envoi :");
-            }
+            setValue("titre", response.data.annonce.titre);
+            // setValue("description",);
         }
+        getAnnonce();
+
+    }, []);
+
+
+    const updateAnnonce = async (data) => {
+
+        // const formData = new FormData();
+
+
+        console.log(data);
+
+        // formData.append('titre', data.titre);
+        // formData.append('description', data.description);
+        // formData.append('transaction', data.transaction);
+        // formData.append('prix', data.prix);
+        // formData.append('superficie', data.superficie);
+        // formData.append('telephone', data.telephone);
+        // formData.append('email', data.email);
+        // formData.append('latitude', data.latitude);
+        // formData.append('longitude', data.longitude);
+        // formData.append('category_id', data.category_id);
+        // formData.append('city', data.city);
+        // formData.append('quartier_id', data.quartier_id);
+        // formData.append('proprietaire_id', user?.id);
+
+        // data.salle_id.forEach((id) => {
+        //     formData.append('salle_id[]', id);
+        // });
+
+        // data.tag_id.forEach((id) => {
+        //     formData.append('tag_id[]', id);
+        // });
+
+        // data.image_files.forEach((item) => {
+        //     if (item.file && item.file.length > 0) {
+        //         formData.append('image_files[]', item.file[0]);
+        //     }
+        // });
+
+        // try {
+        //     const response = await axios.post("http://localhost:8000/api/annonce", formData, {
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data'
+        //         }
+        //     });
+        //     showToast('success', "Annonce Updated Successfully !");
+        //     console.log("the server response:", response.data.annonce);
+        //     setAnnouncements([...announcements, response.data.annonce]);
+        //     setTimeout(() => navigate("/properties"), 3000);
+        // } catch (error) {
+        //     if (error.response) {
+        //         console.error("Erreur lors de l'envoi :", error.response.data);
+        //         showToast('error', "Erreur lors de l'envoi :");
+        //     } else {
+        //         console.error("Erreur inconnue :", error);
+        //         showToast('error', "Erreur lors de l'envoi :");
+        //     }
+        // }
 
     };
 
@@ -165,9 +187,9 @@ export default function CreateAnnonce() {
         <div className="max-w-4xl mx-auto p-6">
             <ToastContainer/>
             <div className="bg-white border border-gray-200 p-8 rounded-none">
-                <h1 className="text-3xl font-light text-gray-900 mb-8">Créer une nouvelle annonce</h1>
+                <h1 className="text-3xl font-light text-gray-900 mb-8">Mettez à jour votre Annonce</h1>
                 
-                <form onSubmit={handleSubmit(createAnnonce)} className="space-y-8">
+                <form onSubmit={handleSubmit(updateAnnonce)} className="space-y-8">
                     {/* Titre */}
                     <div>
                         <label htmlFor="titre" className={`block mb-3 text-sm font-medium ${errors.titre ? 'text-red-700' : 'text-gray-700'}`}>
