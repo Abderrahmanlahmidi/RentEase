@@ -28,6 +28,8 @@ const Login = () => {
                 email: data.email,
                 password: data.password,
             });
+        
+            localStorage.setItem("user", JSON.stringify(response.data.user));
             setUser(response.data.user);
             navigate("/");
         } catch (error) {
@@ -36,7 +38,7 @@ const Login = () => {
             setIsLoading(false);
         }
     };
-
+    
     return (
         <div className="flex justify-center items-center min-h-screen bg-white p-4">
             <motion.div 

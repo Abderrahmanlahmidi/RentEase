@@ -44,8 +44,6 @@ export const informationContext = createContext();
 
 const App = () => {
   const { t, i18n } = useTranslation();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const role = user?.role?.name || "";
 
   const contextInformation = { t, i18n };
 
@@ -64,8 +62,8 @@ const App = () => {
             <Route path="/properties/annonce/:annonceId" element={<AnnonceDetails />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
-            {/* Protected Dashboard Routes */}
-            <Route element={<ProtectedDashboard role={role} allowedRole="Admin" />}>
+            {/* Protected Dashboard Routes - Only for Admin */}
+            <Route element={<ProtectedDashboard allowedRole="Admin" />}>
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route index element={<HomeDashboard />} />
                 <Route path="users" element={<UsersDashboard />} />
@@ -78,8 +76,8 @@ const App = () => {
               </Route>
             </Route>
 
-            {/* Protected User Routes */}
-            <Route element={<ProtectedProfile user={user} />}>
+            {/* Protected User Routes - For all authenticated users */}
+            <Route element={<ProtectedProfile />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/annonces" element={<Annonces />}>
                 <Route index element={<MyAnnonces />} />
