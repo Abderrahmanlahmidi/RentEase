@@ -85,18 +85,7 @@ class AuthController extends Controller
         }
     }
 
-    public function profile(Request $request): JsonResponse {
-        if ($request->user()) {
-            return response()->json([
-                "message" => "profile success",
-                "user" => $request->user()
-            ]);
-        }else{
-            return response()->json([
-                "message" => "user not found",
-            ]);
-        }
-    }
+
     public function logout(Request $request): JsonResponse {
         $user = User::where("id", $request->user()->id)->first();
         if ($user) {
@@ -229,9 +218,6 @@ class AuthController extends Controller
        ], 201);
 
     }
-
-
-
 
 }
 

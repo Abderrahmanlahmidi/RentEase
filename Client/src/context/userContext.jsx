@@ -4,31 +4,34 @@ import axios from "axios";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-
-
   const [announcements, setAnnouncements] = useState([]);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const displayAnnouces = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/annonces");
         setAnnouncements(response.data.annonces);
-      }catch(error){
+      } catch(error) {
         console.log("Error get data" + error);
       }
     }
-    displayAnnouces()
-  }, [])
-
+    displayAnnouces();
+  }, []);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser && !user) {
-      setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse user data", e);
+        localStorage.removeItem("user");
+      }
     }
+    setLoading(false);
   }, []);
-
 
   useEffect(() => {
     if (user) {
@@ -39,10 +42,14 @@ export const UserProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, announcements, setAnnouncements}}>
+    <UserContext.Provider value={{ 
+      user, 
+      setUser, 
+      announcements, 
+      setAnnouncements,
+      loading
+    }}>
       {children}
     </UserContext.Provider>
   );
 };
-
- 

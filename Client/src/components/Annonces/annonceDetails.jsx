@@ -497,7 +497,7 @@ export default function AnnonceDetails() {
                     </div>
                   </a>
                 </div>
-                {user.id !== annonce.proprietaire_id ? (
+                {user?.id !== annonce.proprietaire_id ? (
                     <>
                       <button
                           onClick={() => setShowVisitForm(true)}

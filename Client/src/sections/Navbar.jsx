@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import UserDropdown from "../components/navbarComponents/userDropdown.jsx";
 import UserNotification from "../components/navbarComponents/userNotification.jsx";
 import { motion } from 'framer-motion';
+import axios from "axios";
+
 
 function Navbar() {
     const { t, i18n } = useContext(informationContext);
@@ -21,9 +23,15 @@ function Navbar() {
         i18n.changeLanguage(event.target.value);
     };
 
-    const logoutHandler = () => {
-        setUser(null);
-        navigate('/');
+    const logoutHandler = async () => {
+        try {
+            await axios.post("http://localhost:8000/api/logout");
+          } catch (error) {
+            console.log("Logout error", error);
+          } finally {
+            setUser(null);
+            localStorage.removeItem("user");
+          }
     };
 
     const routing = ["/", "/Properties", "/About", "/Contact"];
@@ -105,8 +113,13 @@ function Navbar() {
 
                 {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center space-x-4">
-                    <UserNotification />
-                    <UserDropdown logoutHandler={logoutHandler} />
+                    {user && (
+                        <>
+                        <UserNotification />
+                        <UserDropdown logoutHandler={logoutHandler} />
+                        </>
+                    )}
+                    
                     <select
                         onChange={handleLanguageChange}
                         defaultValue={i18n.language}
