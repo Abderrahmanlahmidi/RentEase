@@ -7,7 +7,7 @@ import axios from "axios";
 const ChangePassword = () => {
     const { user } = useContext(UserContext);
     const [showPassword, setShowPassword] = useState(false);
-    const { formState: { errors }, handleSubmit, register, watch } = useForm();
+    const { formState: { errors }, handleSubmit, register, watch, reset } = useForm();
     const [showConfirmPassword, setConfirmShowPassword] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
 
@@ -17,6 +17,7 @@ const ChangePassword = () => {
             const response = await axios.put(`http://127.0.0.1:8000/api/user/password/${user.id}`, data, { withCredentials: true });
             if (response.status === 202) {
                 setSuccessMessage(response.data.message);
+                reset();
             }
         } catch (error) {
             console.error(error);

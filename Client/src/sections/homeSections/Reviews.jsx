@@ -4,15 +4,13 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { UserContext } from "../../context/userContext.jsx";
-import { informationContext } from "../../App";
-import { NavLink } from "react-router-dom";
+
 
 export default function Reviews() {
     const [reviews, setReviews] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { user } = useContext(UserContext);
-    const { t } = useContext(informationContext);
 
     useEffect(() => {
         const getReviews = async () => {
@@ -35,15 +33,6 @@ export default function Reviews() {
         }
     };
 
-    const container = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
 
     return (
         <section className="py-14 px-4 sm:px-6 lg:px-8 bg-gray-50">
@@ -77,20 +66,13 @@ export default function Reviews() {
                 )}
 
                 {/* Review Cards Grid */}
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true }}
+                <div
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
-                    {reviews.map((review, index) => (
-                        <motion.div
-                            key={index}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                show: { opacity: 1, y: 0 }
-                            }}
+                    {reviews.map((review) => (
+                        <div
+                            key={review.id}
+                           
                             className="group bg-white border border-gray-200 p-8 rounded-none hover:shadow-sm transition-all duration-300 h-full flex flex-col"
                         >
                             <div className="flex flex-col h-full">
@@ -122,9 +104,9 @@ export default function Reviews() {
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
-                </motion.div>
+                </div>
             </div>
 
             {/* Add Review Modal */}
