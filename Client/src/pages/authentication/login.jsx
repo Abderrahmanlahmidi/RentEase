@@ -28,6 +28,8 @@ const Login = () => {
                 email: data.email,
                 password: data.password,
             });
+
+            console.log(response);
         
             localStorage.setItem("user", JSON.stringify(response.data.user));
             setUser(response.data.user);

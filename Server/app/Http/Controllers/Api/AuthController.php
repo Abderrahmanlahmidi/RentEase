@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -130,12 +131,16 @@ class AuthController extends Controller
             ], 404);
         }
 
+        if(Storage::exists('/public/' . $user->profile_image)){
+            Storage::delete('/public/' . $user->profile_image);
+        }
+
         $validator = Validator::make($request->all(), [
             "firstName" => "required|string",
             "lastName" => "required|string",
             "age" => "required|integer|min:18",
             "email" => "required|email|unique:users,email," . $id,
-            "profile_image" => "required|string",
+            "profile_image" => "required",
         ]);
 
         if ($validator->fails()) {
@@ -148,7 +153,7 @@ class AuthController extends Controller
         $user->lastName = $request->lastName;
         $user->age = $request->age;
         $user->email = $request->email;
-        $user->profile_image = $request->profile_image;
+        $user->profile_image = $request->file("profile_image")->store("profile", "public");
 
         $user->save();
 
@@ -163,6 +168,8 @@ class AuthController extends Controller
     public function changePassword(Request $request, $id): JsonResponse{
 
         $user = User::find($id);
+
+
 
        $validator = Validator::make($request->all(), [
            "password" => "required",

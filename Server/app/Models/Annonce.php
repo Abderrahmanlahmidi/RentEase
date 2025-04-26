@@ -24,6 +24,7 @@ class Annonce extends Model
         'email',
         'telephone',
         'city',
+        'numberRooms'
     ];
 
     public function proprietaire()

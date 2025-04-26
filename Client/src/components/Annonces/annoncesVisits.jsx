@@ -166,10 +166,11 @@ export default function AnnoncesVisits() {
                 </div>
 
                 {loading && (
-                    <div className="mb-4 p-4 bg-gray-100 text-gray-700 rounded-none border border-gray-200 flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700 mr-2"></div>
-                        Loading data...
-                    </div>
+                  <div className="mb-4 p-4 bg-gray-100 text-gray-700 rounded-none border border-gray-200 flex items-center justify-center space-x-2">
+                   <div className="h-5 w-5 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></div>
+                  <span>Loading data...</span>
+                </div>
+                
                 )}
 
                 {activeTab === "requests" ? (

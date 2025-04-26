@@ -21,7 +21,6 @@ import {
     FaCity,
     FaMapMarkedAlt,
 } from 'react-icons/fa';
-
 import {useNavigate} from "react-router-dom";
 
 export default function UpdateAnnonce() {
@@ -30,14 +29,13 @@ export default function UpdateAnnonce() {
     const [salles, setSalles]= useState([]);
     const [quartiers, setQuartiers] = useState([]);
     const [selectedCity, setSelectedCity] = useState();
-    const [selectedAnnonce, setSelectedAnnonce] = useState()
-    const {user,announcements,setAnnouncements} = useContext(UserContext);
-
+    const [selectedAnnonce, setSelectedAnnonce] = useState(null);
+    const {announcements, setAnnouncements} = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    const addFileField = () => {
-        append({ file: null });
-    };
+    const {updateAnnonceId} = useParams();
+
     const {
         register,
         handleSubmit,
@@ -46,8 +44,21 @@ export default function UpdateAnnonce() {
         setValue,
         formState: { errors }
     } = useForm({
-        defaultValues:{
-            image_urls:[""]
+        defaultValues: {
+            titre: "",
+            description: "",
+            transaction: "location",
+            prix: "",
+            superficie: "",
+            telephone: "",
+            email: "",
+            latitude: "",
+            longitude: "",
+            category_id: "",
+            quartier_id: "",
+            tag_id: [],
+            salle_id: [],
+            image_files: []
         }
     });
 
@@ -58,9 +69,8 @@ export default function UpdateAnnonce() {
 
     const transaction = watch("transaction", "location");
 
-    const uniqueCities = [...new Set(quartiers.map(q => q.city.nom))];
-    const filteredQuartiers = quartiers.filter(q => q.city.nom === selectedCity);
-
+    const uniqueCities = [...new Set(quartiers.map(q => q.city?.nom))].filter(Boolean);
+    const filteredQuartiers = quartiers.filter(q => q.city?.nom === selectedCity);
 
     const displayCategories = async () => {
         try {
@@ -70,7 +80,6 @@ export default function UpdateAnnonce() {
             showToast("error", "Failed to load categories");
         }
     };
-
 
     const displayTags = async () => {
         try {
@@ -103,85 +112,117 @@ export default function UpdateAnnonce() {
         displayCategories();
         displayTags();
         displaySalles();
-        displayQuartier()
-    }, [])
-
-
-    
-
-    const {updateAnnonceId} = useParams();
+        displayQuartier();
+    }, []);
 
     useEffect(() => {
         const getAnnonce = async () => {
-            const response = await axios.get(`http://127.0.0.1:8000/api/findannonce/${updateAnnonceId}`)
-            console.log(response.data.annonce);
-            setSelectedAnnonce(response.date.annonce)
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/findannonce/${updateAnnonceId}`);
+                const annonce = response.data.annonce;
+                
+                setSelectedAnnonce(annonce);   
+                setValue("titre", annonce.titre);  
+                setValue("description", annonce.description);  
+                setValue("transaction", annonce.transaction);
+                setValue("category_id", annonce.category_id);  
+                setValue("prix", annonce.prix);
+                setValue("superficie", annonce.superficie);
+                setValue("telephone", annonce.telephone);
+                setValue("email", annonce.email);
+                setValue("latitude", annonce.latitude);
+                setValue("longitude", annonce.longitude);
+                setValue("quartier_id", annonce.quartier_id);
+                
+                const quartier = quartiers.find(q => q.id === annonce.quartier_id);
+                if (quartier) {
+                    setSelectedCity(quartier.city?.nom);
+                    setValue("city", quartier.city?.nom);
+                }
 
-            setValue("titre", response.data.annonce.titre);
-            // setValue("description",);
+                setValue("tag_id", annonce.tags.map(tag => tag.id));
+                setValue("salle_id", annonce.salles.map(salle => salle.id));
+
+            } catch (error) {
+                console.error("Erreur lors de la récupération :", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+    
+        if (quartiers.length > 0) {
+            getAnnonce();
         }
-        getAnnonce();
-
-    }, []);
-
+    }, [updateAnnonceId, quartiers]);
 
     const updateAnnonce = async (data) => {
 
-        // const formData = new FormData();
-
-
         console.log(data);
+        const formData = new FormData();
 
-        // formData.append('titre', data.titre);
-        // formData.append('description', data.description);
-        // formData.append('transaction', data.transaction);
-        // formData.append('prix', data.prix);
-        // formData.append('superficie', data.superficie);
-        // formData.append('telephone', data.telephone);
-        // formData.append('email', data.email);
-        // formData.append('latitude', data.latitude);
-        // formData.append('longitude', data.longitude);
-        // formData.append('category_id', data.category_id);
-        // formData.append('city', data.city);
-        // formData.append('quartier_id', data.quartier_id);
-        // formData.append('proprietaire_id', user?.id);
+        formData.append('_method', 'PUT');
+        formData.append('titre', data.titre);
+        formData.append('description', data.description);
+        formData.append('transaction', data.transaction);
+        formData.append('prix', data.prix);
+        formData.append('superficie', data.superficie);
+        formData.append('telephone', data.telephone);
+        formData.append('email', data.email);
+        formData.append('latitude', data.latitude);
+        formData.append('longitude', data.longitude);
+        formData.append('category_id', data.category_id);
+        formData.append('quartier_id', data.quartier_id);
 
-        // data.salle_id.forEach((id) => {
-        //     formData.append('salle_id[]', id);
-        // });
+        data.salle_id.forEach((id) => {
+            formData.append('salle_id[]', id);
+        });
 
-        // data.tag_id.forEach((id) => {
-        //     formData.append('tag_id[]', id);
-        // });
+        data.tag_id.forEach((id) => {
+            formData.append('tag_id[]', id);
+        });
 
-        // data.image_files.forEach((item) => {
-        //     if (item.file && item.file.length > 0) {
-        //         formData.append('image_files[]', item.file[0]);
-        //     }
-        // });
+        data.image_files.forEach((item) => {
+            if (item.file && item.file.length > 0) {
+                formData.append('image_files[]', item.file[0]);
+            }
+        });
 
-        // try {
-        //     const response = await axios.post("http://localhost:8000/api/annonce", formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     });
-        //     showToast('success', "Annonce Updated Successfully !");
-        //     console.log("the server response:", response.data.annonce);
-        //     setAnnouncements([...announcements, response.data.annonce]);
-        //     setTimeout(() => navigate("/properties"), 3000);
-        // } catch (error) {
-        //     if (error.response) {
-        //         console.error("Erreur lors de l'envoi :", error.response.data);
-        //         showToast('error', "Erreur lors de l'envoi :");
-        //     } else {
-        //         console.error("Erreur inconnue :", error);
-        //         showToast('error', "Erreur lors de l'envoi :");
-        //     }
-        // }
-
+        try {
+            const response = await axios.post(`http://localhost:8000/api/annonce/${updateAnnonceId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            showToast('success', "Annonce Updated Successfully!");
+            setAnnouncements(announcements.map(ann => 
+                ann.id === parseInt(updateAnnonceId) ? response.data.annonce : ann
+            ));
+            setTimeout(() => navigate("/properties"), 3000);
+        } catch (error) {
+            if (error.response) {
+                console.error("Erreur lors de l'envoi :", error.response.data);
+                showToast('error', "Erreur lors de la mise à jour");
+            } else {
+                console.error("Erreur inconnue :", error);
+                showToast('error', "Erreur lors de la mise à jour");
+            }
+        }
     };
 
+    const addFileField = () => {
+        append({ file: null });
+    };
+
+    if (isLoading) return (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-50/50 backdrop-blur-sm z-50">
+          <div className="text-center space-y-4 p-6">
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent border-gray-400"></div>
+            </div>
+          </div>
+        </div>
+    );
 
     return (
         <div className="max-w-4xl mx-auto p-6">
@@ -285,7 +326,6 @@ export default function UpdateAnnonce() {
                                         : 'border-gray-300'
                                 }`}
                             >
-                                <option value="">Sélectionnez une option</option>
                                 <option value="location">Location</option>
                                 <option value="achat">Achat</option>
                             </select>
@@ -300,7 +340,7 @@ export default function UpdateAnnonce() {
                     {/* Prix */}
                     <div>
                         <label htmlFor="prix" className={`block mb-3 text-sm font-medium ${errors.prix ? 'text-red-700' : 'text-gray-700'}`}>
-                            Prix ({transaction === "location" ? "par mois" : ""}) *
+                            Prix ({transaction === "location" ? "par mois" : "À vendre"}) *
                         </label>
                         <div className="relative">
                             <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${
@@ -510,8 +550,14 @@ export default function UpdateAnnonce() {
                                         }`}
                                     >
                                         <option value="">Sélectionnez un quartier</option>
-                                        {filteredQuartiers.map((quartier, index) => (
-                                            <option key={index} value={quartier.id}>{quartier.nom}</option>
+                                        {filteredQuartiers.map((quartier) => (
+                                            <option 
+                                                key={quartier.id} 
+                                                value={quartier.id}
+                                                selected={selectedAnnonce?.quartier_id === quartier.id}
+                                            >
+                                                {quartier.nom}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>
@@ -545,7 +591,7 @@ export default function UpdateAnnonce() {
                                         }
                                     })}
                                     className={`pl-10 w-full px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-black ${
-                                        errors.email
+                                        errors.latitude
                                             ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700'
                                             : 'border-gray-300'
                                     }`}
@@ -577,7 +623,7 @@ export default function UpdateAnnonce() {
                                         }
                                     })}
                                     className={`pl-10 w-full px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-black ${
-                                        errors.email
+                                        errors.longitude
                                             ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700'
                                             : 'border-gray-300'
                                     }`}
@@ -614,7 +660,13 @@ export default function UpdateAnnonce() {
                             >
                                 <option value="">Sélectionnez une catégorie</option>
                                 {category.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>{cat.nom}</option>
+                                    <option 
+                                        key={cat.id} 
+                                        value={cat.id}
+                                        selected={selectedAnnonce?.category_id === cat.id}
+                                    >
+                                        {cat.nom}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -636,8 +688,9 @@ export default function UpdateAnnonce() {
                                     <input
                                         id={`tag-${tag.id}`}
                                         type="checkbox"
-                                        {...register("tag_id", { required: "Au moins un tag est requis" })}
+                                        {...register("tag_id")}
                                         value={tag.id}
+                                        defaultChecked={selectedAnnonce?.tags?.some(t => t.id === tag.id)}
                                         className={`h-4 w-4 border-gray-300 rounded focus:ring-0 ${
                                             errors.tag_id ? 'text-red-500' : 'text-gray-700'
                                         }`}
@@ -666,8 +719,9 @@ export default function UpdateAnnonce() {
                                     <input
                                         id={`salle-${salle.id}`}
                                         type="checkbox"
-                                        {...register("salle_id", { required: "Au moins une salle est requise" })}
+                                        {...register("salle_id")}
                                         value={salle.id}
+                                        defaultChecked={selectedAnnonce?.salles?.some(s => s.id === salle.id)}
                                         className={`h-4 w-4 border-gray-300 rounded focus:ring-0 ${
                                             errors.salle_id ? 'text-red-500' : 'text-gray-700'
                                         }`}
@@ -692,6 +746,7 @@ export default function UpdateAnnonce() {
                         </label>
                         
                         <div className="space-y-4">
+                            {/* File upload fields */}
                             {fields.map((field, index) => (
                                 <div key={field.id} className="flex items-center gap-3">
                                     <div className="flex-1">
@@ -700,9 +755,7 @@ export default function UpdateAnnonce() {
                                             accept="image/*"
                                             className="hidden"
                                             id={`file-upload-${index}`}
-                                            {...register(`image_files.${index}.file`, {
-                                                required: index === 0 ? "Au moins une image est requise" : false
-                                            })}
+                                            {...register(`image_files.${index}.file`)}
                                         />
                                         <label
                                             htmlFor={`file-upload-${index}`}
@@ -710,7 +763,7 @@ export default function UpdateAnnonce() {
                                         >
                                             <div className="flex items-center justify-between">
                                                 <span className="text-sm font-medium text-gray-700">
-                                                    {field.file?.name || `Sélectionner une image ${index + 1}`}
+                                                    {field.file?.name || `Sélectionner une nouvelle image ${index + 1}`}
                                                 </span>
                                                 <FaArrowRight className="text-gray-400" />
                                             </div>
@@ -743,7 +796,8 @@ export default function UpdateAnnonce() {
                             <p className="mt-2 text-sm text-red-600">
                                 {errors.image_files[0]?.file?.message}
                             </p>
-                        )}
+
+                            )}
                     </div>
 
                     {/* Submit Button */}
@@ -752,7 +806,7 @@ export default function UpdateAnnonce() {
                             type="submit"
                             className="px-6 py-2 bg-black text-white font-medium hover:bg-gray-800 transition-colors flex items-center"
                         >
-                            Publier l'annonce
+                            Mettre à jour l'annonce
                             <FaArrowRight className="ml-2" />
                         </button>
                     </div>

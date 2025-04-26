@@ -87,7 +87,7 @@ export default function Reviews() {
                                     <div className="flex items-center space-x-3">
                                         <div className="bg-gray-100 rounded-full">
                                             <img
-                                                src={review.auteur.profile_image}
+                                                src={`http://localhost:8000/storage/${review.auteur.profile_image}`}
                                                 alt="Profile"
                                                 className="w-9 h-9 rounded-full object-cover"
                                             />

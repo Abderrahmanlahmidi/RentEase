@@ -76,12 +76,6 @@ export default function MyAnnonces() {
                     className="text-center py-16"
                 >
                     <p className="text-gray-600 mb-6">You haven't created any announcements yet</p>
-                    <button
-                        onClick={() => navigate('/Annonces/createAnnonce')}
-                        className="px-6 py-3 bg-black text-white font-medium rounded-none hover:bg-gray-800 transition-colors"
-                    >
-                        Create Your First Announcement
-                    </button>
                 </motion.div>
             )}
         </div>

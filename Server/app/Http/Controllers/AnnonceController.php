@@ -31,10 +31,11 @@ class AnnonceController extends Controller
             "superficie" => "required|numeric|min:1",
             "tag_id" => "required|array",
             "tag_id.*" => "exists:tags,id",
-            "image_files" => "required|min:1",
+            "image_files" => "required",
             "image_files.*" => "required",
             "city" => "required|string",
-            'proprietaire_id' => 'required'
+            'proprietaire_id' => 'required',
+            'numberRooms' => 'required',
         ]);
 
 
@@ -57,7 +58,8 @@ class AnnonceController extends Controller
             "prix" => $request->prix,
             "quartier_id" => $request->quartier_id,
             "superficie" => $request->superficie,
-            "proprietaire_id" => $request->proprietaire_id
+            "proprietaire_id" => $request->proprietaire_id,
+            "numberRooms" => $request->numberRooms
         ]);
 
         $annonce->tags()->sync($request->tag_id);
@@ -156,6 +158,7 @@ class AnnonceController extends Controller
             "image_files.*" => "required|image",
             "city" => "required|string",
             "proprietaire_id" => "required|exists:users,id",
+            "numberRooms" => "required|numeric|min:1",
         ]);
 
         if ($validator->fails()) {
@@ -185,6 +188,7 @@ class AnnonceController extends Controller
             'superficie' => $request->superficie,
             'city' => $request->city,
             'proprietaire_id' => $request->proprietaire_id,
+            'numberRooms' => $request->numberRooms
         ]);
 
         $annonce->salles()->sync($request->salle_id);

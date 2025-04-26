@@ -19,8 +19,8 @@ import {
     FaList,
     FaCity,
     FaMapMarkedAlt,
+    FaDoorOpen
 } from 'react-icons/fa';
-
 import {useNavigate} from "react-router-dom";
 
 export default function CreateAnnonce() {
@@ -32,8 +32,6 @@ export default function CreateAnnonce() {
     const {user,announcements,setAnnouncements} = useContext(UserContext);
 
     const navigate = useNavigate();
-
-
 
     const addFileField = () => {
         append({ file: null });
@@ -107,6 +105,7 @@ export default function CreateAnnonce() {
 
     const createAnnonce = async (data) => {
 
+        console.log(data);
 
         const formData = new FormData();
 
@@ -121,8 +120,10 @@ export default function CreateAnnonce() {
         formData.append('longitude', data.longitude);
         formData.append('category_id', data.category_id);
         formData.append('city', data.city);
+        formData.append('numberRooms', data.numberRooms);
         formData.append('quartier_id', data.quartier_id);
         formData.append('proprietaire_id', user?.id);
+        
 
         data.salle_id.forEach((id) => {
             formData.append('salle_id[]', id);
@@ -137,6 +138,8 @@ export default function CreateAnnonce() {
                 formData.append('image_files[]', item.file[0]);
             }
         });
+
+        console.log(formData);
 
         try {
             const response = await axios.post("http://localhost:8000/api/annonce", formData, {
@@ -603,6 +606,50 @@ export default function CreateAnnonce() {
                         )}
                     </div>
 
+                    {/* Number of Rooms */}
+                     <div>
+                       <label 
+                         htmlFor="numberRooms" 
+                         className={`block mb-3 text-sm font-medium ${errors.numberRooms ? 'text-red-700' : 'text-gray-700'}`}
+                       >
+                         Number of Rooms *
+                       </label>
+                       <div className="relative">
+                         <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${
+                           errors.numberRooms ? 'text-red-500' : 'text-gray-500'
+                         }`}>
+                           <FaDoorOpen /> {/* You can use FaDoorOpen or another appropriate icon */}
+                         </div>
+                         <input
+                           id="numberRooms"
+                           type="number"
+                           {...register("numberRooms", {
+                             required: "Number of rooms is required",
+                             min: {
+                               value: 1,
+                               message: "Minimum 1 room required"
+                             },
+                             max: {
+                               value: 50,
+                               message: "Maximum 50 rooms allowed"
+                             },
+                             valueAsNumber: true
+                           })}
+                           className={`pl-10 w-full px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-black ${
+                             errors.numberRooms
+                               ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700'
+                               : 'border-gray-300'
+                           }`}
+                           placeholder={errors.numberRooms ? "Invalid input" : "Enter total number of rooms"}
+                         />
+                       </div>
+                       {errors.numberRooms && (
+                         <p className="mt-2 text-sm text-red-600">
+                           {errors.numberRooms.message}
+                         </p>
+                       )}
+                     </div>
+
                     {/* Tags */}
                     <div>
                         <label className={`block mb-3 text-sm font-medium ${errors.tag_id ? 'text-red-700' : 'text-gray-700'}`}>
@@ -633,10 +680,10 @@ export default function CreateAnnonce() {
                         )}
                     </div>
 
-                    {/* Salles */}
+                    {/* équipements publics */}
                     <div>
                         <label className={`block mb-3 text-sm font-medium ${errors.salle_id ? 'text-red-700' : 'text-gray-700'}`}>
-                            Salles (Multi-sélection) *
+                           équipements publics (Multi-sélection) *
                         </label>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                             {salles.map((salle) => (

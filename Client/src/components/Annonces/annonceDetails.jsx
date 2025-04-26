@@ -6,10 +6,6 @@ import {
   FaEnvelope,
   FaHome,
   FaRulerCombined,
-  FaBed,
-  FaBath,
-  FaUtensils,
-  FaCouch,
   FaShare,
   FaHeart,
   FaChevronLeft,
@@ -17,7 +13,9 @@ import {
   FaCalendarAlt,
   FaStar,
   FaTimes,
-  FaCheck
+  FaCheck,
+  FaBuilding,
+  FaCity,
 } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
 import AnnonceMap from './annonceMap.jsx';
@@ -26,6 +24,7 @@ import { useForm } from 'react-hook-form';
 import { UserContext } from '../../context/userContext.jsx';
 import { ToastContainer } from "react-toastify";
 import { showToast } from "../../utils/toastUtils.jsx";
+import GetFacilityIcon from '../../utils/GetFacilityIcon.jsx';
 
 export default function AnnonceDetails() {
   const { annonceId } = useParams();
@@ -43,7 +42,7 @@ export default function AnnonceDetails() {
   const {
     register,
     handleSubmit,
-    reset,
+    reset, 
     formState: { errors }
   } = useForm();
 
@@ -107,12 +106,15 @@ export default function AnnonceDetails() {
   };
 
   if (loading) return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-400 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading property details...</p>
+    <div className="fixed inset-0 flex justify-center items-center bg-gray-50/50 backdrop-blur-sm z-50">
+      <div className="text-center space-y-4 p-6">
+        <div className="flex justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent border-gray-400"></div>
         </div>
+        <p className="text-gray-700 font-medium">Updating your profile...</p>
+        <p className="text-sm text-gray-500">Please wait while we save your changes</p>
       </div>
+    </div>
   );
 
   if (error) return (
@@ -274,7 +276,7 @@ export default function AnnonceDetails() {
             </div>
             <div className="flex flex-col items-end">
               <div className="text-3xl font-light text-gray-900">
-                {annonce.prix.toLocaleString()} {annonce.transaction === 'location' ? '/mois' : ''}
+              ${annonce.prix.toLocaleString()} {annonce.transaction === 'location' ? '/mois' : '/vendre'}
               </div>
               {annonce.ancienPrix && (
                   <span className="text-lg line-through text-gray-600">
@@ -355,44 +357,44 @@ export default function AnnonceDetails() {
                       <p className="font-medium text-gray-900">{annonce.superficie} m²</p>
                     </div>
                   </div>
+                 
                   <div className="flex items-start space-x-4">
                     <div className="p-3 bg-gray-100 mr-4">
-                      <FaBed className="text-xl text-gray-600" />
+                      <FaBuilding className="text-xl text-gray-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Bedrooms</p>
-                      <p className="font-medium text-gray-900">{annonce.salles.find(s => s.type === 'chambre')?.nombre || 0}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 bg-gray-100 mr-4">
-                      <FaBath className="text-xl text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Bathrooms</p>
-                      <p className="font-medium text-gray-900">{annonce.salles.find(s => s.type === 'salle de bain')?.nombre || 0}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 bg-gray-100 mr-4">
-                      <FaUtensils className="text-xl text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Kitchens</p>
-                      <p className="font-medium text-gray-900">{annonce.salles.find(s => s.type === 'cuisine')?.nombre || 0}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 bg-gray-100 mr-4">
-                      <FaCouch className="text-xl text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Living Rooms</p>
-                      <p className="font-medium text-gray-900">{annonce.salles.find(s => s.type === 'salon')?.nombre || 0}</p>
+                      <p className="text-sm text-gray-600">Total Rooms</p>
+                      <p className="font-medium text-gray-900">{annonce.numberRooms}</p>
                     </div>
                   </div>
                 </div>
               </div>
+
+             {/* Public Facilities */}
+             <div className="bg-white p-8 border border-gray-200">
+               <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
+                 Public Facilities
+               </h2>
+               {annonce.salles && annonce.salles.length > 0 ? (
+                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                   {annonce.salles.map((facility, index) => (
+                     <div key={index} className="flex items-start space-x-4">
+                       <div className="p-3 bg-gray-100 mr-4">
+                        <GetFacilityIcon type={facility.type}/>
+                       </div>
+                       <div>
+                         <p className="text-sm text-gray-600 capitalize">{facility.type.replace(/_/g, ' ')}</p>
+                         <p className="font-medium text-gray-900">
+                           Available
+                         </p>
+                       </div>
+                     </div>
+                   ))}
+                 </div>
+               ) : (
+                 <p className="text-gray-600">No public facilities listed</p>
+               )}
+             </div>
 
               {/* Description */}
               <div className="bg-white p-8 border border-gray-200">
@@ -458,7 +460,7 @@ export default function AnnonceDetails() {
 
                 <div className="flex items-center mb-8">
                   <img
-                      src={annonce.proprietaire.profile_image || `https://ui-avatars.com/api/?name=${annonce.proprietaire.firstName}+${annonce.proprietaire.lastName}&background=random`}
+                      src={`http://localhost:8000/storage/${annonce.proprietaire.profile_image}`}
                       alt={annonce.proprietaire.firstName}
                       className="w-16 h-16 rounded-full object-cover mr-4 border-2 border-gray-200"
                   />
