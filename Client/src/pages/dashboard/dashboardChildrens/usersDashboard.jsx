@@ -121,8 +121,9 @@ export default function UsersDashboard() {
       <div className="relative overflow-auto max-h-[600px] w-full">
         {isLoading ? (
           <div className="flex justify-center items-center p-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
-          </div>
+          <div className="h-12 w-12 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+        </div>
+        
         ) : (
           <motion.table
             variants={container}
@@ -152,7 +153,7 @@ export default function UsersDashboard() {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
-                            src={item.profile_image || '/default-profile.jpg'}
+                            src={`http://localhost:8000/storage/${item.profile_image}`}
                             alt="Profile"
                             className="h-10 w-10 rounded-none object-cover border border-gray-200"
                           />

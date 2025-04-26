@@ -1,13 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function HeroAnnonces() {
     const navigate = useNavigate();
+    const [activeTab, setActiveTab] = useState(null);
+
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+        if (tab === 'create') {
+            navigate('/Annonces/createAnnonce');
+        } else {
+            navigate('/Annonces');
+        }
+    };
 
     return (
         <div className="bg-white border-b border-gray-200 py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
+
                 {/* Back Button */}
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
@@ -23,7 +35,7 @@ export default function HeroAnnonces() {
                     </button>
                 </motion.div>
 
-                {/* Title Section */}
+                {/* Title */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -38,26 +50,30 @@ export default function HeroAnnonces() {
                     </p>
                 </motion.div>
 
-                {/* Action Buttons */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="flex flex-col sm:flex-row justify-center gap-4 mt-8"
-                >
-                    <button
-                        onClick={() => navigate('/Annonces/createAnnonce')}
-                        className="px-6 py-3 bg-black text-white font-medium rounded-none hover:bg-gray-800 transition-colors flex items-center justify-center"
-                    >
-                        Create Announcement
-                    </button>
-                    <button
-                        onClick={() => navigate('/Annonces')}
-                        className="px-6 py-3 border border-black text-black font-medium rounded-none hover:bg-gray-100 transition-colors flex items-center justify-center"
-                    >
-                        View My Announcements
-                    </button>
-                </motion.div>
+                {/* Tab Selector with original style */}
+                <div className="flex justify-center mb-8">
+                    <div className="relative bg-gray-100 p-1  inline-flex">
+                        <motion.div 
+                            layout
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            className={`absolute top-1 bottom-1 left-1 bg-white shadow-sm  transition-all duration-300 ${activeTab === 'view' ? 'translate-x-0' : activeTab === 'create' ? 'translate-x-full' : 'translate-x-0'}`}
+                            style={{ width: 'calc(50% - 0.25rem)' }}
+                        />
+                        <button
+                            onClick={() => handleTabClick('view')}
+                            className={`relative px-6 py-2 text-sm font-medium  z-10 transition-colors ${activeTab === 'view' ? 'text-black' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            View
+                        </button>
+                        <button
+                            onClick={() => handleTabClick('create')}
+                            className={`relative px-6 py-2 text-sm font-medium  z-10 transition-colors ${activeTab === 'create' ? 'text-black' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Create
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     );

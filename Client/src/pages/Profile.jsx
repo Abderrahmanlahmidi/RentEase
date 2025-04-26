@@ -6,6 +6,7 @@ import { UserContext } from "../context/userContext.jsx";
 import ChangePassword from "./changePassword.jsx";
 
 const Profile = () => {
+    
     const { register, reset, formState: { errors }, handleSubmit } = useForm();
     const [successMessage, setSuccessMessage] = useState("");
     const [userData, setUserData] = useState({});
@@ -20,22 +21,43 @@ const Profile = () => {
     };
 
     const onSubmit = async (data) => {
+        console.log(data);
         data.id = userData?.user?.id;
-
-        try {
-            await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
-                withCredentials: true,
-            });
-            const response = await axios.put(`http://127.0.0.1:8000/api/user/update/${data.id}`, data, {
-                withCredentials: true,
-            });
-            setUser(response.data.user);
-            setSuccessMessage("Profile successfully updated!");
-        } catch (error) {
-            console.error("Error:", error?.response?.data || error.message);
-            setSuccessMessage("Failed to update profile.");
+      
+        const formData = new FormData();
+      
+        formData.append("firstName", String(data.firstName));
+        formData.append("lastName", String(data.lastName));
+        formData.append("email", String(data.email));
+        formData.append("age", String(data.age));
+        formData.append("_method", "PUT");
+      
+        if (data.profile_image && data.profile_image.length > 0) {
+          formData.append("profile_image", data.profile_image[0]);
         }
-    };
+      
+      
+        try {
+          const response = await axios.post(
+            `http://127.0.0.1:8000/api/user/update/${data.id}`,
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          );
+      
+          console.log(response);
+          setUser(response.data.user);
+          setSuccessMessage("Profile successfully updated!");
+        } catch (error) {
+          console.error("Error:", error?.response?.data || error.message);
+          setSuccessMessage("Failed to update profile.");
+        }
+      };
+      
+    
 
     const handleSubmitId = async (id) => {
         try {
@@ -80,16 +102,23 @@ const Profile = () => {
             </div>
 
             {successMessage && (
-                <div className={`p-4 mb-6 text-sm ${successMessage.includes("success") ? "bg-gray-100 text-gray-800" : "bg-gray-100 text-gray-800"} border border-gray-200`}>
+                <div className={`p-4 mb-6 text-sm ${successMessage.includes("success") ? "bg-gray-100 text-gray-800" : "bg-gray-100 text-gray-800"} border border-gray-200 relative`}>
                     {successMessage}
+                    <button 
+                        onClick={() => setSuccessMessage("")}
+                        className="absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
             )}
-
             <div className="bg-white border border-gray-200 p-6 mb-6">
                 <div className="flex items-center gap-6">
                     <div className="w-20 h-20">
                         <img 
-                            src={user?.profile_image} 
+                            src={`http://localhost:8000/storage/${user?.profile_image}`}
                             alt="Profile" 
                             className="w-full h-full object-cover rounded-full border-2 border-gray-200" 
                         />
@@ -177,7 +206,7 @@ const Profile = () => {
                         </div>
                         
                         {/* Age */}
-                        <div className="flex flex-col">
+                        <div className="flex flex-col md:col-span-2">
                             <label htmlFor="age" className="block mb-2 text-sm font-medium text-gray-700">
                                 Age
                             </label>
@@ -204,19 +233,40 @@ const Profile = () => {
                         </div>
                         
                         {/* Profile Image */}
-                        <div className="flex flex-col">
-                            <label htmlFor="profileImage" className="block mb-2 text-sm font-medium text-gray-700">
-                                Profile Image URL
-                            </label>
-                            <input 
-                                type="text" 
-                                id="profileImage" 
-                                placeholder="Enter image URL" 
-                                className="border border-gray-300 text-sm block w-full p-2.5 focus:border-black focus:ring-0" 
-                                {...register("profile_image")}
-                            />
-                        </div>
-                        
+                         <div className="flex flex-col md:col-span-2"> {/* Changed to span full width on medium+ screens */}
+                           <label htmlFor="profile_image" className="block mb-2 text-sm font-medium text-gray-700">
+                             Profile Image
+                           </label>
+                           
+                           <div className="flex items-center gap-4">
+                             
+                             <div className="flex-1">
+                               <label className="cursor-pointer">
+                                 <input
+                                   type="file"
+                                   id="profile_image"
+                                   accept="image/*"
+                                   className="sr-only"
+                                   {...register("profile_image")}
+                                 />
+                                 <div className="flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+                                   <svg className="w-6 h-6 mb-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                   </svg>
+                                   <p className="text-sm text-gray-600 text-center">
+                                     <span className="font-medium text-indigo-600">Click to upload</span> or drag and drop
+                                   </p>
+                                   <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 2MB</p>
+                                 </div>
+                               </label>
+                             </div>
+                           </div>
+                           
+                           {errors.profile_image && (
+                             <p className="mt-2 text-sm text-red-600">{errors.profile_image.message}</p>
+                           )}
+                         </div>
+
                         {/* Email */}
                         <div className="flex flex-col md:col-span-2">
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
@@ -251,6 +301,7 @@ const Profile = () => {
                             Save Changes
                         </button>
                     </div>
+
                 </form>
             ) : (
                 <ChangePassword />

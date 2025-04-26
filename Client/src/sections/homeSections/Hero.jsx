@@ -11,7 +11,7 @@ export default function Hero() {
       {/* Image Background */}
       <div className="absolute inset-0 w-full h-full">
         <img
-          src="https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          src="https://cdn.pixabay.com/photo/2014/08/03/23/41/house-409451_1280.jpg"
           alt="Modern property"
           className="w-full h-full object-cover"
         />

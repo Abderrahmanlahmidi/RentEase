@@ -27,8 +27,8 @@ function UserDropdown({ logoutHandler }) {
                 aria-expanded={isOpen}
             >
                 <img
-                    src={user?.profile_image}
-                    alt="User avatar"
+                    src={`http://localhost:8000/storage/${user?.profile_image}`}
+                    alt="User avatar" 
                     className="w-full h-full object-cover"
                 />
             </button>

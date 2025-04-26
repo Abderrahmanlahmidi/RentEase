@@ -1,18 +1,19 @@
 import { useState, useContext, useEffect } from 'react';
-import { FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaTimes, FaArrowLeft } from 'react-icons/fa';
 import { UserContext } from '../context/userContext.jsx';
 import { useForm } from 'react-hook-form';
 import axios from "axios";
 import { showToast } from "../utils/toastUtils.jsx";
 import { ToastContainer } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export default function UserReviews() {
     const { user } = useContext(UserContext);
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [selectReviews, setSelectReviews] = useState(null);
+    const navigate = useNavigate();
     
     const {
         register,
@@ -42,7 +43,7 @@ export default function UserReviews() {
 
     const updateReview = async (data) => {
         try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/review/update/${selectReviews.id}`, {...data, auteur_id:selectReviews.auteur.id});
+            await axios.put(`http://127.0.0.1:8000/api/review/update/${selectReviews.id}`, {...data, auteur_id:selectReviews.auteur.id});
             await getReviews();
             setIsEditModalOpen(false);
             showToast("success" , "Review updated successfully");
@@ -65,16 +66,26 @@ export default function UserReviews() {
         <div className="min-h-screen bg-white p-4 md:p-8">
             <ToastContainer/>
             <div className="max-w-6xl mx-auto">
-                {/* Header */}
+                {/* Header with Back Button */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-12"
                 >
+                    <div className="flex items-center gap-4 mb-4">
+                        <button
+                            onClick={() => navigate('/')}
+                            className="flex items-center text-gray-600 hover:text-black transition-colors"
+                        >
+                            <FaArrowLeft className="mr-2" />
+                            Back to Home
+                        </button>
+                    </div>
                     <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-2">My Reviews</h1>
                     <p className="text-gray-600">Manage your property reviews</p>
                 </motion.div>
 
+                {/* Rest of the component remains the same */}
                 {/* Reviews Table */}
                 <div className="bg-white border border-gray-200 rounded-none overflow-hidden">
                     <div className="overflow-x-auto">
