@@ -51,13 +51,13 @@ function Properties() {
         <div className="flex flex-col min-h-screen bg-white">
             <Navbar />
 
-            {/* Search Form */}
+
             <section className="mt-[60px] px-4 sm:px-6 lg:px-8 py-8 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        {/* Main Filters */}
+
                         <div className="flex flex-col sm:flex-row gap-4">
-                            {/* Location */}
+
                             <div className="relative flex-1">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <FiMapPin className="h-5 w-5 text-gray-500" />
@@ -73,7 +73,6 @@ function Properties() {
                                 </select>
                             </div>
 
-                            {/* Property Type */}
                             <div className="relative flex-1">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <FiHome className="h-5 w-5 text-gray-500" />
@@ -89,7 +88,6 @@ function Properties() {
                                 </select>
                             </div>
 
-                            {/* Price Range */}
                             <div className="relative flex-1">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <FiDollarSign className="h-5 w-5 text-gray-500" />
@@ -105,7 +103,6 @@ function Properties() {
                                 </select>
                             </div>
 
-                            {/* Search Button */}
                             <motion.button
                                 type="submit"
                                 whileHover={{ scale: 1.02 }}
@@ -120,7 +117,6 @@ function Properties() {
                 </div>
             </section>
 
-            {/* Properties Content */}
             <motion.div
                 className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1"
                 variants={container}

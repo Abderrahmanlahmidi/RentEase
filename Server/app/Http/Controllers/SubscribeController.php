@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Subscribe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -28,7 +27,7 @@ class SubscribeController extends Controller
             $message->to($request->email)
                 ->subject('Welcome to the RentEase Newsletter');
         });
-        
+
         Subscribe::create([
              'email' => $request->email,
              'date' => $request->date,

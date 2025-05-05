@@ -48,6 +48,7 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/api/annonce/${id}`);
             showToast("success", "Annonce deleted successfully");
+
             onDelete(id);
         } catch {
             showToast("error", "Failed to delete Annonce");
@@ -58,9 +59,9 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
         <div className="bg-white border border-gray-200 rounded-none overflow-hidden hover:shadow-sm transition-all duration-300 w-full">
             <ToastContainer />
             
-            {/* Image Gallery Section */}
+
             <div className="relative h-56 w-full overflow-hidden bg-gray-100">
-                {/* Navigation Arrows */}
+
                 <div className="absolute inset-0 flex items-center justify-between z-10 px-2">
                     <button
                         onClick={prevImage}
@@ -78,7 +79,6 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
                     </button>
                 </div>
 
-                {/* Animated Images */}
                 <AnimatePresence custom={direction} initial={false}>
                     <motion.img
                         key={currentImageIndex}
@@ -94,7 +94,7 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
                     />
                 </AnimatePresence>
 
-                {/* Image Indicators */}
+
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
                     {annonceData.images.map((_, index) => (
                         <div
@@ -105,7 +105,6 @@ const CardUserAnnonces = ({ annonceData, onDelete }) => {
                 </div>
             </div>
 
-            {/* Content Section */}
             <div className="p-5">
                 <div className="flex justify-between items-start mb-3">
                     <h2 className="text-xl font-medium text-gray-900 line-clamp-1">

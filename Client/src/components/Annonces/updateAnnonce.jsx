@@ -231,7 +231,7 @@ export default function UpdateAnnonce() {
                 <h1 className="text-3xl font-light text-gray-900 mb-8">Mettez à jour votre Annonce</h1>
                 
                 <form onSubmit={handleSubmit(updateAnnonce)} className="space-y-8">
-                    {/* Titre */}
+
                     <div>
                         <label htmlFor="titre" className={`block mb-3 text-sm font-medium ${errors.titre ? 'text-red-700' : 'text-gray-700'}`}>
                             Titre *
@@ -266,7 +266,6 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Description */}
                     <div>
                         <label htmlFor="description" className={`block mb-3 text-sm font-medium ${errors.description ? 'text-red-700' : 'text-gray-700'}`}>
                             Description *
@@ -306,7 +305,6 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Transaction Type */}
                     <div>
                         <label htmlFor="transaction" className={`block mb-3 text-sm font-medium ${errors.transaction ? 'text-red-700' : 'text-gray-700'}`}>
                             Type de transaction *
@@ -337,7 +335,7 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Prix */}
+
                     <div>
                         <label htmlFor="prix" className={`block mb-3 text-sm font-medium ${errors.prix ? 'text-red-700' : 'text-gray-700'}`}>
                             Prix ({transaction === "location" ? "par mois" : "À vendre"}) *
@@ -377,7 +375,7 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Superficie */}
+
                     <div>
                         <label htmlFor="superficie" className={`block mb-3 text-sm font-medium ${errors.superficie ? 'text-red-700' : 'text-gray-700'}`}>
                             Superficie (m²) *
@@ -417,9 +415,9 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Contact Info */}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Téléphone */}
+
                         <div>
                             <label htmlFor="telephone" className={`block mb-3 text-sm font-medium ${errors.telephone ? 'text-red-700' : 'text-gray-700'}`}>
                                 Numéro de téléphone *
@@ -455,7 +453,7 @@ export default function UpdateAnnonce() {
                             )}
                         </div>
 
-                        {/* Email */}
+
                         <div>
                             <label htmlFor="email" className={`block mb-3 text-sm font-medium ${errors.email ? 'text-red-700' : 'text-gray-700'}`}>
                                 Email *
@@ -492,9 +490,9 @@ export default function UpdateAnnonce() {
                         </div>
                     </div>
 
-                    {/* Location */}
+
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
-                        {/* Ville */}
+
                         <div>
                             <label htmlFor="city" className={`block mb-3 text-sm font-medium ${errors.city ? 'text-red-700' : 'text-gray-700'}`}>
                                 Ville *
@@ -528,7 +526,6 @@ export default function UpdateAnnonce() {
                             )}
                         </div>
 
-                        {/* Quartier */}
                         {selectedCity && (
                             <div>
                                 <label htmlFor="quartier" className={`block mb-3 text-sm font-medium ${errors.quartier_id ? 'text-red-700' : 'text-gray-700'}`}>
@@ -570,7 +567,7 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Coordonnées */}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label htmlFor="latitude" className={`block mb-2 text-sm font-medium ${errors.latitude ? 'text-red-700 dark:text-red-500' : 'text-gray-700 dark:text-gray-300'}`}>
@@ -638,7 +635,6 @@ export default function UpdateAnnonce() {
                         </div>
                     </div>
 
-                    {/* Catégorie */}
                     <div>
                         <label htmlFor="categorie" className={`block mb-3 text-sm font-medium ${errors.category_id ? 'text-red-700' : 'text-gray-700'}`}>
                             Catégorie *
@@ -677,7 +673,7 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Tags */}
+
                     <div>
                         <label className={`block mb-3 text-sm font-medium ${errors.tag_id ? 'text-red-700' : 'text-gray-700'}`}>
                             Tags (Multi-sélection) *
@@ -708,7 +704,7 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Salles */}
+
                     <div>
                         <label className={`block mb-3 text-sm font-medium ${errors.salle_id ? 'text-red-700' : 'text-gray-700'}`}>
                             Salles (Multi-sélection) *
@@ -739,14 +735,14 @@ export default function UpdateAnnonce() {
                         )}
                     </div>
 
-                    {/* Images */}
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-3">
                             Images <span className="text-red-500">*</span>
                         </label>
                         
                         <div className="space-y-4">
-                            {/* File upload fields */}
+
                             {fields.map((field, index) => (
                                 <div key={field.id} className="flex items-center gap-3">
                                     <div className="flex-1">

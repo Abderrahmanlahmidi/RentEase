@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import { FaSearch } from 'react-icons/fa';
 import { UserContext } from "../../../context/userContext.jsx";
-import { useContext, useState } from "react";
+import {useContext, useState} from "react";
+import axios from "axios";
+import {showToast} from "../../../utils/toastUtils.jsx";
+import {ToastContainer} from "react-toastify";
 
 export default function AnnoncesDashboard() {
-    const { announcements } = useContext(UserContext);
+    const { announcements, setAnnouncements} = useContext(UserContext);
     const [filtered, setFiltered] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -18,11 +21,32 @@ export default function AnnoncesDashboard() {
         }
     };
 
+    const handleDeleteAnnonce = (id) => {
+        const updatedAnnouncements = announcements.filter(item => item.id !== id);
+        setAnnouncements(updatedAnnouncements);
+    }
+
+    const deleteAnnonce = async (id) => {
+        try {
+            await axios.delete(`http://127.0.0.1:8000/api/annonce/${id}`);
+
+            showToast("success", "Annonce deleted successfully");
+        } catch {
+            showToast("error", "Failed to delete Annonce");
+        }
+    };
+
+
+
+
+
+
     const displayedAnnonces = search === "" ? announcements : filtered;
 
     return (
         <div className="w-full bg-white border border-gray-200 rounded-none overflow-hidden">
             {/* Header with Search */}
+            <ToastContainer/>
             <div className="flex flex-col md:flex-row items-center justify-between p-6 border-b border-gray-200">
                 <h2 className="text-xl font-light text-gray-900 mb-4 md:mb-0">
                     Annonces Management
@@ -87,6 +111,10 @@ export default function AnnoncesDashboard() {
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
+                                            onClick={() => {
+                                                deleteAnnonce(item.id);
+                                                handleDeleteAnnonce(item.id)
+                                            }}
                                             className="px-3 py-1 text-xs font-medium text-white bg-black hover:bg-gray-800 transition-colors"
                                         >
                                             Delete

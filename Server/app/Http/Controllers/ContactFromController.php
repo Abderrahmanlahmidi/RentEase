@@ -24,11 +24,9 @@ class ContactFromController extends Controller
                  Name: {$validated['firstName']} {$validated['lastName']}
                  Email: {$validated['email']}
                  Message:
-                 {$validated['message']}
-                 Regards,
-                 RentEase Website",
+                 {$validated['message']}",
                 function ($message) use ($validated) {
-                $message->to("dvabderrahmane@gmail.com")->subject("New Email From {$validated['firstName']} {$validated['lastName']}");
+                $message->to(env("MAIL_USERNAME"))->subject("New Email From {$validated['firstName']} {$validated['lastName']}");
             });
         } catch (\Exception $e) {
             return $e->getMessage();

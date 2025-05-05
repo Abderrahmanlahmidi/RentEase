@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import {FaTimes, FaArrowRight, FaSearch } from "react-icons/fa";
 
 export default function ReviewsDashboard() {
+    
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedReview, setSelectedReview] = useState(null);
@@ -154,7 +155,7 @@ export default function ReviewsDashboard() {
                 </table>
             </div>
 
-            {/* Create Review Modal */}
+
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -229,7 +230,7 @@ export default function ReviewsDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Review Modal */}
+
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}

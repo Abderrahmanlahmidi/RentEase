@@ -60,7 +60,6 @@ const Register = () => {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* First Name */}
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
               {t("first_name")}
@@ -89,7 +88,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Last Name */}
+
           <div>
             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
               {t("last_name")}
@@ -118,7 +117,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Age */}
+
           <div>
             <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-2">
               {t("age")}
@@ -145,7 +144,6 @@ const Register = () => {
             )}
           </div>
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               {t("email")}
@@ -170,7 +168,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Password */}
+
           <div className="relative">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               {t("password")}
@@ -206,7 +204,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Confirm Password */}
+
           <div className="relative">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
               {t("confirmed password")}
@@ -237,7 +235,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Submit Button */}
+
           <motion.button
             type="submit"
             whileHover={{ scale: 1.02 }}
@@ -258,7 +256,6 @@ const Register = () => {
             )}
           </motion.button>
 
-          {/* Login Link */}
           <p className="text-sm text-gray-600 text-center">
             {t("already_have_account")}{" "}
             <NavLink 

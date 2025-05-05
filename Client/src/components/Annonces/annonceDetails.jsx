@@ -6,8 +6,6 @@ import {
   FaEnvelope,
   FaHome,
   FaRulerCombined,
-  FaShare,
-  FaHeart,
   FaChevronLeft,
   FaChevronRight,
   FaCalendarAlt,
@@ -15,7 +13,6 @@ import {
   FaTimes,
   FaCheck,
   FaBuilding,
-  FaCity,
 } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
 import AnnonceMap from './annonceMap.jsx';
@@ -33,8 +30,6 @@ export default function AnnonceDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [showVisitForm, setShowVisitForm] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { user } = useContext(UserContext);
@@ -165,7 +160,7 @@ export default function AnnonceDetails() {
           className="bg-gray-50 min-h-screen"
       >
         <ToastContainer />
-        {/* Visit Schedule Form Modal */}
+
         {showVisitForm && (
             <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/50">
               <motion.div
@@ -240,7 +235,6 @@ export default function AnnonceDetails() {
             </div>
         )}
 
-        {/* Back button */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <button
               onClick={() => navigate(-1)}
@@ -252,7 +246,6 @@ export default function AnnonceDetails() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Title and Price Section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 border border-gray-200">
             <div className="mb-4 md:mb-0">
               <div className="flex items-center flex-wrap gap-2 mb-3">
@@ -286,7 +279,6 @@ export default function AnnonceDetails() {
             </div>
           </div>
 
-          {/* Image Gallery */}
           <div className="relative mb-10 overflow-hidden border border-gray-200">
             <div className="relative h-[500px] w-full">
               <img
@@ -295,7 +287,6 @@ export default function AnnonceDetails() {
                   className="w-full h-full object-cover transition-opacity duration-300"
               />
 
-              {/* Navigation arrows */}
               <button
                   onClick={handlePrevImage}
                   className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all transform hover:scale-110"
@@ -309,31 +300,14 @@ export default function AnnonceDetails() {
                 <FaChevronRight className="text-gray-800" />
               </button>
 
-              {/* Image counter */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1 rounded-full text-sm font-medium">
                 {activeImageIndex + 1} / {annonce.images.length}
-              </div>
-
-              {/* Action buttons */}
-              <div className="absolute top-6 right-6 flex space-x-3">
-                <button
-                    className="p-3 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all transform hover:scale-110"
-                    onClick={() => setIsFavorite(!isFavorite)}
-                >
-                  <FaHeart className={isFavorite ? "text-red-500" : "text-gray-600"} />
-                </button>
-                <button className="p-3 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all transform hover:scale-110">
-                  <FaShare className="text-gray-600" />
-                </button>
               </div>
             </div>
           </div>
 
-          {/* Main content grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Main Content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Key Features */}
               <div className="bg-white p-8 border border-gray-200">
                 <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
                   Property Features
@@ -370,7 +344,6 @@ export default function AnnonceDetails() {
                 </div>
               </div>
 
-             {/* Public Facilities */}
              <div className="bg-white p-8 border border-gray-200">
                <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
                  Public Facilities
@@ -396,7 +369,6 @@ export default function AnnonceDetails() {
                )}
              </div>
 
-              {/* Description */}
               <div className="bg-white p-8 border border-gray-200">
                 <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
                   Property Description
@@ -408,14 +380,13 @@ export default function AnnonceDetails() {
                 </div>
               </div>
 
-              {/* Amenities */}
               {annonce.tags && annonce.tags.length > 0 && (
                   <div className="bg-white p-8 border border-gray-200">
                     <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
                       Amenities
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {annonce.tags.slice(0, showAllAmenities ? annonce.tags.length : 6).map((tag, index) => (
+                      {annonce.tags.map((tag, index) => (
                           <div key={index} className="flex items-center space-x-3">
                             <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
                               <FaStar className="text-xs text-gray-600" />
@@ -424,18 +395,9 @@ export default function AnnonceDetails() {
                           </div>
                       ))}
                     </div>
-                    {annonce.tags.length > 6 && (
-                        <button
-                            onClick={() => setShowAllAmenities(!showAllAmenities)}
-                            className="mt-4 text-gray-600 hover:text-gray-900 font-medium text-sm"
-                        >
-                          {showAllAmenities ? 'Show Less' : `Show All (${annonce.tags.length})`}
-                        </button>
-                    )}
                   </div>
               )}
 
-              {/* Map */}
               <div className="bg-white p-8 border border-gray-200">
                 <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
                   Location
@@ -450,9 +412,8 @@ export default function AnnonceDetails() {
               </div>
             </div>
 
-            {/* Right Column - Owner & Contact */}
+
             <div className="space-y-6">
-              {/* Contact Card */}
               <div className="bg-white p-8 sticky top-6 border border-gray-200">
                 <h2 className="text-2xl font-light text-gray-900 mb-6 pb-4 border-b border-gray-200">
                   Contact Agent

@@ -4,7 +4,6 @@ import Menu from '../components/Menu';
 import { informationContext } from "../App";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-import { useNavigate } from "react-router-dom";
 import UserDropdown from "../components/navbarComponents/userDropdown.jsx";
 import UserNotification from "../components/navbarComponents/userNotification.jsx";
 import { motion } from 'framer-motion';
@@ -15,7 +14,7 @@ function Navbar() {
     const { t, i18n } = useContext(informationContext);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { user, setUser } = useContext(UserContext);
-    const navigate = useNavigate();
+
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -39,7 +38,6 @@ function Navbar() {
     return (
         <nav className="bg-white fixed top-0 w-full border-b border-gray-200 z-50 px-4 sm:px-8 lg:px-16 xl:px-32 py-3">
             <div className="flex items-center justify-between">
-                {/* Logo/Brand */}
                 <motion.div 
                     whileHover={{ scale: 1.02 }}
                     className="flex items-center space-x-2"
@@ -53,7 +51,6 @@ function Navbar() {
                     </NavLink>
                 </motion.div>
 
-                {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center space-x-8">
                     <ul className="flex space-x-6">
                         {t('navbar_links', { returnObjects: true }).map((link, index) => (
@@ -70,7 +67,6 @@ function Navbar() {
                         ))}
                     </ul>
 
-                    {/* User/Auth Section */}
                     <div className="flex items-center space-x-4">
                         {user ? (
                             <>
@@ -99,7 +95,6 @@ function Navbar() {
                             </>
                         )}
 
-                        {/* Language Selector */}
                         <select
                             onChange={handleLanguageChange}
                             defaultValue={i18n.language}
@@ -111,7 +106,6 @@ function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center space-x-4">
                     {user && (
                         <>
@@ -142,7 +136,6 @@ function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
             {isMenuOpen && (
                 <Menu
                     t={t}

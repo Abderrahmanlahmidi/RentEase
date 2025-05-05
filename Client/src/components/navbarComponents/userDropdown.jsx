@@ -19,7 +19,7 @@ function UserDropdown({ logoutHandler }) {
 
     return (
         <div className="relative inline-block text-left">
-            {/* Avatar Button */}
+
             <button
                 onClick={toggleDropdown}
                 className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 hover:border-black transition-colors focus:outline-none"
@@ -33,7 +33,7 @@ function UserDropdown({ logoutHandler }) {
                 />
             </button>
 
-            {/* Dropdown */}
+
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -45,7 +45,7 @@ function UserDropdown({ logoutHandler }) {
                         role="menu"
                         aria-orientation="vertical"
                     >
-                        {/* User Info */}
+
                         <div className="px-4 py-3 border-b border-gray-200">
                             <p className="text-sm font-medium text-gray-900">
                                 {user?.firstName} {user?.lastName}
@@ -55,7 +55,6 @@ function UserDropdown({ logoutHandler }) {
                             </p>
                         </div>
 
-                        {/* Links */}
                         <ul className="py-1 text-sm text-gray-700">
                             {user?.role?.name === "Admin" && (
                                 <li>
@@ -116,7 +115,6 @@ function UserDropdown({ logoutHandler }) {
                             </li>
                         </ul>
 
-                        {/* Sign Out */}
                         <div className="border-t border-gray-200 py-1">
                             <button
                                 onClick={() => {

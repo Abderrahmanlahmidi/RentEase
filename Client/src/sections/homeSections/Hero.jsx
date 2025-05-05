@@ -8,7 +8,7 @@ export default function Hero() {
 
   return (
     <div className="relative mt-[62px] w-full min-h-[70vh] flex items-center justify-center overflow-hidden">
-      {/* Image Background */}
+
       <div className="absolute inset-0 w-full h-full">
         <img
           src="https://cdn.pixabay.com/photo/2014/08/03/23/41/house-409451_1280.jpg"
@@ -17,7 +17,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* Dark overlay for better text contrast */}
+
       <div className="absolute inset-0 bg-black/40 z-1"></div>
 
       <div className="relative z-10 w-full max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -34,7 +34,7 @@ export default function Hero() {
             {t('hero.description')}
           </p>
 
-          {/* Action Buttons */}
+
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <NavLink
               to="/properties"

@@ -9,7 +9,6 @@ function About() {
             <Navbar />
 
             <main className="flex-1 bg-white mt-[63px]">
-                {/* Hero section */}
                 <section className="py-14 px-4 max-w-4xl mx-auto text-center">
                     <h1 className="text-4xl font-light tracking-tight text-gray-900 mb-2">
                         About Our Studio
@@ -20,7 +19,6 @@ function About() {
                     </p>
                 </section>
 
-                {/* Content section */}
                 <section className="py-12 px-4 max-w-3xl mx-auto">
                     <div className="space-y-8">
                         <div>
@@ -41,7 +39,7 @@ function About() {
                     </div>
                 </section>
 
-                {/* Team section */}
+
                 <section className="py-14 px-4 max-w-4xl mx-auto border-t border-gray-200">
                     <h2 className="text-2xl font-light text-gray-900 mb-12 text-center">The Team</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -64,7 +62,7 @@ function About() {
                     </div>
                 </section>
 
-                {/* Contact CTA */}
+
                 <section className="py-14 px-4 max-w-3xl mx-auto text-center border-t border-gray-200">
                     <h2 className="text-2xl font-light text-gray-900 mb-6">Interested in working together?</h2>
                     <p className="text-gray-600 mb-8 max-w-xl mx-auto">

@@ -15,7 +15,7 @@ export default function MyAnnonces() {
         setAnnouncements(updatedAnnouncements);
     };
 
-    // Animation variants
+
     const container = {
         hidden: { opacity: 0 },
         show: {

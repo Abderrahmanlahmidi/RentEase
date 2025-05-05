@@ -12,7 +12,6 @@ export default function UsersDashboard() {
   const [selectRole, setSelectRole] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Animation variants
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -102,7 +101,7 @@ export default function UsersDashboard() {
     <div className="w-full bg-white border border-gray-200 rounded-none overflow-hidden">
       <ToastContainer />
 
-      {/* Table Header */}
+
       <div className="flex flex-col md:flex-row items-center justify-between p-6 border-b border-gray-200">
         <h2 className="text-2xl font-light text-gray-900 mb-4 md:mb-0">
           User Management
@@ -117,7 +116,7 @@ export default function UsersDashboard() {
         </div>
       </div>
 
-      {/* Table Container */}
+
       <div className="relative overflow-auto max-h-[600px] w-full">
         {isLoading ? (
           <div className="flex justify-center items-center p-12">
