@@ -46,7 +46,6 @@ const Contact = () => {
         <div className="flex flex-col min-h-screen bg-gray-50">
             <Navbar />
 
-            {/* Alert Notification */}
             <AnimatePresence>
                 {alert?.visible && (
                     <motion.div
@@ -88,7 +87,7 @@ const Contact = () => {
             </AnimatePresence>
 
             <main className="flex-1 bg-white mt-[63px]">
-                {/* Hero section */}
+
                 <section className="py-14 px-4 max-w-4xl mx-auto text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -105,7 +104,7 @@ const Contact = () => {
                     </motion.div>
                 </section>
 
-                {/* Contact Content */}
+
                 <section className="py-12 px-4 max-w-6xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-8">
                         {/* Contact Information */}
@@ -155,7 +154,6 @@ const Contact = () => {
                                 </div>
                             </div>
 
-                            {/* Map */}
                             <div className="mt-6 overflow-hidden h-64 border border-gray-200">
                                 <iframe
                                     title="Location Map"
@@ -167,7 +165,7 @@ const Contact = () => {
                             </div>
                         </motion.div>
 
-                        {/* Contact Form */}
+
                         <motion.form
                             initial={{ opacity: 0, x: 40 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -273,7 +271,6 @@ const Contact = () => {
                 </section>
             </main>
 
-            {/* Footer */}
             <footer className="bg-white border-t border-gray-200 py-8 px-4 text-center text-sm text-gray-600">
                 <p>© {new Date().getFullYear()} Studio Black & White. All rights reserved.</p>
             </footer>

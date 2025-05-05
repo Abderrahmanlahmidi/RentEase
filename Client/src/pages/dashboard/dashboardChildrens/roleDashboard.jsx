@@ -142,7 +142,7 @@ export default function RolesDashboard() {
                 </table>
             </div>
 
-            {/* Create Role Modal */}
+
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -217,7 +217,6 @@ export default function RolesDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Role Modal */}
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}

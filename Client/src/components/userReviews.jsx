@@ -66,7 +66,7 @@ export default function UserReviews() {
         <div className="min-h-screen bg-white p-4 md:p-8">
             <ToastContainer/>
             <div className="max-w-6xl mx-auto">
-                {/* Header with Back Button */}
+
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -85,8 +85,6 @@ export default function UserReviews() {
                     <p className="text-gray-600">Manage your property reviews</p>
                 </motion.div>
 
-                {/* Rest of the component remains the same */}
-                {/* Reviews Table */}
                 <div className="bg-white border border-gray-200 rounded-none overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
@@ -144,7 +142,7 @@ export default function UserReviews() {
                     </div>
                 </div>
 
-                {/* Edit Review Modal */}
+
                 <AnimatePresence>
                     {isEditModalOpen && (
                         <motion.div

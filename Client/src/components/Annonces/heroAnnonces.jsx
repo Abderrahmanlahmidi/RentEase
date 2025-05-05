@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 export default function HeroAnnonces() {
+    
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(null);
 
@@ -20,7 +21,6 @@ export default function HeroAnnonces() {
         <div className="bg-white border-b border-gray-200 py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
 
-                {/* Back Button */}
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -35,7 +35,6 @@ export default function HeroAnnonces() {
                     </button>
                 </motion.div>
 
-                {/* Title */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -50,7 +49,6 @@ export default function HeroAnnonces() {
                     </p>
                 </motion.div>
 
-                {/* Tab Selector with original style */}
                 <div className="flex justify-center mb-8">
                     <div className="relative bg-gray-100 p-1  inline-flex">
                         <motion.div 

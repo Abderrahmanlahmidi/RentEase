@@ -6,7 +6,6 @@ import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import axios from "axios";
 
-// Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function HomeDashboard() {
@@ -44,7 +43,6 @@ export default function HomeDashboard() {
         return `${time} - ${fullDate}`;
     }
 
-    // Chart data configuration
     const metricsData = {
         labels: ['Properties', 'Clients', 'Avg Revenue', 'Total Revenue'],
         datasets: [
@@ -121,13 +119,11 @@ export default function HomeDashboard() {
             variants={container}
             className="w-full bg-white p-6"
         >
-            {/* Header */}
             <motion.div variants={item} className="mb-8">
                 <h1 className="text-3xl font-light text-gray-900">Dashboard Overview</h1>
                 <p className="text-gray-600">Welcome back! Here's what's happening today.</p>
             </motion.div>
 
-            {/* Stats Cards */}
             <motion.div
                 variants={container}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
@@ -189,9 +185,9 @@ export default function HomeDashboard() {
                 </motion.div>
             </motion.div>
 
-            {/* Main Content with Charts */}
+
             <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Metrics Bar Chart */}
+
                 <div className="lg:col-span-2 bg-white border border-gray-200 p-6">
                     <h2 className="text-xl font-light text-gray-900 mb-4">Metrics Overview</h2>
                     <div className="h-86">
@@ -199,7 +195,7 @@ export default function HomeDashboard() {
                     </div>
                 </div>
 
-                {/* Recent Activity */}
+
                 <div className="bg-white border border-gray-200 p-6">
                     <h2 className="text-xl font-light text-gray-900 mb-4">Recent Properties</h2>
                     <div className="space-y-4">

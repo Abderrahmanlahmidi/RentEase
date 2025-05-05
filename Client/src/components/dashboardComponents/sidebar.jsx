@@ -88,7 +88,7 @@ export default function Sidebar() {
                 </ul>
             </div>
 
-            {/* Back to Home Button */}
+
             <div className="p-4 border-t border-gray-200">
                 <NavLink
                     to="/"

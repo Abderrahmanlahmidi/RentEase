@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export default function AnnoncesVisits() {
+
     const [visits, setVisits] = useState([]);
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
@@ -114,7 +115,7 @@ export default function AnnoncesVisits() {
                     <h1 className="text-3xl font-light text-gray-900 mb-2">Visit Management</h1>
                     <p className="text-gray-600">Manage your property visits and schedule</p>
 
-                    {/* Tab Navigation */}
+
                     <div className="flex mt-8 border-b border-gray-200">
                         <motion.button
                             variants={tabVariants}
@@ -134,7 +135,7 @@ export default function AnnoncesVisits() {
                         </motion.button>
                     </div>
 
-                    {/* Filter Controls - Only for requests tab */}
+
                     {activeTab === "requests" && (
                         <div className="flex space-x-2 mt-4">
                             <button
@@ -170,7 +171,7 @@ export default function AnnoncesVisits() {
                    <div className="h-5 w-5 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></div>
                   <span>Loading data...</span>
                 </div>
-                
+
                 )}
 
                 {activeTab === "requests" ? (

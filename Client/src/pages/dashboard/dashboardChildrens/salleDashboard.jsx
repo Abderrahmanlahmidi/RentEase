@@ -153,7 +153,6 @@ export default function SallesDashboard() {
                 </table>
             </div>
 
-            {/* Create Salle Modal */}
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -228,7 +227,7 @@ export default function SallesDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Salle Modal */}
+
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}

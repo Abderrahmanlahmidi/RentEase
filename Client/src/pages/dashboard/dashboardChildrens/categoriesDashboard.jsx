@@ -85,7 +85,7 @@ export default function CategoriesDashboard() {
     return (
         <div className="w-full">
             <ToastContainer />
-            {/* Table Header */}
+
             <div className="flex items-center justify-between p-6 bg-white border-b border-gray-200">
                 <h2 className="text-xl font-light text-gray-900">
                     Category Management
@@ -99,7 +99,6 @@ export default function CategoriesDashboard() {
                 </button>
             </div>
 
-            {/* Categories Table */}
             <div className="relative overflow-auto max-h-[600px] w-full">
                 <table className="w-full text-sm text-left">
                     <thead className="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-gray-50">
@@ -143,7 +142,6 @@ export default function CategoriesDashboard() {
                 </table>
             </div>
 
-            {/* Create Category Modal */}
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -217,7 +215,7 @@ export default function CategoriesDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Category Modal */}
+
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}

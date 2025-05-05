@@ -11,6 +11,8 @@ use App\Repositories\Eloquent\SalleRepository;
 use App\Repositories\Contracts\SalleRepositoryInterface;
 use App\Repositories\Eloquent\ReviewRepository;
 use  App\Repositories\Contracts\ReviewRepositoryInterface;
+use App\Repositories\Contracts\AnnonceRepositoryInterface;
+use App\Repositories\Eloquent\AnnonceRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SalleRepositoryInterface::class, SalleRepository::class);
         $this->app->bind(ReviewRepositoryInterface::class, ReviewRepository::class);
         $this->app->bind(VisitRepositoryInterface::class, VisitRepository::class);
+        $this->app->bind(AnnonceRepositoryInterface::class, AnnonceRepository::class);
     }
 
     /**

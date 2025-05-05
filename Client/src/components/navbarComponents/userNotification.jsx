@@ -87,7 +87,7 @@ export default function NotificationButton() {
 
     return (
         <div className="relative">
-            {/* Notification Button */}
+
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="relative p-2 text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none"
@@ -105,7 +105,7 @@ export default function NotificationButton() {
                 )}
             </button>
 
-            {/* Animated Notification Dropdown */}
+
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -142,7 +142,6 @@ export default function NotificationButton() {
                             </div>
                         </div>
 
-                        {/* Notifications List */}
                         <div className="max-h-96 overflow-y-auto">
                             {isLoading ? (
                                 <div className="px-4 py-6 text-center">
@@ -225,7 +224,6 @@ export default function NotificationButton() {
                             )}
                         </div>
 
-                        {/* Footer */}
                         {notifications.length > 0 && !isLoading && !error && (
                             <div className="px-4 py-2 border-t border-gray-200 text-center">
                                 <button

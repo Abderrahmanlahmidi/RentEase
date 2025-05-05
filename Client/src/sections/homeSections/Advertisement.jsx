@@ -78,7 +78,7 @@ export default function Advertisement() {
 
                 {ads.length > 0 ? (
                     <div className="relative">
-                        {/* Gradient fade effect for scroll indication */}
+ 
                         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l z-10 pointer-events-none" />
                         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r z-10 pointer-events-none" />
 
@@ -150,7 +150,7 @@ export default function Advertisement() {
                     </div>
                 )}
 
-                {/* CTA Section */}
+ 
                 <div className="mt-16 text-center">
                     <motion.div
                         initial={{ opacity: 0 }}

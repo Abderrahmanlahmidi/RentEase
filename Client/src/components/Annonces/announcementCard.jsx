@@ -41,9 +41,9 @@ const AnnouncementCard = ({ announcement }) => {
 
     return (
         <div className="bg-white border border-gray-200 hover:shadow-sm transition-all duration-300">
-            {/* Image Gallery Section */}
+
             <div className="relative h-56 w-full overflow-hidden">
-                {/* Navigation Arrows */}
+
                 <div className="absolute inset-0 flex items-center justify-between z-10 px-2">
                     <button
                         onClick={prevImage}
@@ -61,7 +61,6 @@ const AnnouncementCard = ({ announcement }) => {
                     </button>
                 </div>
 
-                {/* Animated Images */}
                 <AnimatePresence custom={direction} initial={false}>
                     <motion.img
                         key={currentImageIndex}
@@ -87,7 +86,6 @@ const AnnouncementCard = ({ announcement }) => {
                     />
                 </AnimatePresence>
 
-                {/* Image Indicators */}
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
                     {images.map((_, index) => (
                         <div
@@ -98,7 +96,7 @@ const AnnouncementCard = ({ announcement }) => {
                 </div>
             </div>
 
-            {/* Content Section */}
+
             <div className="p-5">
                 <div className="flex justify-between items-start mb-3">
                     <h2 className="text-xl font-light text-gray-900 line-clamp-1">

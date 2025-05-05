@@ -144,7 +144,6 @@ export default function TagsDashboard() {
                 </table>
             </div>
 
-            {/* Create Tag Modal */}
             {isCreateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -219,7 +218,7 @@ export default function TagsDashboard() {
                 </motion.div>
             )}
 
-            {/* Update Tag Modal */}
+
             {isUpdateModalOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}

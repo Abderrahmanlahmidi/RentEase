@@ -12,7 +12,7 @@ const Menu = ({ toggleMenu, t, routing }) => {
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className="fixed inset-0 bg-white z-50 p-8 md:hidden"
       >
-        {/* Close Button */}
+
         <motion.button
           onClick={toggleMenu}
           whileTap={{ scale: 0.95 }}
@@ -22,9 +22,9 @@ const Menu = ({ toggleMenu, t, routing }) => {
           <FaTimes className="w-6 h-6" />
         </motion.button>
 
-        {/* Menu Content */}
+
         <div className="h-full flex flex-col justify-center">
-          {/* Navigation Links */}
+
           <motion.ul className="space-y-4 mb-12">
             {t('navbar_links', { returnObjects: true }).map((link, index) => (
               <motion.li 
@@ -47,7 +47,7 @@ const Menu = ({ toggleMenu, t, routing }) => {
             ))}
           </motion.ul>
 
-          {/* Auth Buttons */}
+
           <motion.div 
             className="flex flex-col space-y-4"
             initial={{ opacity: 0, y: 20 }}

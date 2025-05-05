@@ -53,7 +53,6 @@ const Login = () => {
                 </h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    {/* Email */}
                     <div>
                         <label
                             htmlFor="email"
@@ -81,7 +80,7 @@ const Login = () => {
                         )}
                     </div>
 
-                    {/* Password */}
+
                     <div className="relative">
                         <label
                             htmlFor="password"
@@ -116,7 +115,6 @@ const Login = () => {
                         )}
                     </div>
 
-                    {/* Submit Button */}
                     <motion.button
                         type="submit"
                         whileHover={{ scale: 1.02 }}
@@ -137,7 +135,6 @@ const Login = () => {
                         )}
                     </motion.button>
 
-                    {/* Register Redirect */}
                     <p className="text-sm text-gray-600 text-center">
                         {t("dont_have_account")}{" "}
                         <NavLink 
